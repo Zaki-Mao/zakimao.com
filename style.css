@@ -3,11 +3,10 @@
    ========================================= */
 @font-face {
     font-family: 'JuanaCustom';
-    /* 确保 J-Extralight.woff2 已上传 */
     src: url('J-Extralight.woff2') format('woff2');
     font-weight: 200; font-style: normal; font-display: swap;
 }
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&family=Noto+Serif+SC:wght@300;400;600&display=swap');
 
 /* =========================================
    2. 全局变量 & 配色
@@ -21,7 +20,7 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; } /* 平滑滚动 */
+html { scroll-behavior: smooth; }
 
 body {
     background-color: var(--bg-color);
@@ -30,19 +29,19 @@ body {
 }
 
 /* =========================================
-   3. Hero 区域
+   3. Hero 区域 (极简版)
    ========================================= */
 .hero-wrapper {
     position: relative; width: 100%; height: 100vh;
-    display: flex; flex-direction: column; align-items: center;
-    overflow: visible; z-index: 10; margin-bottom: 250px; 
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    overflow: hidden; z-index: 10; 
 }
 
 /* 巨大标题 "Hi Zaki" */
 .huge-title {
     font-family: 'JuanaCustom', serif !important;
     font-size: 22vw; font-weight: 200; color: var(--primary-color);
-    line-height: 0.8; white-space: nowrap; margin-top: -2vw;
+    line-height: 0.8; white-space: nowrap; margin-top: -5vh;
     display: flex; justify-content: center; align-items: baseline; 
     letter-spacing: -1vw; 
 }
@@ -76,172 +75,218 @@ body {
     font-size: 1.5rem; color: var(--text-color); margin-bottom: 2rem; line-height: 1.4;
 }
 
-.pill-button {
-    display: inline-flex; align-items: center; gap: 8px;
-    background-color: #FFFFFF; color: #222; padding: 14px 32px;
-    border-radius: 100px; text-decoration: none; font-family: 'Inter', sans-serif;
-    font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: transform 0.3s ease;
+/* 动态向下箭头 */
+.scroll-indicator {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    opacity: 0; animation: fadeIn 1s ease 2s forwards; cursor: pointer;
 }
-.pill-button:hover { transform: translateY(-3px); }
-
-/* =========================================
-   4. Hero 卡片交互区 (16:9 横版)
-   ========================================= */
-.photo-pile-container {
-    position: absolute; bottom: 0; left: 0; width: 100%; height: 400px;
-    display: flex; justify-content: center;
-    opacity: 0; animation: fadeIn 1s ease 1s forwards;
-    z-index: 100; overflow: visible;
+.scroll-text {
+    font-family: 'Inter', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em;
+    color: var(--primary-color); opacity: 0.8;
 }
-
-/* 卡片基础样式 */
-.photo-card {
-    position: absolute; display: block;
-    /* 🔥 核心修改：改为 16:9 比例 (例如 360x200) */
-    width: 360px; height: 200px; 
-    
-    background-size: cover; background-position: center;
-    border: 6px solid #fff; border-radius: 8px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15); text-decoration: none;
-    
-    /* 默认堆叠状态 */
-    left: 50% !important; 
-    bottom: -100px; 
-    
-    transform: translateX(-50%) rotate(0deg) scale(0.9);
-    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-    
-    cursor: pointer; transform-origin: center bottom; overflow: hidden;
+.arrow-icon {
+    width: 20px; height: 30px; border: 1.5px solid var(--primary-color); border-radius: 20px;
+    position: relative;
 }
-
-/* 堆叠时的微小随机角度 */
-.photo-card:nth-child(1) { transform: translateX(-50%) rotate(-4deg) scale(0.9); z-index: 1; }
-.photo-card:nth-child(2) { transform: translateX(-50%) rotate(0deg) scale(0.95); z-index: 2; }
-.photo-card:nth-child(3) { transform: translateX(-50%) rotate(3deg) scale(0.9); z-index: 1; }
-
-/* 悬停散开 */
-.photo-pile-container:hover .photo-card {
-    left: var(--left) !important;
-    bottom: 0px; 
-    transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot)) scale(1);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+.arrow-icon::after {
+    content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+    width: 2px; height: 6px; background-color: var(--primary-color); border-radius: 2px;
+    animation: scrollDown 1.5s infinite ease-in-out;
 }
-
-/* 单卡悬停高亮 */
-.photo-pile-container:hover .photo-card:hover {
-    z-index: 100 !important;
-    transform: translateX(-50%) translateY(-30px) scale(1.05) rotate(0deg) !important;
-    border-color: #fff;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+@keyframes scrollDown {
+    0% { top: 6px; opacity: 1; height: 6px; }
+    100% { top: 18px; opacity: 0; height: 2px; }
 }
-
-/* 遮罩层 & 按钮 */
-.card-overlay {
-    position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.4); /* 简单的半透明黑遮罩 */
-    display: flex; justify-content: center; align-items: center; 
-    opacity: 0; transition: opacity 0.3s ease;
-}
-
-/* 🔥 新增：悬停时的按钮样式 */
-.view-btn {
-    background-color: white; color: black;
-    padding: 10px 24px; border-radius: 50px;
-    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.9rem;
-    transform: translateY(20px); transition: transform 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
-
-.photo-card:hover .card-overlay { opacity: 1; }
-.photo-card:hover .view-btn { transform: translateY(0); }
 
 
 /* =========================================
-   5. 黄色区域 (About, Projects, Blog)
+   4. 黄色背景区域通用设置
    ========================================= */
 .dark-section {
     position: relative; background-color: var(--dark-bg); color: var(--light-text);
-    width: 100%; padding: 160px 10% 100px; z-index: 1; margin-top: 0;
+    width: 100%; padding: 140px 10% 100px; z-index: 1;
 }
-.dark-section::before {
+/* 渐变过渡 */
+.dark-section.first-section::before {
     content: ''; position: absolute; top: -250px; left: 0; width: 100%; height: 251px;
     background: linear-gradient(to bottom, transparent, var(--dark-bg));
     pointer-events: none; z-index: 2;
 }
 .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 3; }
 
-/* About Me */
-.story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 120px; align-items: center; }
-.story-text { text-align: left; }
+
+/* =========================================
+   5. About Me & Language Switch
+   ========================================= */
+/* 语言切换按钮样式 */
+.lang-switch-wrapper {
+    position: absolute; top: 40px; right: 10%; /* 定位在右上角 */
+    z-index: 20;
+}
+.lang-btn {
+    background: none; border: 1px solid #2C241B; border-radius: 20px;
+    padding: 6px 16px; color: #2C241B; font-family: 'Inter', sans-serif; font-size: 0.8rem;
+    cursor: pointer; transition: all 0.3s ease;
+}
+.lang-btn:hover { background-color: rgba(44,36,27, 0.1); }
+.lang-btn span.active { font-weight: 700; text-decoration: underline; }
+
+.story-grid { display: grid; grid-template-columns: 1fr; gap: 60px; margin-bottom: 80px; text-align: center; }
+
+/* 文本样式 */
 .story-paragraph { 
-    font-family: 'Playfair Display', serif; 
-    font-size: 2.8rem; line-height: 1.2; font-weight: 400; 
-    margin-bottom: 40px; color: #2C241B; font-style: italic;
+    font-family: 'Playfair Display', 'Noto Serif SC', serif; 
+    font-size: 2.2rem; line-height: 1.6; font-weight: 400; 
+    color: #2C241B; max-width: 800px; margin: 0 auto;
 }
 .story-paragraph.small { 
-    font-size: 1.2rem; opacity: 0.8; margin-top: 30px; 
-    font-family: 'Inter', sans-serif; line-height: 1.6; font-weight: 400; font-style: normal;
+    font-size: 1.2rem; opacity: 0.8; margin-top: 20px; 
+    font-family: 'Inter', 'Noto Serif SC', sans-serif; line-height: 1.8;
 }
-.leaf-icon { font-size: 2rem; opacity: 0.5; margin: 30px 0; color: #2C241B; }
-.about-image-wrapper { width: 100%; max-width: 450px; height: auto; aspect-ratio: 4/5; overflow: hidden; border-radius: 4px; }
-.about-image-wrapper img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
 
-/* 🔥 新增：项目区域样式 (Projects) */
+/* 教育/经历 Logo Wall */
+.edu-section {
+    margin-top: 80px; padding-top: 60px; 
+    border-top: 1px solid rgba(44,36,27, 0.1);
+}
+.edu-title {
+    font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em;
+    margin-bottom: 40px; opacity: 0.6; text-align: center;
+}
+.edu-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 40px; align-items: center; justify-items: center;
+}
+.edu-item {
+    display: flex; flex-direction: column; align-items: center; gap: 15px; opacity: 0.8; transition: opacity 0.3s;
+}
+.edu-item:hover { opacity: 1; }
+.edu-icon { font-size: 2rem; color: #2C241B; } 
+.edu-school { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-weight: 600; font-size: 1.1rem; }
+.edu-major { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 0.9rem; opacity: 0.7; }
+
+
+/* =========================================
+   6. Gallery (工作瞬间 / 照片墙)
+   ========================================= */
+.gallery-wrapper {
+    position: relative;
+    width: 100%;
+    height: 600px; 
+    display: flex; justify-content: center; align-items: center;
+    margin: 60px 0 120px;
+}
+
+.photo-pile-container {
+    position: relative; 
+    width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+}
+
+.photo-card {
+    position: absolute; display: block;
+    width: 280px; height: 380px; 
+    background-size: cover; background-position: center;
+    border: 6px solid #fff; border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    
+    left: 50% !important; 
+    top: 50%;
+    margin-top: -190px; 
+    
+    transform: translateX(-50%) rotate(0deg) scale(0.9);
+    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    cursor: pointer; transform-origin: center bottom;
+}
+
+/* 堆叠角度 */
+.photo-card:nth-child(1) { transform: translateX(-50%) rotate(-6deg) scale(0.9); z-index: 1; }
+.photo-card:nth-child(2) { transform: translateX(-50%) rotate(-3deg) scale(0.92); z-index: 2; }
+.photo-card:nth-child(3) { transform: translateX(-50%) rotate(2deg) scale(0.95); z-index: 3; }
+.photo-card:nth-child(4) { transform: translateX(-50%) rotate(5deg) scale(0.9); z-index: 1; }
+
+/* 悬停散开 */
+.photo-pile-container:hover .photo-card {
+    left: var(--left) !important;
+    top: 50%; 
+    transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot)) scale(1);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+
+/* 单卡高亮 */
+.photo-pile-container:hover .photo-card:hover {
+    z-index: 100 !important;
+    transform: translateX(-50%) translateY(-30px) scale(1.1) rotate(0deg) !important;
+    border-color: #fff;
+}
+
+.card-overlay {
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); 
+    display: flex; justify-content: center; align-items: center; padding: 20px;
+    opacity: 0; transition: opacity 0.3s ease; text-align: center;
+}
+.card-desc {
+    color: #FFF; font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 1rem; line-height: 1.4;
+    transform: translateY(10px); transition: transform 0.3s ease;
+}
+.photo-card:hover .card-overlay { opacity: 1; }
+.photo-card:hover .card-desc { transform: translateY(0); }
+
+
+/* =========================================
+   7. Projects & Blog 
+   ========================================= */
 .project-list { display: flex; flex-direction: column; gap: 120px; margin-bottom: 160px; }
 .project-item { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; }
-/* 偶数个项目反向排列 (图在右，文在左) */
 .project-item:nth-child(even) { direction: rtl; }
 .project-item:nth-child(even) .project-info { direction: ltr; }
 
 .project-preview {
-    width: 100%; aspect-ratio: 16/9; /* 保持16:9 */
+    width: 100%; aspect-ratio: 16/9; 
     overflow: hidden; border-radius: 8px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    transition: transform 0.4s ease;
 }
 .project-preview img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
 .project-preview:hover img { transform: scale(1.05); }
 
 .project-info { padding: 20px 0; }
 .project-name { font-family: 'JuanaCustom', serif; font-size: 3rem; margin-bottom: 20px; color: #2C241B; }
-.project-desc { font-family: 'Inter', sans-serif; font-size: 1.1rem; line-height: 1.6; opacity: 0.8; margin-bottom: 30px; }
+.project-desc { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 1.1rem; line-height: 1.6; opacity: 0.8; margin-bottom: 30px; }
 .project-link { 
     display: inline-block; text-decoration: none; color: #2C241B; 
     border-bottom: 1px solid #2C241B; padding-bottom: 4px; 
-    font-family: 'Inter', sans-serif; font-weight: 500;
+    font-family: 'Inter', 'Noto Serif SC', sans-serif; font-weight: 500;
     transition: opacity 0.3s;
 }
 .project-link:hover { opacity: 0.6; }
 
-
-/* Blog & Section Label */
-.section-label { font-family: 'Inter', sans-serif; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 60px; border-bottom: 1px solid rgba(44,36,27, 0.1); padding-bottom: 20px; color: #2C241B; }
+/* Blog */
+.section-label { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 60px; border-bottom: 1px solid rgba(44,36,27, 0.1); padding-bottom: 20px; color: #2C241B; }
 .blog-list { display: flex; flex-direction: column; }
 .blog-item { display: flex; justify-content: space-between; align-items: center; padding: 40px 0; border-bottom: 1px solid rgba(44,36,27, 0.1); cursor: pointer; transition: all 0.3s ease; text-decoration: none; color: #2C241B; }
 .blog-item:hover { background-color: rgba(255,255,255,0.2); padding-left: 20px; }
 .blog-meta { font-family: 'Inter', sans-serif; font-size: 0.9rem; opacity: 0.6; width: 150px; }
 .blog-content { flex: 1; }
 .blog-title { font-family: 'JuanaCustom', serif; font-size: 2.2rem; font-weight: 200; margin-bottom: 10px; }
-.blog-tag { font-family: 'Inter', sans-serif; font-size: 0.8rem; background-color: rgba(44,36,27,0.05); padding: 4px 10px; border-radius: 4px; opacity: 0.8; }
+.blog-tag { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 0.8rem; background-color: rgba(44,36,27,0.05); padding: 4px 10px; border-radius: 4px; opacity: 0.8; }
 .blog-thumb { width: 180px; height: 110px; border-radius: 4px; overflow: hidden; margin-left: 40px; opacity: 0; transform: translateX(20px); transition: all 0.4s ease; }
 .blog-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .blog-item:hover .blog-thumb { opacity: 1; transform: translateX(0); }
 
-/* 手机适配 */
 @media (max-width: 768px) {
     .huge-title { font-size: 45vw; margin-top: 10vh; letter-spacing: -3vw; }
-    .hero-wrapper { margin-bottom: 120px; }
-    
-    /* 手机上卡片尺寸适配 16:9 */
-    .photo-pile-container { height: 300px; }
-    .photo-card { width: 240px; height: 135px; bottom: -60px; } /* 缩小版的16:9 */
-    
-    .story-grid, .project-item { grid-template-columns: 1fr; gap: 40px; }
-    .project-item:nth-child(even) { direction: ltr; } /* 手机上取消左右交替 */
-    
-    .dark-section { padding-top: 80px; }
-    .dark-section::before { height: 100px; top: -100px; }
-    .blog-item { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .hero-wrapper { height: 90vh; }
+    .story-paragraph { font-size: 1.8rem; }
+    .edu-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+    .gallery-wrapper { height: 400px; margin: 40px 0; }
+    .photo-card { width: 180px; height: 260px; }
+    .project-item, .story-grid { grid-template-columns: 1fr; gap: 40px; }
+    .project-item:nth-child(even) { direction: ltr; } 
+    .dark-section.first-section::before { height: 100px; top: -100px; }
+    .lang-switch-wrapper { right: 5%; top: 20px; }
 }
 
 .fab-menu { position: fixed; bottom: 40px; left: 40px; width: 50px; height: 50px; background-color: #6B2E7F; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; z-index: 99; }
