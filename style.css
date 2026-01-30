@@ -1,11 +1,12 @@
 /* =========================================
-   1. 引入自定义字体: Garnett Light
+   1. 引入自定义字体: AbhayaLibre Medium
    ========================================= */
 @font-face {
-    font-family: 'GarnettCustom';
-    /* ⚠️ 必须确保你上传的文件名完全一致，区分大小写 */
-    src: url('Garnett-Light.ttf') format('truetype');
-    font-weight: 300;
+    font-family: 'AbhayaCustom';
+    /* ⚠️ 这里的 src 必须和你上传到 GitHub 的文件名完全一致 */
+    /* 如果你的文件后缀是 .otf，请改为 .otf */
+    src: url('AbhayaLibre-Medium.ttf') format('truetype');
+    font-weight: 500;
     font-style: normal;
 }
 
@@ -28,7 +29,7 @@ body {
 }
 
 /* =========================================
-   3. 英雄区域布局 (Hero Wrapper)
+   3. 英雄区域布局
    ========================================= */
 .hero-wrapper {
     position: relative;
@@ -41,14 +42,14 @@ body {
 }
 
 /* =========================================
-   4. 巨大标题 "Zaki" (使用 Garnett Light)
+   4. 巨大标题 "Zaki" (使用 AbhayaCustom)
    ========================================= */
 .huge-title {
-    font-family: 'GarnettCustom', sans-serif; /* 这里的名字要和上面 @font-face 对应 */
+    font-family: 'AbhayaCustom', serif; /* 这里的名字对应上面的 @font-face */
     font-size: 34vw;       /* 巨大字号 */
-    font-weight: 300;      /* Light 字重 */
+    font-weight: 500;      /* Medium 字重 */
     color: var(--primary-color);
-    line-height: 0.8;      /* 行高 */
+    line-height: 0.8;      
     white-space: nowrap;
     margin-top: -2vw;
     z-index: 10;
@@ -56,10 +57,11 @@ body {
     /* 布局与对齐 */
     display: flex;
     justify-content: center;
-    align-items: baseline; /* 关键：让大写Z和小写aki底部对齐 */
+    align-items: baseline; /* 保证大小写底部对齐 */
     
     /* 视觉微调 */
-    letter-spacing: -2vw;  /* 细体字在大尺寸下稍微紧凑点更高级 */
+    /* Abhaya Libre 本身字宽比较舒适，稍微收紧一点点即可，不用像 Garnett 缩那么多 */
+    letter-spacing: -1vw;  
 }
 
 /* --- 丝滑入场动画 --- */
@@ -69,7 +71,6 @@ body {
     animation: smoothDrop 1.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
 
-/* 差速下落 */
 .letter:nth-child(1) { animation-delay: 0.2s; }
 .letter:nth-child(2) { animation-delay: 0.35s; }
 .letter:nth-child(3) { animation-delay: 0.5s; }
@@ -121,19 +122,16 @@ body {
 }
 
 /* =========================================
-   6. 底部照片散落区 (First Version Layout)
+   6. 底部照片散落区
    ========================================= */
 .photo-pile-container {
     position: absolute;
     bottom: -80px;
     width: 100%;
     height: 350px;
-    
-    /* 初始隐藏，延迟出现 */
     opacity: 0;
     transform: translateY(50px);
     animation: cardsFloatUp 1.5s cubic-bezier(0.2, 1, 0.3, 1) 1.2s forwards;
-    
     pointer-events: none; 
 }
 
@@ -151,7 +149,7 @@ body {
     border-radius: 4px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     
-    /* 核心定位逻辑 (由 HTML 内联样式控制) */
+    /* 核心布局逻辑 */
     left: var(--left);
     transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot));
     
@@ -167,13 +165,13 @@ body {
 }
 
 /* =========================================
-   7. 手机适配 & 浮动菜单
+   7. 手机适配 & 菜单
    ========================================= */
 @media (max-width: 768px) {
     .huge-title { 
-        font-size: 45vw; /* 手机上更大 */
+        font-size: 45vw; 
         margin-top: 10vh; 
-        letter-spacing: -3vw; /* 手机上需要更紧 */
+        letter-spacing: -2vw;
     }
     .photo-pile-container { bottom: -120px; }
     .photo-card { width: 140px; height: 200px; }
