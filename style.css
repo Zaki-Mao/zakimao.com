@@ -1,8 +1,9 @@
 /* =========================================
-   1. 引入自定义字体: Garnett Light (保持不变)
+   1. 引入自定义字体: Garnett Light
    ========================================= */
 @font-face {
     font-family: 'GarnettCustom';
+    /* ⚠️ 确保 GitHub 仓库里有这个文件，且文件名大小写完全一致 */
     src: url('Garnett-Light.ttf') format('truetype');
     font-weight: 300;
     font-style: normal;
@@ -12,16 +13,16 @@
    2. 全局变量 & 设置
    ========================================= */
 :root {
-    --bg-color: #FAF5EF;      
-    --primary-color: #E34234; 
-    --text-color: #5A4D4D;    
+    --bg-color: #FAF5EF;      /* 杏仁白 */
+    --primary-color: #E34234; /* 朱砂红 */
+    --text-color: #5A4D4D;    /* 深暖灰 */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     background-color: var(--bg-color);
-    font-family: 'Inter', sans-serif; 
+    font-family: 'Inter', sans-serif; /* 正文继续用 Inter */
     overflow-x: hidden;
     height: 100vh;
 }
@@ -40,23 +41,26 @@ body {
 }
 
 /* =========================================
-   4. 巨大标题 "Zaki" (Garnett Light 保持不变)
+   4. 巨大标题 "Zaki" (Garnett Light + 宽间距)
    ========================================= */
 .huge-title {
     font-family: 'GarnettCustom', sans-serif;
-    font-size: 34vw;       
-    font-weight: 300;      
+    font-size: 34vw;       /* 保持巨大 */
+    font-weight: 300;      /* Light 字重 */
     color: var(--primary-color);
     line-height: 0.8;      
     white-space: nowrap;
     margin-top: -2vw;
     z-index: 10;
     
+    /* 布局与对齐 */
     display: flex;
     justify-content: center;
     align-items: baseline; 
     
-    letter-spacing: 1vw; /* 保持你喜欢的宽间距 */
+    /* 核心修改：让字母分开一点 */
+    /* 之前是 -2vw (紧凑)，现在改为 1vw (宽松) */
+    letter-spacing: 1vw;   
 }
 
 /* --- 丝滑入场动画 --- */
@@ -65,6 +69,7 @@ body {
     opacity: 0;
     animation: smoothDrop 1.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
+
 .letter:nth-child(1) { animation-delay: 0.2s; }
 .letter:nth-child(2) { animation-delay: 0.35s; }
 .letter:nth-child(3) { animation-delay: 0.5s; }
@@ -76,7 +81,7 @@ body {
 }
 
 /* =========================================
-   5. 中间内容区 (这里改字体了！)
+   5. 中间内容区 (Subtitle & Button)
    ========================================= */
 .content-area {
     margin-top: 5vh;
@@ -89,12 +94,7 @@ body {
 @keyframes fadeIn { to { opacity: 1; } }
 
 .subtitle-text {
-    /* 核心修改：使用 Playfair Display 斜体 */
-    font-family: 'Playfair Display', serif;
-    font-style: italic; /* 斜体让它更有“头衔”的高级感 */
-    font-size: 1.3rem;  /* 稍微大一点点 */
-    font-weight: 400;   /* 字重适中 */
-    
+    font-size: 1.1rem;
     color: var(--text-color);
     margin-bottom: 2rem;
     line-height: 1.6;
@@ -110,11 +110,7 @@ body {
     padding: 14px 32px;
     border-radius: 100px;
     text-decoration: none;
-    
-    /* 按钮建议保持 Inter (无衬线)，这样更清晰易读，也和上面的斜体形成对比 */
-    font-family: 'Inter', sans-serif; 
     font-weight: 600;
-    
     box-shadow: 0 4px 20px rgba(0,0,0,0.06);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -137,6 +133,7 @@ body {
     animation: cardsFloatUp 1.5s cubic-bezier(0.2, 1, 0.3, 1) 1.2s forwards;
     pointer-events: none; 
 }
+
 @keyframes cardsFloatUp {
     to { opacity: 1; transform: translateY(0); }
 }
@@ -150,12 +147,15 @@ body {
     border: 4px solid #fff;
     border-radius: 4px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    
     left: var(--left);
     transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot));
+    
     transition: transform 0.4s ease, z-index 0s;
     pointer-events: auto; 
     cursor: pointer;
 }
+
 .photo-card:hover {
     z-index: 100;
     transform: translateX(-50%) translateY(-100px) scale(1.1) rotate(0deg) !important;
@@ -169,6 +169,7 @@ body {
     .huge-title { 
         font-size: 45vw; 
         margin-top: 10vh; 
+        /* 手机上屏幕小，如果间距太大字会换行，所以手机上还是稍微紧一点 */
         letter-spacing: -1vw; 
     }
     .photo-pile-container { bottom: -120px; }
