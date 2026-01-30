@@ -1,0 +1,207 @@
+/* =========================================
+   1. 全局设置 & 变量
+   ========================================= */
+:root {
+    --bg-color: #FAF5EF;      /* 杏仁白 */
+    --primary-color: #E34234; /* 朱砂红 */
+    --text-color: #5A4D4D;    /* 深暖灰 */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden; /* 关键：防止巨大文字撑出横向滚动条 */
+    height: 100vh;
+}
+
+/* =========================================
+   2. 英雄区域布局 (Hero Layout)
+   ========================================= */
+.hero-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 0; /* 顶格 */
+}
+
+/* =========================================
+   3. 巨大标题 ZAKI (Typography)
+   ========================================= */
+.huge-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 34vw; /* 视口宽度的 34%，保证两边溢出 */
+    font-weight: 500;
+    color: var(--primary-color);
+    line-height: 0.75; /* 压缩行高 */
+    white-space: nowrap;
+    margin-top: -2vw; /* 负边距消除顶部空隙 */
+    user-select: none; /* 防止被选中变蓝 */
+    z-index: 10;
+    
+    /* Flex 用于字母排列 */
+    display: flex;
+    justify-content: center;
+}
+
+/* --- 字母入场动画 --- */
+.letter {
+    display: inline-block;
+    opacity: 0;
+    /* 贝塞尔曲线模拟物理下落感 (重力回弹) */
+    animation: smoothDrop 1.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+/* 差速设置：让每个字母错开时间落下 */
+.letter:nth-child(1) { animation-delay: 0.2s; }
+.letter:nth-child(2) { animation-delay: 0.35s; }
+.letter:nth-child(3) { animation-delay: 0.5s; }
+.letter:nth-child(4) { animation-delay: 0.65s; }
+
+@keyframes smoothDrop {
+    0% {
+        transform: translateY(-120%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* =========================================
+   4. 中间内容区 (Subtitle & Button)
+   ========================================= */
+.content-area {
+    margin-top: 5vh;
+    text-align: center;
+    z-index: 20;
+    opacity: 0;
+    animation: fadeIn 1.5s ease 1.2s forwards; /* 等大字落下后再显示 */
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+.subtitle-text {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.pill-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #FFFFFF;
+    color: #222;
+    padding: 14px 32px;
+    border-radius: 100px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pill-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(227, 66, 52, 0.2); /* 红色光晕 */
+}
+
+/* =========================================
+   5. 底部照片堆叠 (Photo Pile)
+   ========================================= */
+.photo-pile-container {
+    position: absolute;
+    bottom: -60px; /* 让照片只露出一半，制造想往下翻的欲望 */
+    width: 100%;
+    height: 300px; /* 容器高度 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none; /* 让鼠标穿透容器 */
+}
+
+.photo-card {
+    position: absolute;
+    width: 220px;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    border: 4px solid #fff;
+    border-radius: 4px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    
+    /* 核心技巧：利用 CSS 变量设置每个图片的位置 */
+    transform: translate(var(--x), var(--y)) rotate(var(--rot));
+    
+    transition: transform 0.4s ease, z-index 0s;
+    pointer-events: auto; /* 恢复卡片的鼠标交互 */
+    cursor: pointer;
+}
+
+/* 鼠标悬停交互 */
+.photo-card:hover {
+    z-index: 100; /* 浮到最上层 */
+    /* 重置旋转，放大，并向上浮起 */
+    transform: translate(var(--x), -80px) scale(1.1) rotate(0deg) !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+/* =========================================
+   6. 浮动菜单按钮 (FAB)
+   ========================================= */
+.fab-menu {
+    position: fixed;
+    bottom: 40px;
+    left: 40px;
+    width: 50px;
+    height: 50px;
+    background-color: #6B2E7F; /* 深紫色 */
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(107, 46, 127, 0.4);
+    z-index: 999;
+    transition: transform 0.2s;
+}
+
+.fab-menu:hover {
+    transform: scale(1.1);
+}
+
+/* =========================================
+   7. 移动端适配 (简单微调)
+   ========================================= */
+@media (max-width: 768px) {
+    .huge-title {
+        font-size: 45vw; /* 手机上字要更大才够霸气 */
+        margin-top: 10vh;
+    }
+    
+    .photo-pile-container {
+        bottom: -100px; /* 手机上照片藏深一点 */
+    }
+    
+    .photo-card {
+        width: 160px;
+        height: 220px;
+    }
+}
