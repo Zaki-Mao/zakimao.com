@@ -276,11 +276,10 @@
     <script src="blog/posts.js"></script>
 
     <script>
-        // 1. 定义语言切换功能 (先定义，保证后面能用)
+        // 1. 定义语言切换功能
         const toggleBtn = document.getElementById('langToggle');
         let currentLang = 'en';
 
-        // 按钮点击事件
         if (toggleBtn) {
             toggleBtn.addEventListener('click', () => {
                 currentLang = currentLang === 'en' ? 'zh' : 'en';
@@ -288,7 +287,6 @@
             });
         }
 
-        // 核心切换函数
         function updateLanguage() {
             const enElements = document.querySelectorAll('.lang-en');
             const zhElements = document.querySelectorAll('.lang-zh');
@@ -297,7 +295,6 @@
                 enElements.forEach(el => el.style.display = 'none');
                 zhElements.forEach(el => {
                     el.style.display = 'inline';
-                    // 修正块级元素的显示
                     if (['P', 'DIV', 'H3'].includes(el.tagName)) {
                         el.style.display = 'block';
                     }
@@ -317,7 +314,7 @@
             }
         }
 
-        // 2. 生成博客列表
+        // 2. 生成博客列表 (🔥 已移除图片生成)
         const container = document.getElementById('blog-list-container');
         
         if (typeof blogPosts !== 'undefined' && container) {
@@ -334,17 +331,13 @@
                             <span class="lang-zh" style="display: none;">${post.tag_zh}</span>
                         </span>
                     </div>
-                    <div class="blog-thumb">
-                        <img src="${post.thumb}" alt="Blog Thumbnail">
-                    </div>
-                </a>
+                    </a>
             `).join('');
 
             container.innerHTML = postsHTML;
         }
 
         // 3. 初始化语言状态
-        // 确保页面加载完成后，新生成的博客内容也能应用正确的语言
         updateLanguage();
     </script>
 
