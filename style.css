@@ -3,7 +3,7 @@
    ========================================= */
 @font-face {
     font-family: 'JuanaCustom';
-    /* 🔥 核心：请确保 J-Extralight.woff2 已上传到 GitHub */
+    /* 🔥 确保 J-Extralight.woff2 已上传 */
     src: url('J-Extralight.woff2') format('woff2');
     font-weight: 200; 
     font-style: normal;
@@ -18,9 +18,7 @@
    ========================================= */
 :root {
     --bg-color: #FAF5EF;      /* 顶部：杏仁白 */
-    
-    /* 底部：暖桃黄 (House Of 同款色系) */
-    --dark-bg: #F6D38D;       
+    --dark-bg: #F6D38D;       /* 底部：暖桃黄 (渐变目标色) */
     
     --primary-color: #E34234; /* 朱砂红 */
     --text-color: #5A4D4D;    /* 深暖灰 */
@@ -51,11 +49,13 @@ body {
     margin-bottom: 250px; 
 }
 
-/* 巨大标题 "ZAKI" - 强制使用 Juana */
-/* 巨大标题 "ZAKI" */
+/* 巨大标题 "Hi Zaki" - 强制使用 Juana */
 .huge-title {
     font-family: 'JuanaCustom', serif !important;
-    font-size: 38vw;       
+    
+    /* 🔥 核心修改：字号缩小以容纳更多字母 */
+    font-size: 22vw;       
+    
     font-weight: 200;      
     color: var(--primary-color);
     line-height: 0.8;      
@@ -66,27 +66,31 @@ body {
     justify-content: center;
     align-items: baseline; 
     
-    /* ❌ 删掉下面这一行，或者改成 none */
+    /* 🔥 核心修改：移除全大写强制，允许 "Hi Zaki" */
     /* text-transform: uppercase; */ 
     
     letter-spacing: -1vw; 
 }
 
-/* 🔥 核心修复：强制内部字母继承字体 (解决 span 不变的问题) */
+/* 强制内部字母继承字体 */
 .huge-title .letter {
     font-family: inherit !important;
 }
 
-/* 字母动效 */
+/* 字母动效 - 更新为 7 个字符的延迟 */
 .letter {
     display: inline-block;
     opacity: 0;
     animation: smoothDrop 1.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
-.letter:nth-child(1) { animation-delay: 0.2s; }
-.letter:nth-child(2) { animation-delay: 0.35s; }
-.letter:nth-child(3) { animation-delay: 0.5s; }
-.letter:nth-child(4) { animation-delay: 0.65s; }
+.letter:nth-child(1) { animation-delay: 0.2s; }  /* H */
+.letter:nth-child(2) { animation-delay: 0.35s; } /* i */
+.letter:nth-child(3) { animation-delay: 0.5s; }  /* 空格 */
+.letter:nth-child(4) { animation-delay: 0.65s; } /* Z */
+.letter:nth-child(5) { animation-delay: 0.8s; }  /* a */
+.letter:nth-child(6) { animation-delay: 0.95s; } /* k */
+.letter:nth-child(7) { animation-delay: 1.1s; }  /* i */
+
 @keyframes smoothDrop {
     0% { transform: translateY(-120%); opacity: 0; }
     100% { transform: translateY(0); opacity: 1; }
@@ -260,9 +264,8 @@ body {
 .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 120px; align-items: center; }
 .story-text { text-align: left; }
 
-/* 既然大标题用了 Juana，这里也推荐统一用 Juana，或者保持 Playfair Display */
 .story-paragraph { 
-    font-family: 'JuanaCustom', serif; /* 尝试统一风格 */
+    font-family: 'JuanaCustom', serif; /* 保持统一高级感 */
     font-size: 3rem; 
     line-height: 1.15; 
     font-weight: 200; 
