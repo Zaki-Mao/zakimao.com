@@ -52,10 +52,9 @@ body {
 }
 
 /* 巨大标题 "ZAKI" - 强制使用 Juana */
+/* 巨大标题 "ZAKI" */
 .huge-title {
-    /* 🔥 核心修复：使用 !important 强制覆盖所有默认设置 */
     font-family: 'JuanaCustom', serif !important;
-    
     font-size: 38vw;       
     font-weight: 200;      
     color: var(--primary-color);
@@ -67,7 +66,9 @@ body {
     justify-content: center;
     align-items: baseline; 
     
-    text-transform: uppercase;
+    /* ❌ 删掉下面这一行，或者改成 none */
+    /* text-transform: uppercase; */ 
+    
     letter-spacing: -1vw; 
 }
 
