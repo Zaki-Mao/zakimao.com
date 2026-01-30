@@ -1,90 +1,417 @@
 /* =========================================
-   4. 黄色背景区域通用设置 (渐变已拉长)
+   1. 字体设置
+   ========================================= */
+@font-face {
+    font-family: 'JuanaCustom';
+    /* 确保 J-Extralight.woff2 在根目录 */
+    src: url('J-Extralight.woff2') format('woff2');
+    font-weight: 200; font-style: normal; font-display: swap;
+}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&family=Noto+Serif+SC:wght@300;400;600&display=swap');
+
+/* =========================================
+   2. 全局变量 & 配色
+   ========================================= */
+:root {
+    --bg-color: #FAF5EF;      /* 顶部：杏仁白 */
+    --dark-bg: #F6D38D;       /* 底部：暖桃黄 */
+    --primary-color: #E34234; /* 朱砂红 */
+    --text-color: #5A4D4D;    /* 深暖灰 */
+    --light-text: #2C241B;    /* 深咖色 */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+    background-color: var(--bg-color);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden; overflow-y: auto;
+}
+
+/* =========================================
+   3. Hero 区域
+   ========================================= */
+.hero-wrapper {
+    position: relative; width: 100%; height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    overflow: hidden; z-index: 10; 
+}
+
+.huge-title {
+    font-family: 'JuanaCustom', serif !important;
+    font-size: 22vw; font-weight: 200; color: var(--primary-color);
+    line-height: 0.8; white-space: nowrap; margin-top: -5vh;
+    display: flex; justify-content: center; align-items: baseline; 
+    letter-spacing: -1vw; 
+}
+.huge-title .letter { font-family: inherit !important; }
+
+/* 字母动效 */
+.letter {
+    display: inline-block; opacity: 0;
+    animation: smoothDrop 1.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+.letter:nth-child(1) { animation-delay: 0.2s; }
+.letter:nth-child(2) { animation-delay: 0.35s; }
+.letter:nth-child(3) { animation-delay: 0.5s; }
+.letter:nth-child(4) { animation-delay: 0.65s; }
+.letter:nth-child(5) { animation-delay: 0.8s; }
+.letter:nth-child(6) { animation-delay: 0.95s; }
+.letter:nth-child(7) { animation-delay: 1.1s; }
+@keyframes smoothDrop {
+    0% { transform: translateY(-120%); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.content-area {
+    margin-top: 5vh; text-align: center; z-index: 20;
+    opacity: 0; animation: fadeIn 1.5s ease 1.2s forwards;
+}
+@keyframes fadeIn { to { opacity: 1; } }
+
+.subtitle-text {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: 1.5rem; color: var(--text-color); margin-bottom: 2rem; line-height: 1.4;
+}
+
+/* 动态向下箭头 */
+.scroll-indicator {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    opacity: 0; animation: fadeIn 1s ease 2s forwards; cursor: pointer;
+    text-decoration: none; 
+}
+.scroll-text {
+    font-family: 'Inter', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em;
+    color: var(--primary-color); opacity: 0.8;
+}
+.arrow-icon {
+    width: 20px; height: 30px; border: 1.5px solid var(--primary-color); border-radius: 20px;
+    position: relative;
+}
+.arrow-icon::after {
+    content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+    width: 2px; height: 6px; background-color: var(--primary-color); border-radius: 2px;
+    animation: scrollDown 1.5s infinite ease-in-out;
+}
+@keyframes scrollDown {
+    0% { top: 6px; opacity: 1; height: 6px; }
+    100% { top: 18px; opacity: 0; height: 2px; }
+}
+
+
+/* =========================================
+   4. 黄色背景区域 (渐变拉长 + 底部紧凑)
    ========================================= */
 .dark-section {
     position: relative; background-color: var(--dark-bg); color: var(--light-text);
     width: 100%; 
-    padding: 140px 10% 60px; 
+    padding: 140px 10% 60px; /* 底部 padding 减小 */
     z-index: 1;
 }
 
-/* 🔥 核心修改：渐变拉长 */
+/* 渐变拉长到 600px */
 .dark-section.first-section::before {
-    content: ''; 
-    position: absolute; 
-    /* 高度增加到 600px，让过渡更柔和 */
-    top: -600px; 
-    left: 0; 
-    width: 100%; 
-    height: 601px; /* 多1px防止缝隙 */
+    content: ''; position: absolute; 
+    top: -600px; left: 0; width: 100%; height: 601px;
     background: linear-gradient(to bottom, transparent, var(--dark-bg));
-    pointer-events: none; 
-    z-index: 2;
+    pointer-events: none; z-index: 2;
 }
-
 .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 3; }
 
 
-/* ... (中间的代码保持不变) ... */
+/* =========================================
+   5. About Me & Language Switch
+   ========================================= */
+.lang-switch-wrapper {
+    position: absolute; top: 0; right: 0; 
+    z-index: 20;
+}
+.lang-btn {
+    background: none; border: 1px solid #2C241B; border-radius: 20px;
+    padding: 6px 16px; color: #2C241B; font-family: 'Inter', sans-serif; font-size: 0.8rem;
+    cursor: pointer; transition: all 0.3s ease;
+}
+.lang-btn:hover { background-color: rgba(44,36,27, 0.1); }
+.lang-btn span.active { font-weight: 700; text-decoration: underline; }
+
+.about-wrapper { position: relative; margin-bottom: 100px; }
+
+.story-grid { 
+    display: grid; 
+    grid-template-columns: 0.8fr 1.2fr; 
+    gap: 80px; align-items: center; 
+}
+
+.about-image-wrapper { 
+    width: 100%; aspect-ratio: 4/5; 
+    overflow: hidden; border-radius: 4px; 
+    box-shadow: 20px 20px 0px rgba(44,36,27, 0.1); 
+}
+.about-image-wrapper img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
+
+.story-text { text-align: left; padding-top: 40px; } 
+
+.story-paragraph { 
+    font-family: 'Playfair Display', 'Noto Serif SC', serif; 
+    font-size: 2.2rem; line-height: 1.5; font-weight: 400; 
+    color: #2C241B; margin-bottom: 30px;
+}
+.story-paragraph.small { 
+    font-size: 1.1rem; opacity: 0.8; margin-top: 20px; 
+    font-family: 'Inter', 'Noto Serif SC', sans-serif; line-height: 1.8;
+}
 
 
 /* =========================================
-   9. Article Page Styles (博客文章页专用样式)
+   6. Education / Experience (完美对齐)
    ========================================= */
-/* 将这些代码粘贴到 style.css 的最底部 */
+.edu-section {
+    margin-top: 60px; padding-top: 80px; 
+    border-top: 1px solid rgba(44,36,27, 0.15); 
+}
+.edu-title {
+    font-family: 'Inter', sans-serif; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.2em;
+    margin-bottom: 60px; opacity: 0.5; text-align: center;
+}
+.edu-grid {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 80px; 
+    align-items: flex-start;
+}
+.edu-item {
+    display: flex; flex-direction: column; align-items: center; gap: 20px; 
+    opacity: 0.8; transition: all 0.3s; text-align: center;
+}
+.edu-item:hover { opacity: 1; transform: translateY(-5px); }
 
+/* Logo 容器：固定高度 + 垂直居中 (解决对齐问题的关键) */
+.edu-icon-wrapper {
+    height: 110px; 
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    justify-content: center;
+}
+
+.edu-logo-img {
+    height: 65px; 
+    width: auto; 
+    display: block;
+    object-fit: contain;
+}
+
+/* 🔥 NTU Logo 加大 */
+.edu-logo-img.ntu-special {
+    height: 95px; 
+}
+
+.edu-icon { 
+    font-size: 3.5rem; 
+    line-height: 1; 
+    display: block; 
+}
+
+.edu-info-text { display: flex; flex-direction: column; gap: 5px; }
+.edu-school { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-weight: 600; font-size: 1rem; letter-spacing: 0.05em; }
+.edu-major { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 0.85rem; opacity: 0.7; }
+
+
+/* =========================================
+   7. Gallery (堆叠 -> 散开 16:9 版)
+   ========================================= */
+.gallery-wrapper {
+    position: relative; width: 100%; height: 600px; 
+    display: flex; justify-content: center; align-items: center;
+    /* 减少到底部的留白 */
+    margin: 20px 0 0px; 
+}
+.photo-pile-container {
+    position: relative; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+}
+
+.photo-card {
+    position: absolute; display: block;
+    /* 16:9 尺寸 (520px) */
+    width: 520px; height: 292px; 
+    
+    overflow: visible; /* 允许文字在卡片外 */
+    
+    border: 8px solid #fff; border-radius: 4px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    background-color: #fff; 
+    
+    left: 50% !important; top: 50%; 
+    margin-top: -146px; 
+    
+    transform: translateX(-50%) rotate(0deg) scale(0.9);
+    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer; transform-origin: center center;
+}
+
+.photo-card-img {
+    width: 100%; height: 100%;
+    background-size: cover; background-position: center;
+}
+
+/* 5张卡片堆叠角度 */
+.photo-card:nth-child(1) { transform: translateX(-50%) rotate(-8deg) scale(0.9); z-index: 1; }
+.photo-card:nth-child(2) { transform: translateX(-50%) rotate(-4deg) scale(0.93); z-index: 2; }
+.photo-card:nth-child(3) { transform: translateX(-50%) rotate(0deg) scale(0.96); z-index: 3; }
+.photo-card:nth-child(4) { transform: translateX(-50%) rotate(4deg) scale(0.93); z-index: 2; }
+.photo-card:nth-child(5) { transform: translateX(-50%) rotate(8deg) scale(0.9); z-index: 1; }
+
+/* 悬停散开 */
+.photo-pile-container:hover .photo-card {
+    left: var(--left) !important; top: 50%; 
+    transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot)) scale(1);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+}
+
+/* 单卡高亮 */
+.photo-pile-container:hover .photo-card:hover {
+    z-index: 100 !important;
+    transform: translateX(-50%) translateY(-20px) scale(1.15) rotate(0deg) !important;
+    border-color: #fff;
+    box-shadow: 0 35px 80px rgba(0,0,0,0.3);
+}
+
+/* 底部文字 (不挡图片) */
+.card-caption {
+    position: absolute;
+    top: 100%; 
+    left: 0; width: 100%;
+    margin-top: 20px; 
+    text-align: center;
+    opacity: 0; 
+    transform: translateY(-10px);
+    transition: all 0.4s ease 0.1s; 
+    pointer-events: none;
+}
+
+.caption-text {
+    font-family: 'Inter', 'Noto Serif SC', sans-serif;
+    font-size: 1rem; line-height: 1.5;
+    color: #2C241B; 
+    background: rgba(255, 255, 255, 0.4); 
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.photo-card:hover .card-caption { 
+    opacity: 1; 
+    transform: translateY(0);
+}
+
+
+/* =========================================
+   8. Projects (紧凑布局)
+   ========================================= */
+#projects {
+    padding-top: 0px !important; 
+    margin-top: -40px; 
+}
+
+.project-list { display: flex; flex-direction: column; gap: 120px; margin-bottom: 160px; }
+.project-item { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; }
+.project-item:nth-child(even) { direction: rtl; }
+.project-item:nth-child(even) .project-info { direction: ltr; }
+
+.project-preview {
+    width: 100%; aspect-ratio: 16/9; 
+    overflow: hidden; border-radius: 8px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+.project-preview img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.project-preview:hover img { transform: scale(1.05); }
+
+.project-info { padding: 20px 0; }
+.project-name { font-family: 'JuanaCustom', serif; font-size: 3rem; margin-bottom: 20px; color: #2C241B; }
+.project-desc { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 1.1rem; line-height: 1.6; opacity: 0.8; margin-bottom: 30px; }
+.project-link { 
+    display: inline-block; text-decoration: none; color: #2C241B; 
+    border-bottom: 1px solid #2C241B; padding-bottom: 4px; 
+    font-family: 'Inter', 'Noto Serif SC', sans-serif; font-weight: 500;
+    transition: opacity 0.3s;
+}
+.project-link:hover { opacity: 0.6; }
+
+.section-label { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 60px; border-bottom: 1px solid rgba(44,36,27, 0.1); padding-bottom: 20px; color: #2C241B; }
+.blog-list { display: flex; flex-direction: column; }
+.blog-item { display: flex; justify-content: space-between; align-items: center; padding: 40px 0; border-bottom: 1px solid rgba(44,36,27, 0.1); cursor: pointer; transition: all 0.3s ease; text-decoration: none; color: #2C241B; }
+.blog-item:hover { background-color: rgba(255,255,255,0.2); padding-left: 20px; }
+.blog-meta { font-family: 'Inter', sans-serif; font-size: 0.9rem; opacity: 0.6; width: 150px; }
+.blog-content { flex: 1; }
+.blog-title { font-family: 'JuanaCustom', serif; font-size: 2.2rem; font-weight: 200; margin-bottom: 10px; }
+.blog-tag { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 0.8rem; background-color: rgba(44,36,27,0.05); padding: 4px 10px; border-radius: 4px; opacity: 0.8; }
+.blog-thumb { width: 180px; height: 110px; border-radius: 4px; overflow: hidden; margin-left: 40px; opacity: 0; transform: translateX(20px); transition: all 0.4s ease; }
+.blog-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.blog-item:hover .blog-thumb { opacity: 1; transform: translateX(0); }
+
+/* 手机适配 */
+@media (max-width: 768px) {
+    .huge-title { font-size: 45vw; margin-top: 10vh; letter-spacing: -3vw; }
+    .hero-wrapper { height: 90vh; }
+    
+    .story-grid { grid-template-columns: 1fr; gap: 40px; } 
+    .about-image-wrapper { aspect-ratio: 16/9; }
+    .lang-switch-wrapper { position: static; margin-bottom: 20px; text-align: right; }
+    
+    .edu-grid { flex-direction: column; gap: 40px; }
+    .edu-icon-wrapper { height: auto; } 
+    
+    .gallery-wrapper { height: 400px; margin: 40px 0; }
+    .photo-card { width: 280px; height: 157px; margin-top: -78px; }
+    
+    .photo-pile-container:hover .photo-card:nth-child(1) { left: 10% !important; }
+    .photo-pile-container:hover .photo-card:nth-child(5) { left: 90% !important; }
+    
+    .project-item { grid-template-columns: 1fr; gap: 40px; }
+    .project-item:nth-child(even) { direction: ltr; } 
+    .dark-section.first-section::before { height: 100px; top: -100px; }
+    #projects { margin-top: 0; }
+}
+
+.fab-menu { position: fixed; bottom: 40px; left: 40px; width: 50px; height: 50px; background-color: #6B2E7F; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; z-index: 99; }
+
+
+/* =========================================
+   9. Article Page Styles (博客文章页专用)
+   ========================================= */
 .article-container {
-    max-width: 800px; /* 文章阅读的最佳宽度 */
+    max-width: 800px; 
     margin: 0 auto;
     padding: 120px 20px;
 }
-
 .article-header { text-align: center; margin-bottom: 80px; }
-
 .article-meta {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif; font-size: 0.9rem;
     color: #2C241B; opacity: 0.6;
     text-transform: uppercase; letter-spacing: 0.1em;
     margin-bottom: 20px;
 }
-
 .article-title {
-    font-family: 'JuanaCustom', serif;
-    font-size: 3.5rem; line-height: 1.1;
-    color: #2C241B;
-    margin-bottom: 40px;
+    font-family: 'JuanaCustom', serif; font-size: 3.5rem; line-height: 1.1;
+    color: #2C241B; margin-bottom: 40px;
 }
-
 .article-cover {
-    width: 100%; height: auto;
-    border-radius: 4px;
-    margin-bottom: 60px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    width: 100%; height: auto; border-radius: 4px;
+    margin-bottom: 60px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
-
 .article-body {
-    font-family: 'Noto Serif SC', 'Inter', serif;
-    font-size: 1.2rem; line-height: 1.8;
+    font-family: 'Noto Serif SC', 'Inter', serif; font-size: 1.2rem; line-height: 1.8;
     color: #2C241B;
 }
-
 .article-body p { margin-bottom: 30px; }
-
 .article-body h2 {
-    font-family: 'JuanaCustom', serif;
-    font-size: 2rem;
+    font-family: 'JuanaCustom', serif; font-size: 2rem;
     margin-top: 60px; margin-bottom: 30px;
 }
-
 .article-body img {
-    width: 100%; height: auto;
-    border-radius: 4px;
-    margin: 40px 0;
+    width: 100%; height: auto; border-radius: 4px; margin: 40px 0;
 }
-
 .article-footer {
     margin-top: 100px; padding-top: 60px;
-    border-top: 1px solid rgba(44,36,27, 0.1);
-    text-align: center;
+    border-top: 1px solid rgba(44,36,27, 0.1); text-align: center;
 }

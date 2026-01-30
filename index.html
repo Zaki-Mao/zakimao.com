@@ -259,87 +259,93 @@
         </div>
     </section>
 
-   <section id="blog" class="dark-section">
+    <section id="blog" class="dark-section">
         <div class="container">
             <div class="section-label">
                 <span class="lang-en">Selected Writings</span>
                 <span class="lang-zh" style="display: none;">近期文章</span>
             </div>
             
-            <div class="blog-list">
-                
-                <a href="blog/soul.html" class="blog-item">
-                    <div class="blog-meta">01.23.2021</div>
-                    <div class="blog-content">
-                        <h3 class="blog-title">《心灵奇旅》：灵魂的 Solo，生与死的交织</h3>
-                        <span class="blog-tag">
-                            <span class="lang-en">Movie Review</span>
-                            <span class="lang-zh" style="display: none;">影评随谈</span>
-                        </span>
-                    </div>
-                    <div class="blog-thumb">
-                        <img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmyk8k221qj30u00clglw.jpg" alt="Soul Movie">
-                    </div>
-                </a>
-
-                <a href="blog/post-1.html" class="blog-item">
-                    <div class="blog-meta">02.07.2025</div>
-                    <div class="blog-content">
-                        <h3 class="blog-title">
-                            <span class="lang-en">Ghost Forest: Whispers in the Obscured Wild</span>
-                            <span class="lang-zh" style="display: none;">幽灵森林：迷雾荒野中的低语</span>
-                        </h3>
-                        <span class="blog-tag">
-                            <span class="lang-en">Photography</span>
-                            <span class="lang-zh" style="display: none;">摄影随笔</span>
-                        </span>
-                    </div>
-                    <div class="blog-thumb">
-                        <img src="https://images.unsplash.com/photo-1448375240586-dfd8d3f5d891?auto=format&fit=crop&w=300&q=80" alt="Forest">
-                    </div>
-                </a>
-
-            </div>
+            <div class="blog-list" id="blog-list-container"></div>
+            
         </div>
     </section>
 
     <div class="fab-menu">⋮</div>
 
+    <script src="blog/posts.js"></script>
+
     <script>
+        // 1. 定义语言切换功能 (先定义，保证后面能用)
         const toggleBtn = document.getElementById('langToggle');
         let currentLang = 'en';
 
-        toggleBtn.addEventListener('click', () => {
-            currentLang = currentLang === 'en' ? 'zh' : 'en';
-            updateLanguage();
-        });
+        // 按钮点击事件
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                currentLang = currentLang === 'en' ? 'zh' : 'en';
+                updateLanguage();
+            });
+        }
 
+        // 核心切换函数
         function updateLanguage() {
             const enElements = document.querySelectorAll('.lang-en');
             const zhElements = document.querySelectorAll('.lang-zh');
 
             if (currentLang === 'zh') {
                 enElements.forEach(el => el.style.display = 'none');
-                zhElements.forEach(el => el.style.display = 'inline');
                 zhElements.forEach(el => {
-                    if (el.tagName === 'P' || el.tagName === 'DIV' || el.tagName === 'H3') {
+                    el.style.display = 'inline';
+                    // 修正块级元素的显示
+                    if (['P', 'DIV', 'H3'].includes(el.tagName)) {
                         el.style.display = 'block';
                     }
                 });
-                toggleBtn.innerHTML = `<span>EN</span> / <span class="active">中文</span>`;
+                if(toggleBtn) toggleBtn.innerHTML = `<span>EN</span> / <span class="active">中文</span>`;
                 document.body.style.fontFamily = "'Noto Serif SC', 'Inter', sans-serif";
             } else {
                 zhElements.forEach(el => el.style.display = 'none');
-                enElements.forEach(el => el.style.display = 'inline');
                 enElements.forEach(el => {
-                    if (el.tagName === 'P' || el.tagName === 'DIV' || el.tagName === 'H3') {
+                    el.style.display = 'inline';
+                    if (['P', 'DIV', 'H3'].includes(el.tagName)) {
                         el.style.display = 'block';
                     }
                 });
-                toggleBtn.innerHTML = `<span class="active">EN</span> / <span>中文</span>`;
+                if(toggleBtn) toggleBtn.innerHTML = `<span class="active">EN</span> / <span>中文</span>`;
                 document.body.style.fontFamily = "'Inter', sans-serif";
             }
         }
+
+        // 2. 生成博客列表
+        const container = document.getElementById('blog-list-container');
+        
+        if (typeof blogPosts !== 'undefined' && container) {
+            const postsHTML = blogPosts.map(post => `
+                <a href="${post.url}" class="blog-item">
+                    <div class="blog-meta">${post.date}</div>
+                    <div class="blog-content">
+                        <h3 class="blog-title">
+                            <span class="lang-en">${post.title_en}</span>
+                            <span class="lang-zh" style="display: none;">${post.title_zh}</span>
+                        </h3>
+                        <span class="blog-tag">
+                            <span class="lang-en">${post.tag_en}</span>
+                            <span class="lang-zh" style="display: none;">${post.tag_zh}</span>
+                        </span>
+                    </div>
+                    <div class="blog-thumb">
+                        <img src="${post.thumb}" alt="Blog Thumbnail">
+                    </div>
+                </a>
+            `).join('');
+
+            container.innerHTML = postsHTML;
+        }
+
+        // 3. 初始化语言状态
+        // 确保页面加载完成后，新生成的博客内容也能应用正确的语言
+        updateLanguage();
     </script>
 
 </body>
