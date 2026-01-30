@@ -3,10 +3,11 @@
    ========================================= */
 @font-face {
     font-family: 'GarnettCustom';
-    /* ⭐ 技巧：加了 ?v=999 强迫浏览器把旧缓存扔掉，重新加载字体 */
-    src: url('Garnett-Light.ttf?v=999') format('truetype');
+    /* 使用相对路径引用字体文件 */
+    src: url('./Garnett-Light.ttf') format('truetype');
     font-weight: 300;
     font-style: normal;
+    font-display: swap;
 }
 
 /* =========================================
@@ -41,17 +42,19 @@ body {
     flex-direction: column;
     align-items: center;
     
-    /* 🔥 关键修复：去掉了 overflow: hidden */
-    /* 这样底部的卡片即使伸出去了，也不会被切掉 */
+    /* 修复：使用 clip 而不是 hidden，避免卡片被裁剪 */
     overflow: visible; 
     
-    /* 确保 Hero 在层级上高于下面的深色区域，这样卡片才能浮在渐变之上 */
-    z-index: 10; 
+    /* 确保 Hero 在层级上高于下面的深色区域 */
+    z-index: 10;
+    
+    /* 🔥 新增：给hero底部留出空间，防止卡片盖住下面内容 */
+    margin-bottom: 200px;
 }
 
 /* 巨大标题 "Zaki" */
 .huge-title {
-    font-family: 'GarnettCustom', sans-serif;
+    font-family: 'GarnettCustom', 'Playfair Display', serif;
     font-size: 34vw;       
     font-weight: 300;      
     color: var(--primary-color);
@@ -123,7 +126,7 @@ body {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 400px; /* 加高感应区，防止鼠标划出去 */
+    height: 400px;
     
     display: flex;
     justify-content: center;
@@ -131,14 +134,16 @@ body {
     opacity: 0;
     animation: fadeIn 1s ease 1s forwards;
     
-    /* 确保卡片层级最高，压在所有渐变和背景之上 */
-    z-index: 100; 
+    /* 确保卡片层级最高 */
+    z-index: 100;
+    
+    /* 🔥 新增：允许卡片超出容器 */
+    overflow: visible;
 }
 
-/* --- 卡片样式 (加大加宽) --- */
+/* --- 卡片样式 --- */
 .photo-card {
     position: absolute;
-    /* ⭐ 修改：卡片变大 */
     width: 280px; 
     height: 360px;
     background-size: cover;
@@ -147,34 +152,62 @@ body {
     border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     
-    /* 默认堆叠状态：沉在底部，只露出一点 */
+    /* 🔥 修复：改进默认堆叠位置，减少伸出屏幕的距离 */
     left: 50% !important; 
-    bottom: -180px; /* 故意让它伸出第一屏，跨在交界线上 */
+    bottom: -120px; /* 减少伸出距离，给下面内容留空间 */
     
-    transform: translateX(-50%) rotate(0deg) scale(0.9);
-    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    /* 🔥 修复：简化transform，避免冲突 */
+    transform: translateX(-50%) scale(0.9);
+    
+    /* 🔥 修复：分离不同属性的transition，避免抽搐 */
+    transition: left 0.6s cubic-bezier(0.25, 0.8, 0.25, 1),
+                bottom 0.6s cubic-bezier(0.25, 0.8, 0.25, 1),
+                transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1),
+                box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1),
+                z-index 0s;
     
     cursor: pointer;
     transform-origin: center bottom;
 }
 
 /* 堆叠时的微小随机角度 */
-.photo-card:nth-child(odd)  { transform: translateX(-50%) rotate(-4deg) scale(0.9); }
-.photo-card:nth-child(even) { transform: translateX(-50%) rotate(3deg) scale(0.92); }
+.photo-card:nth-child(1) { transform: translateX(-50%) rotate(-3deg) scale(0.9); }
+.photo-card:nth-child(2) { transform: translateX(-50%) rotate(2deg) scale(0.91); }
+.photo-card:nth-child(3) { transform: translateX(-50%) rotate(-1deg) scale(0.92); }
+.photo-card:nth-child(4) { transform: translateX(-50%) rotate(3deg) scale(0.91); }
+.photo-card:nth-child(5) { transform: translateX(-50%) rotate(-2deg) scale(0.9); }
 
-/* 鼠标悬停：散开 */
+/* 鼠标悬停容器：散开 */
 .photo-pile-container:hover .photo-card {
     left: var(--left) !important;
-    bottom: -50px; /* 散开时稍微升起来 */
+    bottom: 20px; /* 散开时升起到合适位置 */
     
-    transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot)) scale(1);
+    /* 🔥 修复：使用独立的 translateY，不要和 var(--y) 混用 */
+    transform: translateX(-50%) rotate(var(--rot)) scale(1);
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+/* 🔥 新增：给每个卡片应用自定义的Y轴偏移 */
+.photo-pile-container:hover .photo-card:nth-child(1) {
+    transform: translateX(-50%) translateY(20px) rotate(var(--rot)) scale(1);
+}
+.photo-pile-container:hover .photo-card:nth-child(2) {
+    transform: translateX(-50%) translateY(60px) rotate(var(--rot)) scale(1);
+}
+.photo-pile-container:hover .photo-card:nth-child(3) {
+    transform: translateX(-50%) translateY(10px) rotate(var(--rot)) scale(1);
+}
+.photo-pile-container:hover .photo-card:nth-child(4) {
+    transform: translateX(-50%) translateY(50px) rotate(var(--rot)) scale(1);
+}
+.photo-pile-container:hover .photo-card:nth-child(5) {
+    transform: translateX(-50%) translateY(30px) rotate(var(--rot)) scale(1);
 }
 
 /* 单卡悬停高亮 */
 .photo-pile-container:hover .photo-card:hover {
-    z-index: 200; /* 最高层级 */
-    transform: translateX(-50%) translateY(-50px) scale(1.08) rotate(0deg) !important;
+    z-index: 200;
+    transform: translateX(-50%) translateY(-20px) scale(1.08) rotate(0deg) !important;
     border-color: #fff;
 }
 
@@ -188,24 +221,27 @@ body {
     width: 100%;
     padding: 160px 10% 100px;
     
-    /* 放在 Hero 下面，防止挡住 Hero 里的内容 */
-    z-index: 1; 
+    /* 放在 Hero 下面 */
+    z-index: 1;
+    
+    /* 🔥 新增：给深色区域顶部加padding，确保和卡片有足够间距 */
+    margin-top: 0;
 }
 
-/* ⭐ 渐变蒙版：解决颜色断层 */
+/* ⭐ 渐变蒙版：平滑过渡 */
 .dark-section::before {
     content: '';
     position: absolute;
-    top: -150px; /* 向上延伸 150px */
+    top: -150px;
     left: 0;
     width: 100%;
-    height: 151px; /* 多 1px 防止缝隙 */
+    height: 151px;
     
-    /* 制作一个从透明到深绿色的渐变，平滑过渡 */
+    /* 制作渐变过渡 */
     background: linear-gradient(to bottom, transparent, var(--dark-bg));
     
-    pointer-events: none; /* 让鼠标能穿透渐变点到下面的卡片(如果卡片在下面的话) */
-    z-index: 2; /* 盖在普通背景上 */
+    pointer-events: none;
+    z-index: 2;
 }
 
 .container {
@@ -216,7 +252,7 @@ body {
 }
 
 /* =========================================
-   5. About / Story 样式 (保持不变)
+   5. About / Story 样式
    ========================================= */
 .story-grid {
     display: grid;
@@ -258,8 +294,12 @@ body {
 }
 
 /* =========================================
-   6. Blog / Articles 样式 (保持不变)
+   6. Blog / Articles 样式
    ========================================= */
+.blog-layout {
+    padding-top: 100px;
+}
+
 .section-label {
     font-family: 'Inter', sans-serif;
     font-size: 0.9rem;
@@ -292,9 +332,12 @@ body {
 @media (max-width: 768px) {
     .huge-title { font-size: 45vw; margin-top: 10vh; letter-spacing: -2vw; }
     
-    /* 手机上卡片稍微小一点，不然挡太多 */
+    /* 手机上调整hero底部边距 */
+    .hero-wrapper { margin-bottom: 120px; }
+    
+    /* 手机上卡片稍微小一点 */
     .photo-pile-container { height: 260px; }
-    .photo-card { width: 180px; height: 260px; bottom: -120px; }
+    .photo-card { width: 180px; height: 260px; bottom: -80px; }
     
     .story-grid { grid-template-columns: 1fr; gap: 40px; }
     .story-paragraph { font-size: 2.2rem; }
