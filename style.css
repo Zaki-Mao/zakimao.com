@@ -1,5 +1,16 @@
 /* =========================================
-   1. 全局设置
+   1. 引入自定义字体: Garnett Light
+   ========================================= */
+@font-face {
+    font-family: 'GarnettCustom';
+    /* ⚠️ 必须确保你上传的文件名完全一致，区分大小写 */
+    src: url('Garnett-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+/* =========================================
+   2. 全局变量 & 设置
    ========================================= */
 :root {
     --bg-color: #FAF5EF;      /* 杏仁白 */
@@ -11,51 +22,54 @@
 
 body {
     background-color: var(--bg-color);
-    font-family: 'Inter', sans-serif;
-    /* 允许纵向滚动，但第一屏要锁住横向溢出 */
-    overflow-x: hidden; 
+    font-family: 'Inter', sans-serif; /* 正文继续用 Inter */
+    overflow-x: hidden;
     height: 100vh;
 }
 
 /* =========================================
-   2. 英雄区域 (Hero Wrapper)
+   3. 英雄区域布局 (Hero Wrapper)
    ========================================= */
 .hero-wrapper {
     position: relative;
     width: 100%;
-    height: 100vh; /* 占满一屏 */
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow: hidden; /* 关键：隐藏ZAKI溢出屏幕的部分 */
+    overflow: hidden; 
 }
 
 /* =========================================
-   3. 巨大标题 ZAKI (回归第一版)
+   4. 巨大标题 "Zaki" (使用 Garnett Light)
    ========================================= */
 .huge-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 34vw; /* 核心：34%视口宽度，确保溢出 */
-    font-weight: 500;
+    font-family: 'GarnettCustom', sans-serif; /* 这里的名字要和上面 @font-face 对应 */
+    font-size: 34vw;       /* 巨大字号 */
+    font-weight: 300;      /* Light 字重 */
     color: var(--primary-color);
-    line-height: 0.75; /* 贴顶 */
-    white-space: nowrap; /* 不换行 */
+    line-height: 0.8;      /* 行高 */
+    white-space: nowrap;
     margin-top: -2vw;
     z-index: 10;
     
+    /* 布局与对齐 */
     display: flex;
     justify-content: center;
+    align-items: baseline; /* 关键：让大写Z和小写aki底部对齐 */
+    
+    /* 视觉微调 */
+    letter-spacing: -2vw;  /* 细体字在大尺寸下稍微紧凑点更高级 */
 }
 
 /* --- 丝滑入场动画 --- */
 .letter {
     display: inline-block;
     opacity: 0;
-    /* 使用物理回弹曲线 */
     animation: smoothDrop 1.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
 
-/* 差速下落：Z先，I后 */
+/* 差速下落 */
 .letter:nth-child(1) { animation-delay: 0.2s; }
 .letter:nth-child(2) { animation-delay: 0.35s; }
 .letter:nth-child(3) { animation-delay: 0.5s; }
@@ -67,7 +81,7 @@ body {
 }
 
 /* =========================================
-   4. 中间内容区 (淡入)
+   5. 中间内容区 (Subtitle & Button)
    ========================================= */
 .content-area {
     margin-top: 5vh;
@@ -107,20 +121,20 @@ body {
 }
 
 /* =========================================
-   5. 底部卡片散落区 (Dispersed Pile)
+   6. 底部照片散落区 (First Version Layout)
    ========================================= */
 .photo-pile-container {
     position: absolute;
-    bottom: -80px; /* 卡片露出大半部分 */
+    bottom: -80px;
     width: 100%;
     height: 350px;
     
-    /* 初始状态：下沉隐藏，等文字落完再升起 */
+    /* 初始隐藏，延迟出现 */
     opacity: 0;
     transform: translateY(50px);
     animation: cardsFloatUp 1.5s cubic-bezier(0.2, 1, 0.3, 1) 1.2s forwards;
     
-    pointer-events: none; /* 允许点击穿透 */
+    pointer-events: none; 
 }
 
 @keyframes cardsFloatUp {
@@ -137,40 +151,34 @@ body {
     border-radius: 4px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     
-    /* 核心布局：使用 CSS 变量控制分散 */
-    /* translate(-50%) 确保以中心点定位，布局更均匀 */
+    /* 核心定位逻辑 (由 HTML 内联样式控制) */
     left: var(--left);
     transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot));
     
     transition: transform 0.4s ease, z-index 0s;
-    pointer-events: auto; /* 恢复交互 */
+    pointer-events: auto; 
     cursor: pointer;
 }
 
-/* 交互：悬停时像抽牌一样浮起 */
 .photo-card:hover {
     z-index: 100;
-    /* 悬停时归正角度，放大，上浮 */
     transform: translateX(-50%) translateY(-100px) scale(1.1) rotate(0deg) !important;
     box-shadow: 0 20px 50px rgba(0,0,0,0.2);
 }
 
 /* =========================================
-   手机适配
+   7. 手机适配 & 浮动菜单
    ========================================= */
 @media (max-width: 768px) {
-    .huge-title { font-size: 45vw; margin-top: 10vh; }
-    
-    .photo-pile-container { bottom: -120px; }
-    
-    /* 手机上卡片变小，且间距重叠多一点，防止超出屏幕 */
-    .photo-card { 
-        width: 140px; 
-        height: 200px;
+    .huge-title { 
+        font-size: 45vw; /* 手机上更大 */
+        margin-top: 10vh; 
+        letter-spacing: -3vw; /* 手机上需要更紧 */
     }
+    .photo-pile-container { bottom: -120px; }
+    .photo-card { width: 140px; height: 200px; }
 }
 
-/* 浮动菜单 */
 .fab-menu {
     position: fixed;
     bottom: 40px;
