@@ -119,7 +119,6 @@ body {
 /* =========================================
    5. About Me & Language Switch
    ========================================= */
-/* 语言切换按钮 (右上角) */
 .lang-switch-wrapper {
     position: absolute; top: 0; right: 0; 
     z-index: 20;
@@ -137,7 +136,7 @@ body {
 /* 左图右文 Grid */
 .story-grid { 
     display: grid; 
-    grid-template-columns: 0.8fr 1.2fr; /* 左图0.8 : 右文1.2 */
+    grid-template-columns: 0.8fr 1.2fr; 
     gap: 80px; align-items: center; 
 }
 
@@ -181,21 +180,19 @@ body {
 }
 .edu-item:hover { opacity: 1; transform: translateY(-5px); }
 
-/* Logo 图片基础样式 */
 .edu-logo-img {
-    height: 60px; /* 默认高度 */
+    height: 60px; 
     width: auto; 
     display: block;
     object-fit: contain;
 }
 
-/* 🔥 NTU 特殊处理：加大高度以平衡视觉 */
+/* 🔥 NTU Logo 特大号 */
 .edu-logo-img.ntu-special {
-    height: 85px; /* 比默认的 60px 大 */
-    margin-top: -15px; /* 往上提一点，保持中心对齐感 */
+    height: 100px; /* 加大到 100px */
+    margin-top: -20px; /* 视觉修正 */
 }
 
-/* 行业图标 Emoji 样式 */
 .edu-icon { 
     font-size: 2.8rem; 
     line-height: 60px; 
@@ -208,85 +205,71 @@ body {
 
 
 /* =========================================
-   7. Gallery (🔥 全新横向滚动画册)
+   7. Gallery (堆叠散开效果 - 16:9 版)
    ========================================= */
 .gallery-wrapper {
-    width: 100%;
-    margin: 60px 0 100px;
-    /* 允许容器比版心更宽，营造无边界感 */
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-    width: 100vw;
+    position: relative; width: 100%; height: 600px; /* 高度给足 */
+    display: flex; justify-content: center; align-items: center;
+    margin: 40px 0 120px;
+}
+.photo-pile-container {
+    position: relative; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
 }
 
-/* 横向滚动容器 */
-.horizontal-gallery-container {
-    display: flex;
-    overflow-x: auto; /* 允许横向滚动 */
-    gap: 30px; /* 图片间距 */
-    padding: 40px 10%; /* 上下留空隙给阴影，左右留空隙给首尾 */
-    scroll-snap-type: x mandatory; /* 启用滚动吸附 */
+.photo-card {
+    position: absolute; display: block;
+    /* 🔥 16:9 比例 */
+    width: 400px; height: 225px; 
     
-    /* 隐藏滚动条 (兼容性写法) */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* IE 10+ */
-}
-.horizontal-gallery-container::-webkit-scrollbar { 
-    display: none; /* Chrome/Safari/Webkit */
-}
-
-/* 单个画廊项目 */
-.gallery-item {
-    position: relative;
-    flex: 0 0 auto; /* 防止被压缩 */
-    width: 420px;   /* 固定宽度 */
-    aspect-ratio: 4/3; /* 横向比例 */
-    border-radius: 8px;
-    overflow: hidden;
-    scroll-snap-align: center; /* 滚动时吸附到中心 */
-    box-shadow: 0 15px 30px rgba(44,36,27, 0.15);
-    transition: all 0.4s ease;
-    border: 4px solid #fff;
+    background-size: cover; background-position: center;
+    border: 6px solid #fff; border-radius: 4px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    
+    left: 50% !important; top: 50%; 
+    margin-top: -112px; /* 高度的一半 */
+    
+    /* 默认状态：堆叠在中间，稍微有点随机角度 */
+    transform: translateX(-50%) rotate(0deg) scale(0.9);
+    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer; transform-origin: center bottom;
 }
 
-.gallery-item img {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform 0.6s ease;
+/* 6张卡片堆叠角度 (错落感) */
+.photo-card:nth-child(1) { transform: translateX(-50%) rotate(-10deg) scale(0.9); z-index: 1; }
+.photo-card:nth-child(2) { transform: translateX(-50%) rotate(-6deg) scale(0.92); z-index: 2; }
+.photo-card:nth-child(3) { transform: translateX(-50%) rotate(-2deg) scale(0.94); z-index: 3; }
+.photo-card:nth-child(4) { transform: translateX(-50%) rotate(3deg) scale(0.94); z-index: 3; }
+.photo-card:nth-child(5) { transform: translateX(-50%) rotate(7deg) scale(0.92); z-index: 2; }
+.photo-card:nth-child(6) { transform: translateX(-50%) rotate(12deg) scale(0.9); z-index: 1; }
+
+/* 🔥 悬停散开逻辑 (16:9 横排散开) */
+.photo-pile-container:hover .photo-card {
+    left: var(--left) !important; top: 50%; 
+    transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot)) scale(1);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
 }
 
-/* 悬停效果 */
-.gallery-item:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 25px 50px rgba(44,36,27, 0.25);
-}
-.gallery-item:hover img {
-    transform: scale(1.05); /* 图片轻微放大 */
-}
-
-/* 故事遮罩层 */
-.gallery-overlay {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(44,36,27, 0.7); /* 深色半透明背景 */
-    display: flex; align-items: center; justify-content: center;
-    padding: 30px;
-    opacity: 0; transition: all 0.3s ease;
-    backdrop-filter: blur(4px); /* 增加一点背景模糊 */
+/* 单卡高亮放大 */
+.photo-pile-container:hover .photo-card:hover {
+    z-index: 100 !important;
+    transform: translateX(-50%) translateY(-20px) scale(1.15) rotate(0deg) !important;
+    border-color: #fff;
+    box-shadow: 0 35px 80px rgba(0,0,0,0.3);
 }
 
-/* 故事文本 */
-.gallery-story {
-    color: #FAF5EF;
-    font-family: 'Playfair Display', 'Noto Serif SC', serif;
-    font-size: 1.2rem;
-    line-height: 1.6;
-    text-align: center;
-    transform: translateY(20px);
-    transition: all 0.4s ease;
+.card-overlay {
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6); 
+    display: flex; justify-content: center; align-items: center; padding: 30px;
+    opacity: 0; transition: opacity 0.3s ease; text-align: center;
 }
-
-.gallery-item:hover .gallery-overlay { opacity: 1; }
-.gallery-item:hover .gallery-story { transform: translateY(0); }
+.card-desc {
+    color: #FFF; font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 1rem; line-height: 1.5;
+    transform: translateY(10px); transition: transform 0.3s ease;
+}
+.photo-card:hover .card-overlay { opacity: 1; }
+.photo-card:hover .card-desc { transform: translateY(0); }
 
 
 /* =========================================
@@ -339,12 +322,14 @@ body {
     
     .edu-grid { flex-direction: column; gap: 40px; }
     
-    /* 手机上画册调整 */
-    .gallery-wrapper { margin: 40px 0; }
-    .horizontal-gallery-container { padding: 20px 5%; gap: 20px; }
-    .gallery-item { width: 280px; aspect-ratio: 4/5; /* 手机上改回竖构图可能更好看，或者保持 4/3 */ }
-    .gallery-story { font-size: 1rem; }
-
+    .gallery-wrapper { height: 400px; margin: 40px 0; }
+    /* 手机上卡片尺寸缩小 */
+    .photo-card { width: 240px; height: 135px; margin-top: -67px; }
+    
+    /* 手机上散开位置 */
+    .photo-pile-container:hover .photo-card:nth-child(1) { left: 10% !important; }
+    .photo-pile-container:hover .photo-card:nth-child(6) { left: 90% !important; }
+    
     .project-item { grid-template-columns: 1fr; gap: 40px; }
     .project-item:nth-child(even) { direction: ltr; } 
     .dark-section.first-section::before { height: 100px; top: -100px; }
