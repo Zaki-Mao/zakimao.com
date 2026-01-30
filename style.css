@@ -1,26 +1,30 @@
 /* =========================================
-   1. 引入自定义字体: Garnett Light
+   1. 字体设置 (双重保险)
    ========================================= */
+/* 方案 A: 你的自定义字体 */
 @font-face {
     font-family: 'GarnettCustom';
-    /* 强制刷新缓存 */
-    src: url('Garnett-Light.ttf?v=2026') format('truetype');
+    /* 尝试加载本地文件，去掉版本号和格式限制，让浏览器自己判断 */
+    src: url('Garnett-Light.ttf'); 
     font-weight: 300;
     font-style: normal;
 }
 
+/* 方案 B: Google Fonts 备用 (Outfit) */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500&display=swap');
+
 /* =========================================
-   2. 全局变量 & 设置 (配色大升级)
+   2. 全局变量 & 配色 (同色系高级感)
    ========================================= */
 :root {
-    --bg-color: #FAF5EF;      /* 杏仁白 (浅色部分) */
+    --bg-color: #FAF5EF;      /* 杏仁白 */
     
-    /* 🔥 修改点 1：把原本的绿色改为“深咖啡/重暖灰”，和杏仁白属于同色系 */
-    --dark-bg: #2C241B;       
+    /* 🔥 修改：从原来的绿色改为“深摩卡色”，与杏仁白同属暖色系 */
+    --dark-bg: #26201D;       
     
     --primary-color: #E34234; /* 朱砂红 */
     --text-color: #5A4D4D;    /* 深暖灰 */
-    --light-text: #EAE5D9;    /* 米白色 (深色背景上的文字) */
+    --light-text: #EAE5D9;    /* 米白色 */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -44,12 +48,13 @@ body {
     align-items: center;
     overflow: visible; 
     z-index: 10;
-    margin-bottom: 200px; /* 给卡片留出伸展空间 */
+    margin-bottom: 200px; 
 }
 
 /* 巨大标题 "ZAKI" */
 .huge-title {
-    font-family: 'GarnettCustom', sans-serif;
+    /* 🔥 优先用 Garnett，如果加载失败，自动降级到 Outfit (效果几乎一样) */
+    font-family: 'GarnettCustom', 'Outfit', sans-serif;
     font-size: 34vw;       
     font-weight: 300;      
     color: var(--primary-color);
@@ -61,7 +66,7 @@ body {
     justify-content: center;
     align-items: baseline; 
     
-    /* 🔥 修改点 2：全大写 + 紧凑间距 */
+    /* 🔥 全大写 + 紧凑间距 */
     text-transform: uppercase; 
     letter-spacing: -2vw; 
 }
@@ -81,7 +86,6 @@ body {
     100% { transform: translateY(0); opacity: 1; }
 }
 
-/* 中间内容区 */
 .content-area {
     margin-top: 5vh;
     text-align: center;
@@ -116,7 +120,9 @@ body {
 }
 .pill-button:hover { transform: translateY(-3px); }
 
-/* --- 卡片交互区 --- */
+/* =========================================
+   4. 卡片交互区 (带链接 & 标题)
+   ========================================= */
 .photo-pile-container {
     position: absolute;
     bottom: 0;
@@ -131,10 +137,10 @@ body {
     overflow: visible;
 }
 
-/* --- 卡片样式 (现在是 <a> 标签) --- */
+/* 卡片样式 (现在是 <a> 标签) */
 .photo-card {
     position: absolute;
-    display: block; /* 必须加，因为 a 标签默认是 inline */
+    display: block;
     width: 280px; 
     height: 360px;
     background-size: cover;
@@ -142,9 +148,8 @@ body {
     border: 5px solid #fff;
     border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    text-decoration: none; /* 去掉链接下划线 */
+    text-decoration: none; 
     
-    /* 默认堆叠状态 */
     left: 50% !important; 
     bottom: -120px; 
     transform: translateX(-50%) scale(0.9);
@@ -152,67 +157,64 @@ body {
     transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
     cursor: pointer;
     transform-origin: center bottom;
-    overflow: hidden; /* 保证遮罩层不溢出 */
+    overflow: hidden; 
 }
 
-/* 堆叠时的随机角度 */
 .photo-card:nth-child(1) { transform: translateX(-50%) rotate(-3deg) scale(0.9); z-index: 1; }
 .photo-card:nth-child(2) { transform: translateX(-50%) rotate(2deg) scale(0.91); z-index: 2; }
 .photo-card:nth-child(3) { transform: translateX(-50%) rotate(-1deg) scale(0.92); z-index: 3; }
 .photo-card:nth-child(4) { transform: translateX(-50%) rotate(3deg) scale(0.91); z-index: 2; }
 .photo-card:nth-child(5) { transform: translateX(-50%) rotate(-2deg) scale(0.9); z-index: 1; }
 
-/* 鼠标悬停容器：散开 */
+/* 悬停散开 */
 .photo-pile-container:hover .photo-card {
     left: var(--left) !important;
     bottom: 20px; 
-    /* 恢复各自的旋转 */
     transform: translateX(-50%) rotate(var(--rot)) scale(1);
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
 }
 
-/* 给每个卡片应用Y轴错落感 */
+/* Y轴错落感 */
 .photo-pile-container:hover .photo-card:nth-child(1) { transform: translateX(-50%) translateY(20px) rotate(var(--rot)) scale(1); }
 .photo-pile-container:hover .photo-card:nth-child(2) { transform: translateX(-50%) translateY(60px) rotate(var(--rot)) scale(1); }
 .photo-pile-container:hover .photo-card:nth-child(3) { transform: translateX(-50%) translateY(10px) rotate(var(--rot)) scale(1); }
 .photo-pile-container:hover .photo-card:nth-child(4) { transform: translateX(-50%) translateY(50px) rotate(var(--rot)) scale(1); }
 .photo-pile-container:hover .photo-card:nth-child(5) { transform: translateX(-50%) translateY(30px) rotate(var(--rot)) scale(1); }
 
-/* 单卡悬停高亮 */
+/* 单卡悬停 */
 .photo-pile-container:hover .photo-card:hover {
     z-index: 200;
     transform: translateX(-50%) translateY(-30px) scale(1.08) rotate(0deg) !important;
     border-color: #fff;
 }
 
-/* 🔥 新增：卡片内的文字遮罩层 (悬停显示项目名) */
+/* 🔥 项目名称遮罩层 */
 .card-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.4); /* 半透明黑底 */
+    background: rgba(44, 36, 27, 0.6); /* 深摩卡色半透明 */
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: 0; /* 默认隐藏 */
+    opacity: 0;
     transition: opacity 0.3s ease;
 }
 .card-title {
-    color: white;
-    font-family: 'GarnettCustom', sans-serif;
-    font-size: 1.5rem;
+    color: #FAF5EF; /* 杏仁白文字 */
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
     font-weight: 500;
-    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     transform: translateY(10px);
     transition: transform 0.3s ease;
 }
-
-/* 悬停卡片时显示文字 */
 .photo-card:hover .card-overlay { opacity: 1; }
 .photo-card:hover .card-title { transform: translateY(0); }
 
 
 /* =========================================
-   4. 深色区域 (About) & 柔和渐变
+   5. 深色区域 (柔和过渡)
    ========================================= */
 .dark-section {
     position: relative;
@@ -224,19 +226,15 @@ body {
     margin-top: 0;
 }
 
-/* ⭐ 渐变蒙版：从杏仁白 -> 深咖色 */
+/* ⭐ 柔和渐变：杏仁白 -> 深摩卡 */
 .dark-section::before {
     content: '';
     position: absolute;
-    top: -200px; /* 拉长渐变区域，让过渡更平滑 */
+    top: -200px; 
     left: 0;
     width: 100%;
     height: 201px;
-    
-    /* 🔥 关键：使用 linear-gradient 模拟同色系过渡 */
-    /* 从透明(其实透出来的是上面的杏仁白) -> 渐变到深咖色 */
     background: linear-gradient(to bottom, transparent, var(--dark-bg));
-    
     pointer-events: none;
     z-index: 2;
 }
@@ -248,9 +246,7 @@ body {
     z-index: 3;
 }
 
-/* =========================================
-   5. About / Blog (保持不变)
-   ========================================= */
+/* Story & Blog (保持原样) */
 .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 120px; align-items: center; }
 .story-text { text-align: left; }
 .story-paragraph { font-family: 'Cormorant Garamond', serif; font-size: 3rem; line-height: 1.15; font-weight: 400; margin-bottom: 40px; }
@@ -278,11 +274,9 @@ body {
     .photo-pile-container { height: 260px; }
     .photo-card { width: 180px; height: 260px; bottom: -80px; }
     .story-grid { grid-template-columns: 1fr; gap: 40px; }
-    .story-paragraph { font-size: 2.2rem; }
-    .dark-section::before { height: 100px; top: -100px; }
     .dark-section { padding-top: 80px; }
+    .dark-section::before { height: 100px; top: -100px; }
     .blog-item { flex-direction: column; align-items: flex-start; gap: 20px; }
-    .blog-thumb { width: 100%; height: 200px; opacity: 1; transform: none; margin-left: 0; }
 }
 
 .fab-menu { position: fixed; bottom: 40px; left: 40px; width: 50px; height: 50px; background-color: #6B2E7F; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; z-index: 99; }
