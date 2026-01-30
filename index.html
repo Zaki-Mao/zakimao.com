@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hi Zaki | Visual Designer</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -30,16 +28,22 @@
 
         <div class="photo-pile-container">
             
-            <a href="https://fotozaki.com" target="_blank" class="photo-card z-1" style="background-image: url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80');">
-                <div class="card-overlay"><span class="card-title">Fotozaki.com</span></div>
+            <a href="#p-fotozaki" class="photo-card" style="--left: 20%; --rot: -8deg; --y: 40px; background-image: url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80');">
+                <div class="card-overlay">
+                    <span class="view-btn">View Project</span>
+                </div>
             </a>
             
-            <a href="https://beholmes.com" target="_blank" class="photo-card z-2" style="background-image: url('https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=600&q=80');">
-                <div class="card-overlay"><span class="card-title">Be Holmes</span></div>
+            <a href="#p-beholmes" class="photo-card" style="--left: 50%; --rot: 0deg; --y: -20px; z-index: 10; background-image: url('https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=600&q=80');">
+                <div class="card-overlay">
+                    <span class="view-btn">View Project</span>
+                </div>
             </a>
             
-            <a href="#" class="photo-card z-1" style="background-image: url('https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=600&q=80');">
-                <div class="card-overlay"><span class="card-title">SpotMark</span></div>
+            <a href="#p-spotmark" class="photo-card" style="--left: 80%; --rot: 8deg; --y: 40px; background-image: url('https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=600&q=80');">
+                <div class="card-overlay">
+                    <span class="view-btn">View Project</span>
+                </div>
             </a>
             
         </div>
@@ -64,6 +68,55 @@
                 <div class="about-image-wrapper">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="Portrait">
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="dark-section">
+        <div class="container">
+            <div class="section-label">Selected Projects</div>
+            
+            <div class="project-list">
+                
+                <div id="p-fotozaki" class="project-item">
+                    <div class="project-preview">
+                        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" alt="Fotozaki Website">
+                    </div>
+                    <div class="project-info">
+                        <h2 class="project-name">Fotozaki</h2>
+                        <p class="project-desc">
+                            A personal photography portfolio showcasing visual stories from Shanghai and beyond. Designed with a focus on immersive viewing experiences and minimalist aesthetics.
+                        </p>
+                        <a href="https://fotozaki.com" target="_blank" class="project-link">Visit Website ↗</a>
+                    </div>
+                </div>
+
+                <div id="p-beholmes" class="project-item">
+                    <div class="project-preview">
+                        <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=800&q=80" alt="Be Holmes Interface">
+                    </div>
+                    <div class="project-info">
+                        <h2 class="project-name">Be Holmes</h2>
+                        <p class="project-desc">
+                            An AI-driven news analysis agent designed for prediction markets. Be Holmes analyzes real-time information to provide actionable insights for traders on Polymarket.
+                        </p>
+                        <a href="https://beholmes.com" target="_blank" class="project-link">Launch App ↗</a>
+                    </div>
+                </div>
+
+                <div id="p-spotmark" class="project-item">
+                    <div class="project-preview">
+                        <img src="https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=800&q=80" alt="SpotMark Plugin">
+                    </div>
+                    <div class="project-info">
+                        <h2 class="project-name">SpotMark</h2>
+                        <p class="project-desc">
+                            A Figma plugin that bridges the gap between design and development. SpotMark simplifies the handoff process by automating asset tagging and spec generation.
+                        </p>
+                        <a href="#" class="project-link">View on Community ↗</a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -97,33 +150,6 @@
     </section>
 
     <div class="fab-menu">⋮</div>
-
-    <script>
-        // 注册 ScrollTrigger 插件
-        gsap.registerPlugin(ScrollTrigger);
-
-        // 选取那三张卡片
-        const cards = document.querySelectorAll('.photo-card');
-
-        // 创建一个时间轴动画，把它绑定到滚动条上
-        let tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: ".hero-wrapper", // 当整个首屏区域开始滚动时触发
-                start: "top top",         // 从屏幕顶部开始
-                end: "bottom 40%",        // 滚到首屏快结束时动画完成
-                scrub: 1                  // 绑定滚动进度 (数值越大越平滑)
-            }
-        });
-
-        // 定义动画：卡片从堆叠状态变成展开状态
-        // 中间的卡片(cards[1])不动，两边的向左右平移并回正角度
-        tl.to(cards[0], { x: -240, rotation: 0, scale: 1, ease: "power1.inOut" }, 0) // 左边卡片往左移
-          .to(cards[1], { x: 0,    rotation: 0, scale: 1, ease: "power1.inOut" }, 0) // 中间卡片回正
-          .to(cards[2], { x: 240,  rotation: 0, scale: 1, ease: "power1.inOut" }, 0); // 右边卡片往右移
-
-        // 启用平滑滚动到锚点 (为了 About Me 按钮)
-        document.documentElement.style.scrollBehavior = 'smooth';
-    </script>
 
 </body>
 </html>

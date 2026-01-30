@@ -3,11 +3,10 @@
    ========================================= */
 @font-face {
     font-family: 'JuanaCustom';
-    /* 🔥 确保 J-Extralight.woff2 已上传 */
+    /* 确保 J-Extralight.woff2 已上传 */
     src: url('J-Extralight.woff2') format('woff2');
     font-weight: 200; font-style: normal; font-display: swap;
 }
-/* 备用及正文字体 */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap');
 
 /* =========================================
@@ -15,14 +14,14 @@
    ========================================= */
 :root {
     --bg-color: #FAF5EF;      /* 顶部：杏仁白 */
-    --dark-bg: #F6D38D;       /* 底部：暖桃黄 (渐变目标色) */
+    --dark-bg: #F6D38D;       /* 底部：暖桃黄 */
     --primary-color: #E34234; /* 朱砂红 */
     --text-color: #5A4D4D;    /* 深暖灰 */
-    --light-text: #2C241B;    /* 深咖色 (适配黄色背景) */
+    --light-text: #2C241B;    /* 深咖色 */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; } /* 启用平滑滚动 */
+html { scroll-behavior: smooth; } /* 平滑滚动 */
 
 body {
     background-color: var(--bg-color);
@@ -86,63 +85,79 @@ body {
 .pill-button:hover { transform: translateY(-3px); }
 
 /* =========================================
-   4. 卡片交互区 (GSAP 控制)
+   4. Hero 卡片交互区 (16:9 横版)
    ========================================= */
 .photo-pile-container {
-    position: absolute; bottom: 0; left: 0; width: 100%; height: 500px;
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 400px;
     display: flex; justify-content: center;
     opacity: 0; animation: fadeIn 1s ease 1s forwards;
     z-index: 100; overflow: visible;
-    pointer-events: none; /* 容器本身不挡鼠标，让卡片挡 */
 }
 
 /* 卡片基础样式 */
 .photo-card {
     position: absolute; display: block;
-    width: 300px; height: 400px; /* 尺寸微调 */
+    /* 🔥 核心修改：改为 16:9 比例 (例如 360x200) */
+    width: 360px; height: 200px; 
+    
     background-size: cover; background-position: center;
     border: 6px solid #fff; border-radius: 8px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.15); text-decoration: none;
-    /* 🔥 核心修改：初始状态全部堆叠在中间底部 */
-    left: 50%; bottom: -180px;
-    /* 使用 margin-left 代替 translateX(-50%) 以配合 GSAP */
-    margin-left: -150px; 
-    transform-origin: center bottom;
-    pointer-events: auto; /* 恢复卡片的鼠标交互 */
-    transition: box-shadow 0.3s ease, transform 0.3s ease; /* 仅保留简单的悬停效果 */
+    
+    /* 默认堆叠状态 */
+    left: 50% !important; 
+    bottom: -100px; 
+    
+    transform: translateX(-50%) rotate(0deg) scale(0.9);
+    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    cursor: pointer; transform-origin: center bottom; overflow: hidden;
 }
 
-/* 🔥 初始堆叠时的微小角度，制造真实感 */
-/* 中间的卡片在最上面 (z-index: 2) */
-.photo-card:nth-child(1) { transform: rotate(-5deg) scale(0.95); } /* 左卡片 */
-.photo-card:nth-child(2) { transform: rotate(0deg) scale(1); z-index: 2; } /* 中卡片 */
-.photo-card:nth-child(3) { transform: rotate(4deg) scale(0.95); } /* 右卡片 */
+/* 堆叠时的微小随机角度 */
+.photo-card:nth-child(1) { transform: translateX(-50%) rotate(-4deg) scale(0.9); z-index: 1; }
+.photo-card:nth-child(2) { transform: translateX(-50%) rotate(0deg) scale(0.95); z-index: 2; }
+.photo-card:nth-child(3) { transform: translateX(-50%) rotate(3deg) scale(0.9); z-index: 1; }
 
-/* 单卡悬停高亮 (简单的上浮效果) */
-.photo-card:hover {
-    z-index: 10 !important; /* 悬停时层级最高 */
-    box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-    /* 注意：这里不能用 transform，因为 GSAP 在控制它。我们只改变 y 轴一点点视觉反馈即可，或者只改变阴影 */
+/* 悬停散开 */
+.photo-pile-container:hover .photo-card {
+    left: var(--left) !important;
+    bottom: 0px; 
+    transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot)) scale(1);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
 }
 
-/* 遮罩层 & 标题 */
+/* 单卡悬停高亮 */
+.photo-pile-container:hover .photo-card:hover {
+    z-index: 100 !important;
+    transform: translateX(-50%) translateY(-30px) scale(1.05) rotate(0deg) !important;
+    border-color: #fff;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+}
+
+/* 遮罩层 & 按钮 */
 .card-overlay {
     position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%); 
-    display: flex; justify-content: center; align-items: flex-end; 
-    padding-bottom: 30px; opacity: 0; transition: opacity 0.3s ease;
+    background: rgba(0,0,0,0.4); /* 简单的半透明黑遮罩 */
+    display: flex; justify-content: center; align-items: center; 
+    opacity: 0; transition: opacity 0.3s ease;
 }
-.card-title {
-    color: #FFF; font-family: 'Inter', sans-serif; font-size: 1.2rem;
-    font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em;
+
+/* 🔥 新增：悬停时的按钮样式 */
+.view-btn {
+    background-color: white; color: black;
+    padding: 10px 24px; border-radius: 50px;
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.9rem;
     transform: translateY(20px); transition: transform 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
+
 .photo-card:hover .card-overlay { opacity: 1; }
-.photo-card:hover .card-title { transform: translateY(0); }
+.photo-card:hover .view-btn { transform: translateY(0); }
 
 
 /* =========================================
-   5. 黄色区域 (柔和过渡) & 正文
+   5. 黄色区域 (About, Projects, Blog)
    ========================================= */
 .dark-section {
     position: relative; background-color: var(--dark-bg); color: var(--light-text);
@@ -155,28 +170,51 @@ body {
 }
 .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 3; }
 
-/* About 样式 */
+/* About Me */
 .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 120px; align-items: center; }
 .story-text { text-align: left; }
-
-/* 🔥 字体修改：正文改回 Playfair Display (衬线) */
 .story-paragraph { 
     font-family: 'Playfair Display', serif; 
     font-size: 2.8rem; line-height: 1.2; font-weight: 400; 
     margin-bottom: 40px; color: #2C241B; font-style: italic;
 }
-/* 🔥 字体修改：小字改回 Inter (无衬线) */
 .story-paragraph.small { 
     font-size: 1.2rem; opacity: 0.8; margin-top: 30px; 
     font-family: 'Inter', sans-serif; line-height: 1.6; font-weight: 400; font-style: normal;
 }
 .leaf-icon { font-size: 2rem; opacity: 0.5; margin: 30px 0; color: #2C241B; }
-
-.image-grid { display: flex; justify-content: flex-start; }
 .about-image-wrapper { width: 100%; max-width: 450px; height: auto; aspect-ratio: 4/5; overflow: hidden; border-radius: 4px; }
 .about-image-wrapper img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
 
-/* Blog 样式 (标题继续用 Juana 保持呼应，正文用 Inter) */
+/* 🔥 新增：项目区域样式 (Projects) */
+.project-list { display: flex; flex-direction: column; gap: 120px; margin-bottom: 160px; }
+.project-item { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; }
+/* 偶数个项目反向排列 (图在右，文在左) */
+.project-item:nth-child(even) { direction: rtl; }
+.project-item:nth-child(even) .project-info { direction: ltr; }
+
+.project-preview {
+    width: 100%; aspect-ratio: 16/9; /* 保持16:9 */
+    overflow: hidden; border-radius: 8px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    transition: transform 0.4s ease;
+}
+.project-preview img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.project-preview:hover img { transform: scale(1.05); }
+
+.project-info { padding: 20px 0; }
+.project-name { font-family: 'JuanaCustom', serif; font-size: 3rem; margin-bottom: 20px; color: #2C241B; }
+.project-desc { font-family: 'Inter', sans-serif; font-size: 1.1rem; line-height: 1.6; opacity: 0.8; margin-bottom: 30px; }
+.project-link { 
+    display: inline-block; text-decoration: none; color: #2C241B; 
+    border-bottom: 1px solid #2C241B; padding-bottom: 4px; 
+    font-family: 'Inter', sans-serif; font-weight: 500;
+    transition: opacity 0.3s;
+}
+.project-link:hover { opacity: 0.6; }
+
+
+/* Blog & Section Label */
 .section-label { font-family: 'Inter', sans-serif; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 60px; border-bottom: 1px solid rgba(44,36,27, 0.1); padding-bottom: 20px; color: #2C241B; }
 .blog-list { display: flex; flex-direction: column; }
 .blog-item { display: flex; justify-content: space-between; align-items: center; padding: 40px 0; border-bottom: 1px solid rgba(44,36,27, 0.1); cursor: pointer; transition: all 0.3s ease; text-decoration: none; color: #2C241B; }
@@ -189,12 +227,18 @@ body {
 .blog-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .blog-item:hover .blog-thumb { opacity: 1; transform: translateX(0); }
 
+/* 手机适配 */
 @media (max-width: 768px) {
     .huge-title { font-size: 45vw; margin-top: 10vh; letter-spacing: -3vw; }
     .hero-wrapper { margin-bottom: 120px; }
-    /* 手机上卡片展开幅度小一点 */
-    .photo-card { width: 220px; height: 300px; bottom: -100px; margin-left: -110px; }
-    .story-grid { grid-template-columns: 1fr; gap: 40px; }
+    
+    /* 手机上卡片尺寸适配 16:9 */
+    .photo-pile-container { height: 300px; }
+    .photo-card { width: 240px; height: 135px; bottom: -60px; } /* 缩小版的16:9 */
+    
+    .story-grid, .project-item { grid-template-columns: 1fr; gap: 40px; }
+    .project-item:nth-child(even) { direction: ltr; } /* 手机上取消左右交替 */
+    
     .dark-section { padding-top: 80px; }
     .dark-section::before { height: 100px; top: -100px; }
     .blog-item { flex-direction: column; align-items: flex-start; gap: 20px; }
