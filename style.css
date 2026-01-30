@@ -30,7 +30,7 @@ body {
 }
 
 /* =========================================
-   3. Hero 区域 (极简 + 动态箭头)
+   3. Hero 区域
    ========================================= */
 .hero-wrapper {
     position: relative; width: 100%; height: 100vh;
@@ -80,7 +80,7 @@ body {
     position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
     display: flex; flex-direction: column; align-items: center; gap: 10px;
     opacity: 0; animation: fadeIn 1s ease 2s forwards; cursor: pointer;
-    text-decoration: none; /* 去掉链接下划线 */
+    text-decoration: none; 
 }
 .scroll-text {
     font-family: 'Inter', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em;
@@ -166,7 +166,7 @@ body {
    ========================================= */
 .edu-section {
     margin-top: 60px; padding-top: 80px; 
-    border-top: 1px solid rgba(44,36,27, 0.15); /* 分割线 */
+    border-top: 1px solid rgba(44,36,27, 0.15); 
 }
 .edu-title {
     font-family: 'Inter', sans-serif; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.2em;
@@ -181,19 +181,24 @@ body {
 }
 .edu-item:hover { opacity: 1; transform: translateY(-5px); }
 
-/* 🔥 Logo 图片样式：原色显示，高度统一 */
+/* Logo 图片基础样式 */
 .edu-logo-img {
-    height: 60px; /* 控制高度，宽度自适应 */
+    height: 60px; /* 默认高度 */
     width: auto; 
     display: block;
     object-fit: contain;
-    /* 不加 filter，显示彩色原图 */
 }
 
-/* 🔥 行业图标 Emoji 样式 */
+/* 🔥 NTU 特殊处理：加大高度以平衡视觉 */
+.edu-logo-img.ntu-special {
+    height: 85px; /* 比默认的 60px 大 */
+    margin-top: -15px; /* 往上提一点，保持中心对齐感 */
+}
+
+/* 行业图标 Emoji 样式 */
 .edu-icon { 
-    font-size: 2.8rem; /* Emoji 大小调整 */
-    line-height: 60px; /* 保持和图片高度一致 */
+    font-size: 2.8rem; 
+    line-height: 60px; 
     display: block; 
 }
 
@@ -203,68 +208,89 @@ body {
 
 
 /* =========================================
-   7. Gallery (画册)
+   7. Gallery (🔥 全新横向滚动画册)
    ========================================= */
 .gallery-wrapper {
-    position: relative; width: 100%; height: 700px; 
-    display: flex; justify-content: center; align-items: center;
-    margin: 40px 0 120px;
-}
-.photo-pile-container {
-    position: relative; width: 100%; height: 100%;
-    display: flex; justify-content: center; align-items: center;
+    width: 100%;
+    margin: 60px 0 100px;
+    /* 允许容器比版心更宽，营造无边界感 */
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    width: 100vw;
 }
 
-.photo-card {
-    position: absolute; display: block;
-    width: 320px; height: 460px; /* 大尺寸 */
-    background-size: cover; background-position: center;
-    border: 8px solid #fff; border-radius: 4px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+/* 横向滚动容器 */
+.horizontal-gallery-container {
+    display: flex;
+    overflow-x: auto; /* 允许横向滚动 */
+    gap: 30px; /* 图片间距 */
+    padding: 40px 10%; /* 上下留空隙给阴影，左右留空隙给首尾 */
+    scroll-snap-type: x mandatory; /* 启用滚动吸附 */
     
-    left: 50% !important; top: 50%; margin-top: -230px; 
-    
-    transform: translateX(-50%) rotate(0deg) scale(0.9);
-    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-    cursor: pointer; transform-origin: center bottom;
+    /* 隐藏滚动条 (兼容性写法) */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE 10+ */
+}
+.horizontal-gallery-container::-webkit-scrollbar { 
+    display: none; /* Chrome/Safari/Webkit */
 }
 
-/* 6张卡片堆叠角度 */
-.photo-card:nth-child(1) { transform: translateX(-50%) rotate(-10deg) scale(0.9); z-index: 1; }
-.photo-card:nth-child(2) { transform: translateX(-50%) rotate(-6deg) scale(0.92); z-index: 2; }
-.photo-card:nth-child(3) { transform: translateX(-50%) rotate(-2deg) scale(0.94); z-index: 3; }
-.photo-card:nth-child(4) { transform: translateX(-50%) rotate(3deg) scale(0.94); z-index: 3; }
-.photo-card:nth-child(5) { transform: translateX(-50%) rotate(7deg) scale(0.92); z-index: 2; }
-.photo-card:nth-child(6) { transform: translateX(-50%) rotate(12deg) scale(0.9); z-index: 1; }
-
-/* 悬停散开 */
-.photo-pile-container:hover .photo-card {
-    left: var(--left) !important; top: 50%; 
-    transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot)) scale(1);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
-}
-.photo-pile-container:hover .photo-card:hover {
-    z-index: 100 !important;
-    transform: translateX(-50%) translateY(-40px) scale(1.1) rotate(0deg) !important;
-    border-color: #fff;
+/* 单个画廊项目 */
+.gallery-item {
+    position: relative;
+    flex: 0 0 auto; /* 防止被压缩 */
+    width: 420px;   /* 固定宽度 */
+    aspect-ratio: 4/3; /* 横向比例 */
+    border-radius: 8px;
+    overflow: hidden;
+    scroll-snap-align: center; /* 滚动时吸附到中心 */
+    box-shadow: 0 15px 30px rgba(44,36,27, 0.15);
+    transition: all 0.4s ease;
+    border: 4px solid #fff;
 }
 
-.card-overlay {
-    position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5); 
-    display: flex; justify-content: center; align-items: center; padding: 20px;
-    opacity: 0; transition: opacity 0.3s ease; text-align: center;
+.gallery-item img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s ease;
 }
-.card-desc {
-    color: #FFF; font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 1.1rem; line-height: 1.4;
-    transform: translateY(10px); transition: transform 0.3s ease;
+
+/* 悬停效果 */
+.gallery-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(44,36,27, 0.25);
 }
-.photo-card:hover .card-overlay { opacity: 1; }
-.photo-card:hover .card-desc { transform: translateY(0); }
+.gallery-item:hover img {
+    transform: scale(1.05); /* 图片轻微放大 */
+}
+
+/* 故事遮罩层 */
+.gallery-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(44,36,27, 0.7); /* 深色半透明背景 */
+    display: flex; align-items: center; justify-content: center;
+    padding: 30px;
+    opacity: 0; transition: all 0.3s ease;
+    backdrop-filter: blur(4px); /* 增加一点背景模糊 */
+}
+
+/* 故事文本 */
+.gallery-story {
+    color: #FAF5EF;
+    font-family: 'Playfair Display', 'Noto Serif SC', serif;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    text-align: center;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+}
+
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+.gallery-item:hover .gallery-story { transform: translateY(0); }
 
 
 /* =========================================
-   8. Projects & Blog 
+   8. Projects & Blog (保持不变)
    ========================================= */
 .project-list { display: flex; flex-direction: column; gap: 120px; margin-bottom: 160px; }
 .project-item { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; }
@@ -307,19 +333,18 @@ body {
     .huge-title { font-size: 45vw; margin-top: 10vh; letter-spacing: -3vw; }
     .hero-wrapper { height: 90vh; }
     
-    /* 手机上 About 变单列 */
     .story-grid { grid-template-columns: 1fr; gap: 40px; } 
     .about-image-wrapper { aspect-ratio: 16/9; }
     .lang-switch-wrapper { position: static; margin-bottom: 20px; text-align: right; }
     
     .edu-grid { flex-direction: column; gap: 40px; }
-    .gallery-wrapper { height: 400px; margin: 40px 0; }
-    .photo-card { width: 220px; height: 320px; }
     
-    /* 手机上卡片散开位置调整 */
-    .photo-pile-container:hover .photo-card:nth-child(1) { left: 10% !important; }
-    .photo-pile-container:hover .photo-card:nth-child(6) { left: 90% !important; }
-    
+    /* 手机上画册调整 */
+    .gallery-wrapper { margin: 40px 0; }
+    .horizontal-gallery-container { padding: 20px 5%; gap: 20px; }
+    .gallery-item { width: 280px; aspect-ratio: 4/5; /* 手机上改回竖构图可能更好看，或者保持 4/3 */ }
+    .gallery-story { font-size: 1rem; }
+
     .project-item { grid-template-columns: 1fr; gap: 40px; }
     .project-item:nth-child(even) { direction: ltr; } 
     .dark-section.first-section::before { height: 100px; top: -100px; }
