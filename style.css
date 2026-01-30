@@ -1,12 +1,11 @@
 /* =========================================
-   1. 引入自定义字体: AbhayaLibre Medium
+   1. 引入自定义字体: Garnett Light
    ========================================= */
 @font-face {
-    font-family: 'AbhayaCustom';
-    /* ⚠️ 这里的 src 必须和你上传到 GitHub 的文件名完全一致 */
-    /* 如果你的文件后缀是 .otf，请改为 .otf */
-    src: url('AbhayaLibre-Medium.ttf') format('truetype');
-    font-weight: 500;
+    font-family: 'GarnettCustom';
+    /* ⚠️ 确保 GitHub 仓库里有这个文件，且文件名大小写完全一致 */
+    src: url('Garnett-Light.ttf') format('truetype');
+    font-weight: 300;
     font-style: normal;
 }
 
@@ -42,12 +41,12 @@ body {
 }
 
 /* =========================================
-   4. 巨大标题 "Zaki" (使用 AbhayaCustom)
+   4. 巨大标题 "Zaki" (Garnett Light + 宽间距)
    ========================================= */
 .huge-title {
-    font-family: 'AbhayaCustom', serif; /* 这里的名字对应上面的 @font-face */
-    font-size: 34vw;       /* 巨大字号 */
-    font-weight: 500;      /* Medium 字重 */
+    font-family: 'GarnettCustom', sans-serif;
+    font-size: 34vw;       /* 保持巨大 */
+    font-weight: 300;      /* Light 字重 */
     color: var(--primary-color);
     line-height: 0.8;      
     white-space: nowrap;
@@ -57,11 +56,11 @@ body {
     /* 布局与对齐 */
     display: flex;
     justify-content: center;
-    align-items: baseline; /* 保证大小写底部对齐 */
+    align-items: baseline; 
     
-    /* 视觉微调 */
-    /* Abhaya Libre 本身字宽比较舒适，稍微收紧一点点即可，不用像 Garnett 缩那么多 */
-    letter-spacing: -1vw;  
+    /* 核心修改：让字母分开一点 */
+    /* 之前是 -2vw (紧凑)，现在改为 1vw (宽松) */
+    letter-spacing: 1vw;   
 }
 
 /* --- 丝滑入场动画 --- */
@@ -149,7 +148,6 @@ body {
     border-radius: 4px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     
-    /* 核心布局逻辑 */
     left: var(--left);
     transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot));
     
@@ -171,7 +169,8 @@ body {
     .huge-title { 
         font-size: 45vw; 
         margin-top: 10vh; 
-        letter-spacing: -2vw;
+        /* 手机上屏幕小，如果间距太大字会换行，所以手机上还是稍微紧一点 */
+        letter-spacing: -1vw; 
     }
     .photo-pile-container { bottom: -120px; }
     .photo-card { width: 140px; height: 200px; }
