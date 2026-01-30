@@ -1,299 +1,60 @@
 /* =========================================
-   1. 引入自定义字体: Garnett Light
+   4. 巨大标题 "Zaki" (严格参照参考图：紧凑、Garnett Light)
    ========================================= */
-@font-face {
-    font-family: 'GarnettCustom';
-    /* ⭐ 修复点1：加了 ?v=1 强制浏览器重新加载字体文件 */
-    src: url('Garnett-Light.ttf?v=1') format('truetype');
-    font-weight: 300;
-    font-style: normal;
-}
-
-/* =========================================
-   2. 全局变量 & 设置
-   ========================================= */
-:root {
-    --bg-color: #FAF5EF;      /* 浅色背景 */
-    --dark-bg: #152218;       /* 深森林绿 */
-    --primary-color: #E34234; /* 朱砂红 */
-    --text-color: #5A4D4D;    /* 深暖灰 */
-    --light-text: #EAE5D9;    /* 米白色 */
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-    background-color: var(--bg-color);
-    font-family: 'Inter', sans-serif;
-    overflow-x: hidden; 
-    overflow-y: auto;
-}
-
-/* =========================================
-   3. Hero 区域 (第一屏)
-   ========================================= */
-.hero-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: hidden; 
-}
-
-/* 巨大标题 "Zaki" */
 .huge-title {
-    font-family: 'GarnettCustom', sans-serif;
+    /* 确保使用了 Garnett Light */
+    font-family: 'GarnettCustom', sans-serif; 
     font-size: 34vw;       
-    font-weight: 300;      
+    font-weight: 300;      /* Light 字重 */
     color: var(--primary-color);
     line-height: 0.8;      
     white-space: nowrap;
     margin-top: -2vw;
     z-index: 10;
+    
+    /* 布局 */
     display: flex;
     justify-content: center;
+    /* 关键：基线对齐，确保 Z 和 aki 底部在一条线上 */
     align-items: baseline; 
-    letter-spacing: 1vw; 
+    
+    /* 🔥 核心修改：极度紧凑的间距 🔥 */
+    /* 使用负值让字母挨在一起，还原参考图效果 */
+    letter-spacing: -1.5vw; 
 }
 
-/* 字母动效 */
+/* --- 丝滑入场动效 (保持不变) --- */
 .letter {
     display: inline-block;
     opacity: 0;
+    /* 使用物理回弹曲线，丝滑顺畅 */
     animation: smoothDrop 1.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
+
+/* 差速下落延迟 */
 .letter:nth-child(1) { animation-delay: 0.2s; }
 .letter:nth-child(2) { animation-delay: 0.35s; }
 .letter:nth-child(3) { animation-delay: 0.5s; }
 .letter:nth-child(4) { animation-delay: 0.65s; }
+
+/* 下落关键帧 */
 @keyframes smoothDrop {
-    0% { transform: translateY(-120%); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
+    0% { 
+        transform: translateY(-120%); /* 从屏幕上方落下 */
+        opacity: 0; 
+    }
+    100% { 
+        transform: translateY(0);     /* 落到原位 */
+        opacity: 1; 
+    }
 }
 
-/* 中间内容区 */
-.content-area {
-    margin-top: 5vh;
-    text-align: center;
-    z-index: 20;
-    opacity: 0;
-    animation: fadeIn 1.5s ease 1.2s forwards;
-}
-@keyframes fadeIn { to { opacity: 1; } }
-
-.subtitle-text {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 1.3rem;
-    color: var(--text-color);
-    margin-bottom: 2rem;
-    line-height: 1.6;
-}
-
-.pill-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background-color: #FFFFFF;
-    color: #222;
-    padding: 14px 32px;
-    border-radius: 100px;
-    text-decoration: none;
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-    transition: transform 0.3s ease;
-}
-.pill-button:hover { transform: translateY(-3px); }
-
-/* --- 卡片堆叠区 --- */
-.photo-pile-container {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    /* 配合卡片变大，感应区也稍微加高一点 */
-    height: 360px; 
-    display: flex;
-    justify-content: center;
-    opacity: 0;
-    animation: fadeIn 1s ease 1s forwards;
-    z-index: 50;
-}
-
-/* --- 卡片样式 (变大) --- */
-.photo-card {
-    position: absolute;
-    /* ⭐ 修复点2：卡片尺寸变宽变大 */
-    width: 260px; 
-    height: 340px;
-    background-size: cover;
-    background-position: center;
-    border: 4px solid #fff;
-    border-radius: 8px;
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
-    
-    /* 默认堆叠状态 */
-    left: 50% !important; 
-    bottom: -180px; /* 沉得更深一点 */
-    transform: translateX(-50%) rotate(0deg) scale(0.9);
-    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-    cursor: pointer;
-    transform-origin: center bottom;
-}
-.photo-card:nth-child(odd)  { transform: translateX(-50%) rotate(-3deg) scale(0.9); }
-.photo-card:nth-child(even) { transform: translateX(-50%) rotate(2deg) scale(0.95); }
-
-/* 悬停散开状态 */
-.photo-pile-container:hover .photo-card {
-    left: var(--left) !important;
-    bottom: -60px; /* 升起高度微调 */
-    transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot)) scale(1);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-}
-.photo-pile-container:hover .photo-card:hover {
-    z-index: 100;
-    transform: translateX(-50%) translateY(-40px) scale(1.05) rotate(0deg) !important;
-}
-
-/* =========================================
-   4. 深色区域通用样式 (含渐变过渡)
-   ========================================= */
-.dark-section {
-    background-color: var(--dark-bg);
-    color: var(--light-text);
-    width: 100%;
-    padding: 140px 10% 100px; /* 顶部内边距加大，给渐变留空间 */
-    position: relative;
-    /* border-top: 1px solid ... 删除旧的硬分割线 */
-}
-
-/* ⭐ 修复点3：添加顶部渐变过渡层 */
-.dark-section::before {
-    content: '';
-    position: absolute;
-    top: -150px; /* 向上延伸，覆盖交界处 */
-    left: 0;
-    width: 100%;
-    height: 150px; /* 渐变高度 */
-    /* 从透明(上方浅色背景)渐变到深绿色 */
-    background: linear-gradient(to bottom, transparent, var(--dark-bg));
-    pointer-events: none; /* 防止遮挡鼠标交互 */
-    z-index: 1;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 2; /* 保证内容在渐变层之上 */
-}
-
-/* =========================================
-   5. About / Story 样式
-   ========================================= */
-.story-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr; 
-    gap: 80px;
-    margin-bottom: 120px;
-    align-items: center; /* 垂直居中对齐 */
-}
-
-.story-text { text-align: left; }
-
-.story-paragraph {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 3rem; /* 字体稍微再大一点，更有冲击力 */
-    line-height: 1.15;
-    font-weight: 400;
-    margin-bottom: 40px;
-}
-
-.story-paragraph.small {
-    font-size: 1.4rem;
-    opacity: 0.7;
-    margin-top: 30px;
-    font-family: 'Inter', sans-serif; /* 小字改用 Inter 更清晰 */
-    line-height: 1.5;
-}
-
-.leaf-icon { font-size: 2rem; opacity: 0.5; margin: 30px 0; }
-
-.image-grid { display: flex; justify-content: flex-start; }
-.about-image-wrapper {
-    width: 100%;
-    max-width: 450px;
-    height: auto;
-    aspect-ratio: 4/5; /* 固定图片比例 */
-    overflow: hidden;
-    border-radius: 4px;
-}
-.about-image-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.9;
-}
-
-/* =========================================
-   6. Blog / Articles 样式
-   ========================================= */
-/* ... (这部分保持不变，省略以节省篇幅，复制时请保留原有的 Blog 样式) ... */
-.section-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    opacity: 0.5;
-    margin-bottom: 60px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 20px;
-}
-.blog-list { display: flex; flex-direction: column; }
-.blog-item {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 40px 0; border-bottom: 1px solid rgba(255,255,255,0.1);
-    cursor: pointer; transition: all 0.3s ease;
-}
-.blog-item:hover { background-color: rgba(255,255,255,0.02); padding-left: 20px; }
-.blog-meta { font-family: 'Inter', sans-serif; font-size: 0.9rem; opacity: 0.6; width: 150px; }
-.blog-content { flex: 1; }
-.blog-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 400; margin-bottom: 10px; }
-.blog-tag { font-family: 'Inter', sans-serif; font-size: 0.8rem; background-color: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; opacity: 0.8; }
-.blog-thumb { width: 180px; height: 110px; border-radius: 4px; overflow: hidden; margin-left: 40px; opacity: 0; transform: translateX(20px); transition: all 0.4s ease; }
-.blog-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.blog-item:hover .blog-thumb { opacity: 1; transform: translateX(0); }
-
-
-/* =========================================
-   7. 手机适配
-   ========================================= */
+/* --- 手机适配微调 --- */
 @media (max-width: 768px) {
-    .huge-title { font-size: 45vw; margin-top: 10vh; letter-spacing: -1vw; }
-    /* 手机上卡片尺寸不用太大 */
-    .photo-pile-container { height: 220px; }
-    .photo-card { width: 160px; height: 220px; bottom: -120px; }
-    
-    .story-grid { grid-template-columns: 1fr; gap: 40px; }
-    .story-paragraph { font-size: 2.2rem; }
-    .about-image-wrapper { max-width: 100%; }
-    
-    /* 手机上渐变可以短一点 */
-    .dark-section::before { height: 100px; top: -100px; }
-    .dark-section { padding-top: 80px; }
-    
-    .blog-item { flex-direction: column; align-items: flex-start; gap: 20px; }
-    .blog-thumb { width: 100%; height: 200px; opacity: 1; transform: none; margin-left: 0; }
-}
-
-/* 浮动菜单 */
-.fab-menu {
-    position: fixed;
-    bottom: 40px; left: 40px; width: 50px; height: 50px;
-    background-color: #6B2E7F; color: white; border-radius: 50%;
-    display: flex; justify-content: center; align-items: center;
-    font-size: 24px; cursor: pointer; z-index: 99;
+    .huge-title { 
+        font-size: 45vw; 
+        margin-top: 10vh; 
+        /* 手机上需要更紧一点才能放下 */
+        letter-spacing: -2.5vw; 
+    }
 }
