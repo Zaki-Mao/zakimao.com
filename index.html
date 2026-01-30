@@ -32,36 +32,42 @@
     <section id="about" class="dark-section first-section">
         <div class="container">
             
-            <div class="lang-switch-wrapper">
-                <button id="langToggle" class="lang-btn">
-                    <span class="active">EN</span> / <span>中文</span>
-                </button>
-            </div>
+            <div class="about-wrapper">
+                <div class="lang-switch-wrapper">
+                    <button id="langToggle" class="lang-btn">
+                        <span class="active">EN</span> / <span>中文</span>
+                    </button>
+                </div>
 
-            <div class="story-grid">
-                <div class="story-text">
-                    <div class="lang-en">
-                        <p class="story-paragraph">
-                            Hi, I'm Zunjie Mao, but everyone calls me Zaki. 
-                            <br>
-                            I hold a Master's degree from NTU Singapore and currently work as a Project Manager. 
-                            My journey spans across both the Esports and Tech industries.
-                        </p>
-                        <p class="story-paragraph small">
-                            Beyond work, I'm an amateur photographer passionate about exploring the unknown and capturing visual stories.
-                        </p>
+                <div class="story-grid">
+                    <div class="about-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="Zaki Portrait">
                     </div>
 
-                    <div class="lang-zh" style="display: none;">
-                        <p class="story-paragraph">
-                            我叫毛遵杰，大家都叫我 Zaki。
-                            <br>
-                            毕业于新加坡南洋理工大学，目前是一名项目经理。
-                            先后踏足电竞行业和科技行业。
-                        </p>
-                        <p class="story-paragraph small">
-                            同时也是一名业余摄影爱好者，喜欢探索新事物。
-                        </p>
+                    <div class="story-text">
+                        <div class="lang-en">
+                            <p class="story-paragraph">
+                                Hi, I'm Zunjie Mao, but everyone calls me Zaki. 
+                                <br>
+                                I hold a Master's degree from NTU Singapore and currently work as a Project Manager. 
+                                My journey spans across both the Esports and Tech industries.
+                            </p>
+                            <p class="story-paragraph small">
+                                Beyond work, I'm an amateur photographer passionate about exploring the unknown and capturing visual stories.
+                            </p>
+                        </div>
+
+                        <div class="lang-zh" style="display: none;">
+                            <p class="story-paragraph">
+                                我叫毛遵杰，大家都叫我 Zaki。
+                                <br>
+                                毕业于新加坡南洋理工大学，目前是一名项目经理。
+                                先后踏足电竞行业和科技行业。
+                            </p>
+                            <p class="story-paragraph small">
+                                同时也是一名业余摄影爱好者，喜欢探索新事物。
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -74,7 +80,8 @@
                 
                 <div class="edu-grid">
                     <div class="edu-item">
-                        <div class="edu-icon">🎓</div>
+                        <img src="images/must.svg" alt="MUST Logo" class="edu-logo-img">
+                        
                         <div class="edu-info-text">
                             <div class="edu-school">
                                 <span class="lang-en">M.U.S.T.</span>
@@ -88,7 +95,8 @@
                     </div>
                     
                     <div class="edu-item">
-                        <div class="edu-icon">🦁</div>
+                        <img src="images/ntu.svg" alt="NTU Logo" class="edu-logo-img">
+
                         <div class="edu-info-text">
                             <div class="edu-school">
                                 <span class="lang-en">NTU Singapore</span>
@@ -136,14 +144,14 @@
     <section id="gallery" class="dark-section" style="padding-top: 0;">
         <div class="container">
             <div class="section-label">
-                <span class="lang-en">Work & Life Gallery</span>
-                <span class="lang-zh" style="display: none;">工作与生活剪影</span>
+                <span class="lang-en">Moments Gallery</span>
+                <span class="lang-zh" style="display: none;">光影瞬间</span>
             </div>
             
             <div class="gallery-wrapper">
                 <div class="photo-pile-container">
                     
-                    <div class="photo-card" style="--left: 15%; --rot: -8deg; --y: 40px; background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=600&q=80');">
+                    <div class="photo-card" style="--left: 10%; --rot: -8deg; --y: 40px; background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=600&q=80');">
                         <div class="card-overlay">
                             <p class="card-desc">
                                 <span class="lang-en">Office vibes in Shanghai</span>
@@ -152,7 +160,7 @@
                         </div>
                     </div>
                     
-                    <div class="photo-card" style="--left: 38%; --rot: -2deg; --y: -20px; z-index: 2; background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80');">
+                    <div class="photo-card" style="--left: 26%; --rot: -2deg; --y: -20px; background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80');">
                         <div class="card-overlay">
                             <p class="card-desc">
                                 <span class="lang-en">Esports Tournament</span>
@@ -161,20 +169,38 @@
                         </div>
                     </div>
                     
-                    <div class="photo-card" style="--left: 62%; --rot: 5deg; --y: 30px; background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80');">
+                    <div class="photo-card" style="--left: 42%; --rot: 5deg; --y: 30px; background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80');">
                         <div class="card-overlay">
                             <p class="card-desc">
-                                <span class="lang-en">Tech Conference 2025</span>
-                                <span class="lang-zh" style="display: none;">2025 科技峰会</span>
+                                <span class="lang-en">Tech Conference</span>
+                                <span class="lang-zh" style="display: none;">科技峰会</span>
                             </p>
                         </div>
                     </div>
                     
-                    <div class="photo-card" style="--left: 85%; --rot: 8deg; --y: -10px; background-image: url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80');">
+                    <div class="photo-card" style="--left: 58%; --rot: 8deg; --y: -10px; background-image: url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80');">
                         <div class="card-overlay">
                             <p class="card-desc">
                                 <span class="lang-en">Street Photography</span>
                                 <span class="lang-zh" style="display: none;">街头摄影</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="photo-card" style="--left: 74%; --rot: -5deg; --y: 20px; background-image: url('https://images.unsplash.com/photo-1531297461136-82lw9z1p1j9d?auto=format&fit=crop&w=600&q=80');">
+                        <div class="card-overlay">
+                            <p class="card-desc">
+                                <span class="lang-en">Team Building</span>
+                                <span class="lang-zh" style="display: none;">团队建设</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="photo-card" style="--left: 90%; --rot: 3deg; --y: -30px; background-image: url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=600&q=80');">
+                        <div class="card-overlay">
+                            <p class="card-desc">
+                                <span class="lang-en">Brainstorming</span>
+                                <span class="lang-zh" style="display: none;">头脑风暴</span>
                             </p>
                         </div>
                     </div>
@@ -287,7 +313,7 @@
 
     <script>
         const toggleBtn = document.getElementById('langToggle');
-        let currentLang = 'en'; // 默认英文
+        let currentLang = 'en';
 
         toggleBtn.addEventListener('click', () => {
             currentLang = currentLang === 'en' ? 'zh' : 'en';
@@ -295,37 +321,27 @@
         });
 
         function updateLanguage() {
-            // 1. 获取所有英文和中文元素
             const enElements = document.querySelectorAll('.lang-en');
             const zhElements = document.querySelectorAll('.lang-zh');
 
-            // 2. 切换显示状态
             if (currentLang === 'zh') {
                 enElements.forEach(el => el.style.display = 'none');
-                zhElements.forEach(el => el.style.display = 'inline'); // 或 block，视情况而定
-                
-                // 修正 block 元素的显示 (如 p 标签)
+                zhElements.forEach(el => el.style.display = 'inline');
                 zhElements.forEach(el => {
                     if (el.tagName === 'P' || el.tagName === 'DIV' || el.tagName === 'H3') {
                         el.style.display = 'block';
                     }
                 });
-                
-                // 更新按钮文字样式
                 toggleBtn.innerHTML = `<span>EN</span> / <span class="active">中文</span>`;
-                
-                // 可以在这里微调中文字体
                 document.body.style.fontFamily = "'Noto Serif SC', 'Inter', sans-serif";
             } else {
                 zhElements.forEach(el => el.style.display = 'none');
                 enElements.forEach(el => el.style.display = 'inline');
-                
                 enElements.forEach(el => {
                     if (el.tagName === 'P' || el.tagName === 'DIV' || el.tagName === 'H3') {
                         el.style.display = 'block';
                     }
                 });
-
                 toggleBtn.innerHTML = `<span class="active">EN</span> / <span>中文</span>`;
                 document.body.style.fontFamily = "'Inter', sans-serif";
             }
