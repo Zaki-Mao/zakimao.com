@@ -106,7 +106,10 @@ body {
    ========================================= */
 .dark-section {
     position: relative; background-color: var(--dark-bg); color: var(--light-text);
-    width: 100%; padding: 140px 10% 100px; z-index: 1;
+    width: 100%; 
+    /* 🔥 这里的 padding-bottom 减小，减少到底部的距离 */
+    padding: 140px 10% 60px; 
+    z-index: 1;
 }
 .dark-section.first-section::before {
     content: ''; position: absolute; top: -250px; left: 0; width: 100%; height: 251px;
@@ -133,7 +136,6 @@ body {
 
 .about-wrapper { position: relative; margin-bottom: 100px; }
 
-/* 左图右文 Grid */
 .story-grid { 
     display: grid; 
     grid-template-columns: 0.8fr 1.2fr; 
@@ -161,7 +163,7 @@ body {
 
 
 /* =========================================
-   6. Education / Experience (Logo Wall)
+   6. Education / Experience (对齐修正版)
    ========================================= */
 .edu-section {
     margin-top: 60px; padding-top: 80px; 
@@ -173,6 +175,8 @@ body {
 }
 .edu-grid {
     display: flex; flex-wrap: wrap; justify-content: center; gap: 80px; 
+    /* 顶部对齐是不够的，我们需要底部对齐 Logo 容器 */
+    align-items: flex-start;
 }
 .edu-item {
     display: flex; flex-direction: column; align-items: center; gap: 20px; 
@@ -180,6 +184,15 @@ body {
 }
 .edu-item:hover { opacity: 1; transform: translateY(-5px); }
 
+/* 🔥 关键：Logo 容器，固定高度 + 底部对齐 */
+.edu-icon-wrapper {
+    height: 100px; /* 给所有图标一个固定的“舞台”高度 */
+    display: flex;
+    align-items: flex-end; /* 底部对齐，这样文字就会在一条线上 */
+    justify-content: center;
+}
+
+/* Logo 图片基础样式 */
 .edu-logo-img {
     height: 60px; 
     width: auto; 
@@ -187,15 +200,15 @@ body {
     object-fit: contain;
 }
 
-/* 🔥 NTU Logo 特大号 */
+/* 🔥 NTU Logo 加大，利用 Flex-end 自动对齐底部 */
 .edu-logo-img.ntu-special {
-    height: 100px; /* 加大到 100px */
-    margin-top: -20px; /* 视觉修正 */
+    height: 90px; /* 加大 */
 }
 
+/* 行业图标 Emoji 样式 */
 .edu-icon { 
-    font-size: 2.8rem; 
-    line-height: 60px; 
+    font-size: 3rem; 
+    line-height: 1; 
     display: block; 
 }
 
@@ -205,12 +218,13 @@ body {
 
 
 /* =========================================
-   7. Gallery (堆叠散开效果 - 16:9 版)
+   7. Gallery (堆叠 -> 散开 16:9 版)
    ========================================= */
 .gallery-wrapper {
-    position: relative; width: 100%; height: 600px; /* 高度给足 */
+    position: relative; width: 100%; height: 500px; 
     display: flex; justify-content: center; align-items: center;
-    margin: 40px 0 120px;
+    /* 🔥 减少这里的 margin-bottom，消除留白 */
+    margin: 40px 0 20px; 
 }
 .photo-pile-container {
     position: relative; width: 100%; height: 100%;
@@ -219,38 +233,37 @@ body {
 
 .photo-card {
     position: absolute; display: block;
-    /* 🔥 16:9 比例 */
-    width: 400px; height: 225px; 
+    /* 🔥 卡片尺寸加大 (16:9) */
+    width: 480px; height: 270px; 
     
     background-size: cover; background-position: center;
-    border: 6px solid #fff; border-radius: 4px;
+    border: 8px solid #fff; border-radius: 4px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.15);
     
     left: 50% !important; top: 50%; 
-    margin-top: -112px; /* 高度的一半 */
+    margin-top: -135px; /* 高度的一半 */
     
-    /* 默认状态：堆叠在中间，稍微有点随机角度 */
+    /* 默认堆叠状态 */
     transform: translateX(-50%) rotate(0deg) scale(0.9);
     transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
     cursor: pointer; transform-origin: center bottom;
 }
 
-/* 6张卡片堆叠角度 (错落感) */
-.photo-card:nth-child(1) { transform: translateX(-50%) rotate(-10deg) scale(0.9); z-index: 1; }
-.photo-card:nth-child(2) { transform: translateX(-50%) rotate(-6deg) scale(0.92); z-index: 2; }
-.photo-card:nth-child(3) { transform: translateX(-50%) rotate(-2deg) scale(0.94); z-index: 3; }
-.photo-card:nth-child(4) { transform: translateX(-50%) rotate(3deg) scale(0.94); z-index: 3; }
-.photo-card:nth-child(5) { transform: translateX(-50%) rotate(7deg) scale(0.92); z-index: 2; }
-.photo-card:nth-child(6) { transform: translateX(-50%) rotate(12deg) scale(0.9); z-index: 1; }
+/* 5张卡片堆叠角度 */
+.photo-card:nth-child(1) { transform: translateX(-50%) rotate(-8deg) scale(0.9); z-index: 1; }
+.photo-card:nth-child(2) { transform: translateX(-50%) rotate(-4deg) scale(0.93); z-index: 2; }
+.photo-card:nth-child(3) { transform: translateX(-50%) rotate(0deg) scale(0.96); z-index: 3; }
+.photo-card:nth-child(4) { transform: translateX(-50%) rotate(4deg) scale(0.93); z-index: 2; }
+.photo-card:nth-child(5) { transform: translateX(-50%) rotate(8deg) scale(0.9); z-index: 1; }
 
-/* 🔥 悬停散开逻辑 (16:9 横排散开) */
+/* 🔥 悬停散开逻辑 (5张卡片均匀分布) */
 .photo-pile-container:hover .photo-card {
     left: var(--left) !important; top: 50%; 
     transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot)) scale(1);
     box-shadow: 0 25px 60px rgba(0,0,0,0.25);
 }
 
-/* 单卡高亮放大 */
+/* 单卡高亮 */
 .photo-pile-container:hover .photo-card:hover {
     z-index: 100 !important;
     transform: translateX(-50%) translateY(-20px) scale(1.15) rotate(0deg) !important;
@@ -321,14 +334,16 @@ body {
     .lang-switch-wrapper { position: static; margin-bottom: 20px; text-align: right; }
     
     .edu-grid { flex-direction: column; gap: 40px; }
+    /* 手机上移除固定高度，让其自然排列 */
+    .edu-icon-wrapper { height: auto; }
     
-    .gallery-wrapper { height: 400px; margin: 40px 0; }
-    /* 手机上卡片尺寸缩小 */
-    .photo-card { width: 240px; height: 135px; margin-top: -67px; }
+    .gallery-wrapper { height: 350px; margin: 40px 0; }
+    /* 手机上卡片缩小 */
+    .photo-card { width: 280px; height: 157px; margin-top: -78px; }
     
     /* 手机上散开位置 */
     .photo-pile-container:hover .photo-card:nth-child(1) { left: 10% !important; }
-    .photo-pile-container:hover .photo-card:nth-child(6) { left: 90% !important; }
+    .photo-pile-container:hover .photo-card:nth-child(5) { left: 90% !important; }
     
     .project-item { grid-template-columns: 1fr; gap: 40px; }
     .project-item:nth-child(even) { direction: ltr; } 
