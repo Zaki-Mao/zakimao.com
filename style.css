@@ -107,8 +107,7 @@ body {
 .dark-section {
     position: relative; background-color: var(--dark-bg); color: var(--light-text);
     width: 100%; 
-    /* 🔥 这里的 padding-bottom 减小，减少到底部的距离 */
-    padding: 140px 10% 60px; 
+    padding: 140px 10% 60px; /* 底部 padding 减小 */
     z-index: 1;
 }
 .dark-section.first-section::before {
@@ -163,7 +162,7 @@ body {
 
 
 /* =========================================
-   6. Education / Experience (对齐修正版)
+   6. Education / Experience (完美对齐版)
    ========================================= */
 .edu-section {
     margin-top: 60px; padding-top: 80px; 
@@ -175,7 +174,7 @@ body {
 }
 .edu-grid {
     display: flex; flex-wrap: wrap; justify-content: center; gap: 80px; 
-    /* 顶部对齐是不够的，我们需要底部对齐 Logo 容器 */
+    /* 🔥 核心修正：使用 center 垂直居中，这是不同形状Logo对齐的最佳方案 */
     align-items: flex-start;
 }
 .edu-item {
@@ -184,30 +183,29 @@ body {
 }
 .edu-item:hover { opacity: 1; transform: translateY(-5px); }
 
-/* 🔥 关键：Logo 容器，固定高度 + 底部对齐 */
+/* Logo 容器：固定高度 + 垂直居中 */
 .edu-icon-wrapper {
-    height: 100px; /* 给所有图标一个固定的“舞台”高度 */
+    height: 110px; /* 给足空间给大Logo */
     display: flex;
-    align-items: flex-end; /* 底部对齐，这样文字就会在一条线上 */
+    align-items: center; /* 垂直居中 */
     justify-content: center;
 }
 
-/* Logo 图片基础样式 */
 .edu-logo-img {
-    height: 60px; 
+    height: 65px; /* 默认高度 */
     width: auto; 
     display: block;
     object-fit: contain;
 }
 
-/* 🔥 NTU Logo 加大，利用 Flex-end 自动对齐底部 */
+/* 🔥 NTU Logo 加大 */
 .edu-logo-img.ntu-special {
-    height: 90px; /* 加大 */
+    height: 95px; /* 加大 */
 }
 
-/* 行业图标 Emoji 样式 */
+/* 行业图标 Emoji */
 .edu-icon { 
-    font-size: 3rem; 
+    font-size: 3.5rem; /* Emoji 稍微调大以匹配视觉权重 */
     line-height: 1; 
     display: block; 
 }
@@ -218,13 +216,13 @@ body {
 
 
 /* =========================================
-   7. Gallery (堆叠 -> 散开 16:9 版)
+   7. Gallery (加大版 + 底部故事)
    ========================================= */
 .gallery-wrapper {
-    position: relative; width: 100%; height: 500px; 
+    position: relative; width: 100%; height: 600px; 
     display: flex; justify-content: center; align-items: center;
-    /* 🔥 减少这里的 margin-bottom，消除留白 */
-    margin: 40px 0 20px; 
+    /* 🔥 减少到底部的留白 */
+    margin: 20px 0 0px; 
 }
 .photo-pile-container {
     position: relative; width: 100%; height: 100%;
@@ -233,20 +231,27 @@ body {
 
 .photo-card {
     position: absolute; display: block;
-    /* 🔥 卡片尺寸加大 (16:9) */
-    width: 480px; height: 270px; 
+    /* 🔥 尺寸加大 (520px宽) */
+    width: 520px; height: 292px; 
     
-    background-size: cover; background-position: center;
+    /* 允许文字显示在卡片外部 */
+    overflow: visible; 
+    
     border: 8px solid #fff; border-radius: 4px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    background-color: #fff; /* 防止图片加载前透视 */
     
     left: 50% !important; top: 50%; 
-    margin-top: -135px; /* 高度的一半 */
+    margin-top: -146px; 
     
-    /* 默认堆叠状态 */
     transform: translateX(-50%) rotate(0deg) scale(0.9);
     transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-    cursor: pointer; transform-origin: center bottom;
+    cursor: pointer; transform-origin: center center;
+}
+
+.photo-card-img {
+    width: 100%; height: 100%;
+    background-size: cover; background-position: center;
 }
 
 /* 5张卡片堆叠角度 */
@@ -256,7 +261,7 @@ body {
 .photo-card:nth-child(4) { transform: translateX(-50%) rotate(4deg) scale(0.93); z-index: 2; }
 .photo-card:nth-child(5) { transform: translateX(-50%) rotate(8deg) scale(0.9); z-index: 1; }
 
-/* 🔥 悬停散开逻辑 (5张卡片均匀分布) */
+/* 悬停散开 */
 .photo-pile-container:hover .photo-card {
     left: var(--left) !important; top: 50%; 
     transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot)) scale(1);
@@ -271,23 +276,44 @@ body {
     box-shadow: 0 35px 80px rgba(0,0,0,0.3);
 }
 
-.card-overlay {
-    position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6); 
-    display: flex; justify-content: center; align-items: center; padding: 30px;
-    opacity: 0; transition: opacity 0.3s ease; text-align: center;
+/* 🔥 全新：底部文字说明 (不挡图片) */
+.card-caption {
+    position: absolute;
+    top: 100%; /* 位于卡片正下方 */
+    left: 0; width: 100%;
+    margin-top: 20px; /* 与卡片的距离 */
+    text-align: center;
+    opacity: 0; 
+    transform: translateY(-10px);
+    transition: all 0.4s ease 0.1s; /* 稍微延迟一点出现 */
+    pointer-events: none;
 }
-.card-desc {
-    color: #FFF; font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 1rem; line-height: 1.5;
-    transform: translateY(10px); transition: transform 0.3s ease;
+
+.caption-text {
+    font-family: 'Inter', 'Noto Serif SC', sans-serif;
+    font-size: 1rem; line-height: 1.5;
+    color: #2C241B; /* 深色文字 */
+    background: rgba(255, 255, 255, 0.4); /* 极淡的背景增强可读性 */
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-block;
 }
-.photo-card:hover .card-overlay { opacity: 1; }
-.photo-card:hover .card-desc { transform: translateY(0); }
+
+/* 只有当鼠标悬停在具体某张卡片上时，才显示它的文字 */
+.photo-card:hover .card-caption { 
+    opacity: 1; 
+    transform: translateY(0);
+}
 
 
 /* =========================================
-   8. Projects & Blog (保持不变)
+   8. Projects (减少顶部留白)
    ========================================= */
+#projects {
+    padding-top: 0px !important; /* 强制去除顶部 padding */
+    margin-top: -40px; /* 稍微往上提一点 */
+}
+
 .project-list { display: flex; flex-direction: column; gap: 120px; margin-bottom: 160px; }
 .project-item { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; }
 .project-item:nth-child(even) { direction: rtl; }
@@ -334,11 +360,10 @@ body {
     .lang-switch-wrapper { position: static; margin-bottom: 20px; text-align: right; }
     
     .edu-grid { flex-direction: column; gap: 40px; }
-    /* 手机上移除固定高度，让其自然排列 */
-    .edu-icon-wrapper { height: auto; }
+    .edu-icon-wrapper { height: auto; } /* 手机上取消固定高度 */
     
-    .gallery-wrapper { height: 350px; margin: 40px 0; }
-    /* 手机上卡片缩小 */
+    .gallery-wrapper { height: 400px; margin: 40px 0; }
+    /* 手机上卡片尺寸缩小 */
     .photo-card { width: 280px; height: 157px; margin-top: -78px; }
     
     /* 手机上散开位置 */
@@ -348,6 +373,7 @@ body {
     .project-item { grid-template-columns: 1fr; gap: 40px; }
     .project-item:nth-child(even) { direction: ltr; } 
     .dark-section.first-section::before { height: 100px; top: -100px; }
+    #projects { margin-top: 0; }
 }
 
 .fab-menu { position: fixed; bottom: 40px; left: 40px; width: 50px; height: 50px; background-color: #6B2E7F; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; z-index: 99; }
