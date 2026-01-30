@@ -3,14 +3,14 @@
    ========================================= */
 @font-face {
     font-family: 'JuanaCustom';
-    /* 🔥 核心修改：加载你下载的 woff2 字体包 */
+    /* 🔥 核心：请确保 J-Extralight.woff2 已上传到 GitHub */
     src: url('J-Extralight.woff2') format('woff2');
-    font-weight: 200; /* ExtraLight 对应极细字重 */
+    font-weight: 200; 
     font-style: normal;
     font-display: swap;
 }
 
-/* 备用字体：Inter 用于正文 */
+/* 备用字体 */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital@1&display=swap');
 
 /* =========================================
@@ -19,7 +19,7 @@
 :root {
     --bg-color: #FAF5EF;      /* 顶部：杏仁白 */
     
-    /* 底部：暖桃黄 (保持你想要的渐变色) */
+    /* 底部：暖桃黄 (House Of 同款色系) */
     --dark-bg: #F6D38D;       
     
     --primary-color: #E34234; /* 朱砂红 */
@@ -51,13 +51,13 @@ body {
     margin-bottom: 250px; 
 }
 
-/* 巨大标题 "ZAKI" - Juana 版本 */
+/* 巨大标题 "ZAKI" - 强制使用 Juana */
 .huge-title {
-    /* 🔥 应用 Juana 字体 */
-    font-family: 'JuanaCustom', serif;
+    /* 🔥 核心修复：使用 !important 强制覆盖所有默认设置 */
+    font-family: 'JuanaCustom', serif !important;
     
     font-size: 38vw;       
-    font-weight: 200;      /* 使用极细字重 */
+    font-weight: 200;      
     color: var(--primary-color);
     line-height: 0.8;      
     white-space: nowrap;
@@ -68,10 +68,12 @@ body {
     align-items: baseline; 
     
     text-transform: uppercase;
-    
-    /* Juana 的线条很细，稍微给一点点呼吸空间，或者紧贴都可以 */
-    /* 这里设为 -1vw，让它保持紧凑但不过分拥挤 */
     letter-spacing: -1vw; 
+}
+
+/* 🔥 核心修复：强制内部字母继承字体 (解决 span 不变的问题) */
+.huge-title .letter {
+    font-family: inherit !important;
 }
 
 /* 字母动效 */
@@ -99,7 +101,7 @@ body {
 @keyframes fadeIn { to { opacity: 1; } }
 
 .subtitle-text {
-    font-family: 'Playfair Display', serif; 
+    font-family: 'Playfair Display', serif;
     font-style: italic;
     font-size: 1.5rem;
     color: var(--text-color);
@@ -131,7 +133,7 @@ body {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 500px; 
+    height: 500px;
     display: flex;
     justify-content: center;
     opacity: 0;
@@ -233,7 +235,7 @@ body {
     margin-top: 0;
 }
 
-/* 渐变过渡：杏仁白 -> 暖桃黄 */
+/* 渐变过渡 */
 .dark-section::before {
     content: '';
     position: absolute;
@@ -253,13 +255,13 @@ body {
     z-index: 3;
 }
 
-/* About & Blog 样式 */
+/* About & Blog */
 .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 120px; align-items: center; }
 .story-text { text-align: left; }
 
-/* 这里的字体也可以换成 Juana，或者保持 Playfair Display 形成对比 */
+/* 既然大标题用了 Juana，这里也推荐统一用 Juana，或者保持 Playfair Display */
 .story-paragraph { 
-    font-family: 'JuanaCustom', serif; /* 试一下也用 Juana，保持统一高级感 */
+    font-family: 'JuanaCustom', serif; /* 尝试统一风格 */
     font-size: 3rem; 
     line-height: 1.15; 
     font-weight: 200; 
@@ -304,7 +306,7 @@ body {
 .blog-meta { font-family: 'Inter', sans-serif; font-size: 0.9rem; opacity: 0.6; width: 150px; }
 .blog-content { flex: 1; }
 .blog-title { 
-    font-family: 'JuanaCustom', serif; /* 文章标题也用 Juana */
+    font-family: 'JuanaCustom', serif; 
     font-size: 2.2rem; 
     font-weight: 200; 
     margin-bottom: 10px; 
