@@ -24,28 +24,41 @@
 html { scroll-behavior: smooth; }
 
 body {
-    background-color: var(--bg-color); /* 默认白色 */
+    background-color: var(--bg-color);
     font-family: 'Inter', sans-serif;
     overflow-x: hidden; overflow-y: auto;
 }
 
 /* =========================================
-   3. Hero 区域 (纯白)
+   3. Hero 区域 (纯白 + 底部缓慢渐变)
    ========================================= */
 .hero-wrapper {
     position: relative; width: 100%; height: 100vh;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    overflow: hidden; z-index: 10; 
-    /* 确保 Hero 区域背景是白色 */
+    overflow: hidden; z-index: 10;
     background-color: var(--bg-color);
+}
+
+/* 🔥 新增：Hero 底部渐变 */
+.hero-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 35vh; /* 控制渐变高度，让过渡更缓慢 */
+    background: linear-gradient(to bottom, transparent, var(--dark-bg));
+    pointer-events: none;
+    z-index: 1; /* 在内容之下，背景之上 */
 }
 
 .huge-title {
     font-family: 'JuanaCustom', serif !important;
     font-size: 22vw; font-weight: 200; color: var(--primary-color);
     line-height: 0.8; white-space: nowrap; margin-top: -5vh;
-    display: flex; justify-content: center; align-items: baseline; 
-    letter-spacing: -1vw; 
+    display: flex; justify-content: center; align-items: baseline;
+    letter-spacing: -1vw;
+    position: relative; z-index: 20; /* 确保在渐变之上 */
 }
 .huge-title .letter { font-family: inherit !important; }
 
@@ -77,59 +90,72 @@ body {
     font-size: 1.5rem; color: var(--text-color); margin-bottom: 2rem; line-height: 1.4;
 }
 
-/* 动态向下箭头 */
+/* =========================================
+   🔥 动态向下箭头 (复古风格)
+   ========================================= */
 .scroll-indicator {
-    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
-    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    position: absolute; bottom: 80px; /* 稍微向上调整位置 */
+    left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 20px;
     opacity: 0; animation: fadeIn 1s ease 2s forwards; cursor: pointer;
-    text-decoration: none; 
+    text-decoration: none;
+    z-index: 20; /* 确保在渐变之上 */
 }
+
 .scroll-text {
     font-family: 'Inter', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em;
     color: var(--primary-color); opacity: 0.8;
 }
+
+/* 复古箭头样式 */
 .arrow-icon {
-    width: 20px; height: 30px; border: 1.5px solid var(--primary-color); border-radius: 20px;
-    position: relative;
+    width: 24px;
+    height: 24px;
+    border: solid var(--primary-color);
+    border-width: 0 3px 3px 0; /* 创建 V 形 */
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg); /* 旋转成箭头 */
+    animation: retroScroll 1.5s infinite ease-in-out;
+    border-radius: 2px; /* 稍微圆角一点 */
 }
+
+/* 移除旧的 ::after */
 .arrow-icon::after {
-    content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
-    width: 2px; height: 6px; background-color: var(--primary-color); border-radius: 2px;
-    animation: scrollDown 1.5s infinite ease-in-out;
+    display: none;
 }
-@keyframes scrollDown {
-    0% { top: 6px; opacity: 1; height: 6px; }
-    100% { top: 18px; opacity: 0; height: 2px; }
+
+/* 复古浮动动画 */
+@keyframes retroScroll {
+    0%, 100% { transform: rotate(45deg) translate(0, 0); }
+    50% { transform: rotate(45deg) translate(8px, 8px); }
 }
 
 
 /* =========================================
-   4. 黄色背景区域 (🔥 渐变紧贴 About)
+   4. 黄色背景区域
    ========================================= */
 .dark-section {
     position: relative; background-color: var(--dark-bg); color: var(--light-text);
-    width: 100%; 
-    padding: 140px 10% 60px; 
+    width: 100%;
+    padding: 140px 10% 60px;
     z-index: 1;
 }
 
-/* 🔥 核心修改：缩短渐变高度，防止它跑到 Hero 去 */
-/* 这里的 150px 意味着渐变只在 About 板块上方 150px 的范围内发生 */
+/* 移除旧的渐变，由 Hero 的 ::after 代替 */
 .dark-section.first-section::before {
-    content: ''; position: absolute; 
-    top: -150px; left: 0; width: 100%; 
-    height: 151px; /* 对应 top 的高度 */
-    background: linear-gradient(to bottom, transparent, var(--dark-bg));
-    pointer-events: none; z-index: 2;
+    display: none;
 }
+
 .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 3; }
 
 
+/* ... (以下样式保持不变) ... */
 /* =========================================
    5. About Me & Language Switch
    ========================================= */
 .lang-switch-wrapper {
-    position: absolute; top: 0; right: 0; 
+    position: absolute; top: 0; right: 0;
     z-index: 20;
 }
 .lang-btn {
@@ -142,70 +168,65 @@ body {
 
 .about-wrapper { position: relative; margin-bottom: 100px; }
 
-.story-grid { 
-    display: grid; 
-    grid-template-columns: 0.8fr 1.2fr; 
-    gap: 80px; align-items: center; 
+.story-grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 80px; align-items: center;
 }
 
-.about-image-wrapper { 
-    width: 100%; aspect-ratio: 4/5; 
-    overflow: hidden; border-radius: 4px; 
-    box-shadow: 20px 20px 0px rgba(44,36,27, 0.1); 
+.about-image-wrapper {
+    width: 100%; aspect-ratio: 4/5;
+    overflow: hidden; border-radius: 4px;
+    box-shadow: 20px 20px 0px rgba(44,36,27, 0.1);
 }
 .about-image-wrapper img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
 
-.story-text { text-align: left; padding-top: 40px; } 
+.story-text { text-align: left; padding-top: 40px; }
 
-.story-paragraph { 
-    font-family: 'Playfair Display', 'Noto Serif SC', serif; 
-    font-size: 2.2rem; line-height: 1.5; font-weight: 400; 
+.story-paragraph {
+    font-family: 'Playfair Display', 'Noto Serif SC', serif;
+    font-size: 2.2rem; line-height: 1.5; font-weight: 400;
     color: #2C241B; margin-bottom: 30px;
 }
-.story-paragraph.small { 
-    font-size: 1.1rem; opacity: 0.8; margin-top: 20px; 
+.story-paragraph.small {
+    font-size: 1.1rem; opacity: 0.8; margin-top: 20px;
     font-family: 'Inter', 'Noto Serif SC', sans-serif; line-height: 1.8;
 }
 
-
 /* =========================================
-   6. Education / Experience (🔥 修复蓝色链接问题)
+   6. Education / Experience (修复蓝色链接问题)
    ========================================= */
 .edu-section {
-    margin-top: 60px; padding-top: 80px; 
-    border-top: 1px solid rgba(44,36,27, 0.15); 
+    margin-top: 60px; padding-top: 80px;
+    border-top: 1px solid rgba(44,36,27, 0.15);
 }
 .edu-title {
     font-family: 'Inter', sans-serif; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.2em;
     margin-bottom: 60px; opacity: 0.5; text-align: center;
 }
 .edu-grid {
-    display: flex; flex-wrap: wrap; justify-content: center; gap: 80px; 
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 80px;
     align-items: flex-start;
 }
 
-/* 🔥 关键修正：强制重置链接样式 */
 .edu-item {
-    display: flex; flex-direction: column; align-items: center; gap: 20px; 
+    display: flex; flex-direction: column; align-items: center; gap: 20px;
     opacity: 0.8; transition: all 0.3s; text-align: center;
-    
-    text-decoration: none !important; /* 去掉下划线 */
-    color: inherit !important;        /* 继承父级颜色，拒绝蓝色 */
+    text-decoration: none !important;
+    color: inherit !important;
     cursor: pointer;
 }
 .edu-item:hover { opacity: 1; transform: translateY(-5px); }
 
-/* Logo 容器 */
 .edu-icon-wrapper {
-    height: 110px; 
+    height: 110px;
     display: flex; align-items: center; justify-content: center;
 }
 
 .edu-logo-img {
-    height: 65px; width: auto; 
+    height: 65px; width: auto;
     display: block; object-fit: contain;
 }
-/* NTU Logo 加大 */
 .edu-logo-img.ntu-special { height: 95px; }
 
 .edu-icon { font-size: 3.5rem; line-height: 1; display: block; }
@@ -214,14 +235,13 @@ body {
 .edu-school { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-weight: 600; font-size: 1rem; letter-spacing: 0.05em; }
 .edu-major { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 0.85rem; opacity: 0.7; }
 
-
 /* =========================================
    7. Gallery (16:9 堆叠流)
    ========================================= */
 .gallery-wrapper {
-    position: relative; width: 100%; height: 600px; 
+    position: relative; width: 100%; height: 600px;
     display: flex; justify-content: center; align-items: center;
-    margin: 20px 0 0px; 
+    margin: 20px 0 0px;
 }
 .photo-pile-container {
     position: relative; width: 100%; height: 100%;
@@ -230,13 +250,12 @@ body {
 
 .photo-card {
     position: absolute; display: block;
-    width: 520px; height: 292px; 
-    overflow: visible; 
+    width: 520px; height: 292px;
+    overflow: visible;
     border: 8px solid #fff; border-radius: 4px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-    background-color: #fff; 
-    
-    left: 50% !important; top: 50%; margin-top: -146px; 
+    background-color: #fff;
+    left: 50% !important; top: 50%; margin-top: -146px;
     transform: translateX(-50%) rotate(0deg) scale(0.9);
     transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
     cursor: pointer; transform-origin: center center;
@@ -247,16 +266,14 @@ body {
     background-size: cover; background-position: center;
 }
 
-/* 堆叠角度 */
 .photo-card:nth-child(1) { transform: translateX(-50%) rotate(-8deg) scale(0.9); z-index: 1; }
 .photo-card:nth-child(2) { transform: translateX(-50%) rotate(-4deg) scale(0.93); z-index: 2; }
 .photo-card:nth-child(3) { transform: translateX(-50%) rotate(0deg) scale(0.96); z-index: 3; }
 .photo-card:nth-child(4) { transform: translateX(-50%) rotate(4deg) scale(0.93); z-index: 2; }
 .photo-card:nth-child(5) { transform: translateX(-50%) rotate(8deg) scale(0.9); z-index: 1; }
 
-/* 悬停散开 */
 .photo-pile-container:hover .photo-card {
-    left: var(--left) !important; top: 50%; 
+    left: var(--left) !important; top: 50%;
     transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot)) scale(1);
     box-shadow: 0 25px 60px rgba(0,0,0,0.25);
 }
@@ -267,7 +284,6 @@ body {
     box-shadow: 0 35px 80px rgba(0,0,0,0.3);
 }
 
-/* 底部文字 */
 .card-caption {
     position: absolute; top: 100%; left: 0; width: 100%;
     margin-top: 20px; text-align: center;
@@ -276,12 +292,11 @@ body {
 }
 .caption-text {
     font-family: 'Inter', 'Noto Serif SC', sans-serif;
-    font-size: 1rem; line-height: 1.5; color: #2C241B; 
-    background: rgba(255, 255, 255, 0.4); 
+    font-size: 1rem; line-height: 1.5; color: #2C241B;
+    background: rgba(255, 255, 255, 0.4);
     padding: 8px 16px; border-radius: 20px; display: inline-block;
 }
 .photo-card:hover .card-caption { opacity: 1; transform: translateY(0); }
-
 
 /* =========================================
    8. Projects
@@ -294,7 +309,7 @@ body {
 .project-item:nth-child(even) .project-info { direction: ltr; }
 
 .project-preview {
-    width: 100%; aspect-ratio: 16/9; 
+    width: 100%; aspect-ratio: 16/9;
     overflow: hidden; border-radius: 8px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
@@ -304,9 +319,9 @@ body {
 .project-info { padding: 20px 0; }
 .project-name { font-family: 'JuanaCustom', serif; font-size: 3rem; margin-bottom: 20px; color: #2C241B; }
 .project-desc { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 1.1rem; line-height: 1.6; opacity: 0.8; margin-bottom: 30px; }
-.project-link { 
-    display: inline-block; text-decoration: none; color: #2C241B; 
-    border-bottom: 1px solid #2C241B; padding-bottom: 4px; 
+.project-link {
+    display: inline-block; text-decoration: none; color: #2C241B;
+    border-bottom: 1px solid #2C241B; padding-bottom: 4px;
     font-family: 'Inter', 'Noto Serif SC', sans-serif; font-weight: 500;
     transition: opacity 0.3s;
 }
@@ -324,15 +339,12 @@ body {
 .blog-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .blog-item:hover .blog-thumb { opacity: 1; transform: translateX(0); }
 
-
 /* =========================================
-   9. FAB Menu (🔥 左下角紫色导航)
+   9. FAB Menu (左下角紫色导航)
    ========================================= */
 .fab-menu-container {
     position: fixed; bottom: 40px; left: 40px; z-index: 99;
 }
-
-/* 按钮主体 */
 .fab-btn {
     width: 50px; height: 50px;
     background-color: var(--fab-color);
@@ -344,8 +356,6 @@ body {
     user-select: none;
 }
 .fab-btn:hover { transform: scale(1.1); }
-
-/* 弹出菜单项 */
 .fab-options {
     position: absolute; bottom: 65px; left: 0;
     display: flex; flex-direction: column; gap: 10px;
@@ -353,12 +363,10 @@ body {
     transform: translateY(20px);
     transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
-
 .fab-options.active {
     opacity: 1; visibility: visible;
     transform: translateY(0);
 }
-
 .fab-link {
     background-color: white; color: var(--fab-color);
     padding: 8px 16px; border-radius: 20px;
@@ -371,12 +379,9 @@ body {
 }
 .fab-options.active .fab-link { opacity: 1; transform: translateX(0); }
 .fab-link:hover { background-color: var(--fab-color); color: white; }
-
-/* 菜单项依次出现的动画延迟 */
 .fab-options.active .fab-link:nth-child(1) { transition-delay: 0.15s; }
 .fab-options.active .fab-link:nth-child(2) { transition-delay: 0.1s; }
 .fab-options.active .fab-link:nth-child(3) { transition-delay: 0.05s; }
-
 
 /* =========================================
    10. Mobile Adaption
@@ -384,28 +389,18 @@ body {
 @media (max-width: 768px) {
     .huge-title { font-size: 45vw; margin-top: 10vh; letter-spacing: -3vw; }
     .hero-wrapper { height: 90vh; }
-    
-    .story-grid { grid-template-columns: 1fr; gap: 40px; } 
+    .story-grid { grid-template-columns: 1fr; gap: 40px; }
     .about-image-wrapper { aspect-ratio: 16/9; }
     .lang-switch-wrapper { position: static; margin-bottom: 20px; text-align: right; }
-    
     .edu-grid { flex-direction: column; gap: 40px; }
-    .edu-icon-wrapper { height: auto; } 
-    
+    .edu-icon-wrapper { height: auto; }
     .gallery-wrapper { height: 400px; margin: 40px 0; }
     .photo-card { width: 280px; height: 157px; margin-top: -78px; }
-    
     .photo-pile-container:hover .photo-card:nth-child(1) { left: 10% !important; }
     .photo-pile-container:hover .photo-card:nth-child(5) { left: 90% !important; }
-    
     .project-item { grid-template-columns: 1fr; gap: 40px; }
-    .project-item:nth-child(even) { direction: ltr; } 
-    
-    /* 手机上调整背景渐变 */
-    .dark-section.first-section::before { height: 50px; top: -50px; }
+    .project-item:nth-child(even) { direction: ltr; }
     #projects { margin-top: 0; }
-    
-    /* 手机上 FAB 放右下角 */
     .fab-menu-container { left: auto; right: 20px; bottom: 20px; }
     .fab-options { left: auto; right: 0; align-items: flex-end; }
 }
