@@ -11,7 +11,7 @@
 </head>
 <body>
 
-    <main class="hero-wrapper">
+    <main class="hero-wrapper" id="hero">
         
         <div class="hero-blobs">
             <div class="blob blob-1"></div>
@@ -19,19 +19,19 @@
             <div class="blob blob-3"></div>
         </div>
 
-        <h1 class="huge-title">
-            <div class="greeting-drum-wrapper">
-                <span class="greeting-item active">Hi</span>
-                <span class="greeting-item">Hello</span>
-                <span class="greeting-item">Bonjour</span>
-                <span class="greeting-item">Hola</span>
-                <span class="greeting-item">你好</span>
-                <span class="greeting-item">こんにちは</span>
+        <div class="title-container">
+            <div class="greeting-drum">
+                <div class="greeting-track">
+                    <span class="drum-item active">Hello</span>
+                    <span class="drum-item">Bonjour</span>
+                    <span class="drum-item">Hola</span>
+                    <span class="drum-item">你好</span>
+                    <span class="drum-item">こんにちは</span>
+                </div>
             </div>
             
-            <span class="letter-anim">&nbsp;</span>
-            <span class="letter-anim">Z</span><span class="letter-anim">a</span><span class="letter-anim">k</span><span class="letter-anim">i</span>
-        </h1>
+            <h1 class="static-name">Zaki</h1>
+        </div>
 
         <div class="content-area">
             <p class="subtitle-text">
@@ -161,57 +161,60 @@
                     </a>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="social-section">
-                <div class="edu-title">
-                    <span class="lang-en">Connect With Me</span>
-                    <span class="lang-zh" style="display: none;">关注我</span>
-                </div>
-                <div class="social-grid">
-                    
-                    <a href="https://www.linkedin.com/in/zunjie-mao-b56838233/" target="_blank" class="social-card">
-                        <div class="social-icon-box linkedin">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                        </div>
-                        <div class="social-text">
-                            <h3>LinkedIn</h3>
-                            <p><span class="lang-en">Career Connect</span><span class="lang-zh" style="display:none">职场交流</span></p>
-                        </div>
-                    </a>
-
-                    <a href="https://www.xiaohongshu.com/user/profile/5feb294b0000000001006ffe" target="_blank" class="social-card">
-                        <div class="social-icon-box xhs">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        </div>
-                        <div class="social-text">
-                            <h3><span class="lang-en">Xiaohongshu</span><span class="lang-zh" style="display:none">小红书</span></h3>
-                            <p><span class="lang-en">Hotel Reviews</span><span class="lang-zh" style="display:none">酒店测评</span></p>
-                        </div>
-                    </a>
-
-                    <a href="https://www.douyin.com/user/MS4wLjABAAAAco5xNCr6FDGKRvTpyOJ2JeHVAbHBGfHjU4G4hjsmBBcYxDV0T2_VfSN9G6SP_48R?from_tab_name=main" target="_blank" class="social-card">
-                        <div class="social-icon-box douyin">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
-                        </div>
-                        <div class="social-text">
-                            <h3><span class="lang-en">Douyin</span><span class="lang-zh" style="display:none">抖音</span></h3>
-                            <p><span class="lang-en">Photography</span><span class="lang-zh" style="display:none">摄影作品</span></p>
-                        </div>
-                    </a>
-
-                    <a href="https://github.com/Zaki-Mao" target="_blank" class="social-card">
-                        <div class="social-icon-box github">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                        </div>
-                        <div class="social-text">
-                            <h3>GitHub</h3>
-                            <p><span class="lang-en">My Code</span><span class="lang-zh" style="display:none">代码仓库</span></p>
-                        </div>
-                    </a>
-
-                </div>
+    <section class="social-section-wrapper">
+        <div class="container">
+            <div class="section-label-line">
+                <span class="lang-en">Connect With Me</span>
+                <span class="lang-zh" style="display: none;">关注我</span>
             </div>
+
+            <div class="social-flex-container">
+                
+                <a href="https://www.linkedin.com/in/zunjie-mao-b56838233/" target="_blank" class="social-card">
+                    <div class="social-icon-box linkedin-bg">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                    </div>
+                    <div class="social-info">
+                        <h3>LinkedIn</h3>
+                        <p class="s-desc">Career Connect</p>
+                    </div>
+                </a>
+
+                <a href="https://www.xiaohongshu.com/user/profile/5feb294b0000000001006ffe" target="_blank" class="social-card">
+                    <div class="social-icon-box xhs-bg">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    </div>
+                    <div class="social-info">
+                        <h3>小红书</h3>
+                        <p class="s-desc">Hotel Reviews</p>
+                    </div>
+                </a>
+
+                <a href="https://www.douyin.com/user/MS4wLjABAAAAco5xNCr6FDGKRvTpyOJ2JeHVAbHBGfHjU4G4hjsmBBcYxDV0T2_VfSN9G6SP_48R?from_tab_name=main" target="_blank" class="social-card">
+                    <div class="social-icon-box douyin-bg">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                    </div>
+                    <div class="social-info">
+                        <h3>抖音</h3>
+                        <p class="s-desc">Photography</p>
+                    </div>
+                </a>
+
+                <a href="https://github.com/Zaki-Mao" target="_blank" class="social-card">
+                    <div class="social-icon-box github-bg">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                    </div>
+                    <div class="social-info">
+                        <h3>GitHub</h3>
+                        <p class="s-desc">My Code</p>
+                    </div>
+                </a>
+
             </div>
+        </div>
     </section>
 
     <section id="gallery" class="dark-section" style="padding-top: 0;">
@@ -338,7 +341,7 @@
     <script src="blog/posts.js"></script>
 
     <script>
-        // --- 1. 语言切换 ---
+        // --- 1. 语言切换 (保留) ---
         const toggleBtn = document.getElementById('langToggle');
         let currentLang = 'en';
 
@@ -372,7 +375,7 @@
             }
         }
 
-        // --- 2. 博客列表 ---
+        // --- 2. 博客列表渲染 (保留) ---
         const container = document.getElementById('blog-list-container');
         if (typeof blogPosts !== 'undefined' && container) {
             const postsHTML = blogPosts.map(post => `
@@ -393,7 +396,7 @@
             container.innerHTML = postsHTML;
         }
 
-        // --- 3. FAB 导航逻辑 ---
+        // --- 3. FAB 悬浮菜单逻辑 (保留) ---
         const fabBtn = document.getElementById('fabBtn');
         const fabOptions = document.getElementById('fabOptions');
         const fabLinks = document.querySelectorAll('.fab-link');
@@ -415,59 +418,59 @@
             });
         }
 
-        // --- 4. Hero 交互逻辑 (光斑+文字滚筒) ---
-        const heroSection = document.querySelector('.hero-wrapper');
+        // --- 4. Hero 区域新逻辑 (鼠标互动 + 滚筒动画) ---
+        const heroWrapper = document.getElementById('hero');
         const blob1 = document.querySelector('.blob-1');
         const blob2 = document.querySelector('.blob-2');
         const blob3 = document.querySelector('.blob-3');
 
-        // 鼠标跟随
-        if (heroSection) {
-            heroSection.addEventListener('mousemove', (e) => {
+        if(heroWrapper) {
+            heroWrapper.addEventListener('mousemove', (e) => {
                 const x = e.clientX;
                 const y = e.clientY;
                 const centerX = window.innerWidth / 2;
                 const centerY = window.innerHeight / 2;
-                
-                // 增加移动系数，让青色光斑移动更明显
-                blob1.style.transform = `translate(${(x - centerX) / 15}px, ${(y - centerY) / 15}px)`;
-                blob2.style.transform = `translate(${-(x - centerX) / 20}px, ${-(y - centerY) / 20}px)`; // 反向移动
-                blob3.style.transform = `translate(${(x - centerX) / 10}px, ${(y - centerY) / 10}px)`;
+
+                // 鼠标视差移动效果
+                blob1.style.transform = `translate(${(x - centerX) * 0.05}px, ${(y - centerY) * 0.05}px)`;
+                blob2.style.transform = `translate(${-(x - centerX) * 0.04}px, ${-(y - centerY) * 0.04}px)`;
+                blob3.style.transform = `translate(${(x - centerX) * 0.02}px, ${(y - centerY) * 0.02}px)`;
             });
         }
 
-        // 滚筒文字切换逻辑
-        const greetings = document.querySelectorAll('.greeting-item');
-        let currentIdx = 0;
+        // 滚筒文字动画 (Drum Effect)
+        const drumItems = document.querySelectorAll('.drum-item');
+        let drumIndex = 0;
 
-        setInterval(() => {
-            // 当前的退出 (往上滚)
-            greetings[currentIdx].classList.remove('active');
-            greetings[currentIdx].classList.add('exit');
+        if (drumItems.length > 0) {
+            setInterval(() => {
+                // 当前项退出 (往上滚)
+                drumItems[drumIndex].classList.remove('active');
+                drumItems[drumIndex].classList.add('exit');
 
-            // 计算下一个
-            currentIdx = (currentIdx + 1) % greetings.length;
+                // 计算下一项
+                drumIndex = (drumIndex + 1) % drumItems.length;
 
-            // 清理其他所有状态，防止堆积
-            greetings.forEach((el, idx) => {
-                if (idx !== currentIdx) {
-                    el.classList.remove('active'); // 确保非当前项没有active
-                    // 稍微延时移除 exit，保证动画播完（或者在下次循环前保持exit状态）
-                    if (idx !== (currentIdx - 1 + greetings.length) % greetings.length) {
-                         el.classList.remove('exit');
+                // 清理其他项的 class，防止混乱
+                drumItems.forEach((item, idx) => {
+                    if (idx !== drumIndex) {
+                        item.classList.remove('active');
+                        // 稍微延时清理exit，这里简化处理，只要不是当前项也不是上一项，就清理
+                        if(idx !== (drumIndex - 1 + drumItems.length) % drumItems.length) {
+                            item.classList.remove('exit');
+                        }
                     }
-                }
-            });
+                });
 
-            // 下一个进入 (从下方滚入)
-            greetings[currentIdx].classList.remove('exit');
-            greetings[currentIdx].classList.add('active');
+                // 下一项进入
+                drumItems[drumIndex].classList.remove('exit');
+                drumItems[drumIndex].classList.add('active');
 
-        }, 2500);
+            }, 2000); 
+        }
 
-        // 初始化
+        // 初始化语言
         updateLanguage();
     </script>
-
 </body>
 </html>
