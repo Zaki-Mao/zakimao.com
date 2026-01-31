@@ -34,7 +34,7 @@ body {
 }
 
 /* =========================================
-   3. Hero 区域 (WebGL 版)
+   3. Hero 区域
    ========================================= */
 .hero-wrapper {
     position: relative; width: 100%; height: 100vh;
@@ -42,20 +42,6 @@ body {
     background-color: var(--bg-color);
     overflow: hidden; z-index: 10;
 }
-
-/* 🟢 新增：WebGL 容器样式 */
-#webgl-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0; /* 最底层 */
-    pointer-events: auto; /* 允许鼠标交互 */
-}
-
-/* 🔴 旧的 CSS 光斑已注释 (为了性能) */
-/* .hero-blobs { ... } */
 
 /* 底部过渡 */
 .hero-wrapper::after {
@@ -68,6 +54,13 @@ body {
     );
     pointer-events: none; z-index: 5;
 }
+
+/* 背景光斑 */
+.hero-blobs { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; transition: transform 0.1s ease-out; will-change: transform; }
+.blob-1 { width: 600px; height: 600px; background: #A5F3FC; top: -10%; left: 10%; } 
+.blob-2 { width: 500px; height: 500px; background: #CCFBF1; bottom: 10%; right: 10%; } 
+.blob-3 { width: 400px; height: 400px; background: #E0F2FE; top: 40%; left: 40%; } 
 
 /* --- 标题容器 --- */
 .title-container {
@@ -91,6 +84,7 @@ body {
     overflow: visible; 
     position: relative;
     text-align: right;
+    
     /* 左侧文字位置微调 */
     transform: translateY(12px); 
 }
@@ -275,7 +269,7 @@ body {
 .social-info .s-desc { font-size: 0.8rem; opacity: 0.7; font-family: 'Inter', sans-serif; }
 
 /* =========================================
-   8. Gallery
+   8. Gallery (更新：加入第7张图的逻辑)
    ========================================= */
 .gallery-wrapper {
     position: relative; width: 100%; height: 600px;
@@ -298,15 +292,17 @@ body {
 }
 .photo-card-img { width: 100%; height: 100%; background-size: cover; background-position: center; }
 
-/* Desktop Pile Logic */
+/* Desktop Pile Logic (堆叠逻辑) */
 .photo-card:nth-child(1) { transform: translateX(-50%) rotate(-8deg) scale(0.9); z-index: 1; }
 .photo-card:nth-child(2) { transform: translateX(-50%) rotate(-4deg) scale(0.93); z-index: 2; }
 .photo-card:nth-child(3) { transform: translateX(-50%) rotate(0deg) scale(0.96); z-index: 3; }
 .photo-card:nth-child(4) { transform: translateX(-50%) rotate(4deg) scale(0.93); z-index: 2; }
 .photo-card:nth-child(5) { transform: translateX(-50%) rotate(8deg) scale(0.9); z-index: 1; }
 .photo-card:nth-child(6) { transform: translateX(-50%) rotate(-2deg) scale(0.95); z-index: 2; }
+/* 🟢 新增：第7张图片样式 */
 .photo-card:nth-child(7) { transform: translateX(-50%) rotate(3deg) scale(0.97); z-index: 3; }
 
+/* 电脑端悬停展开 */
 .photo-pile-container:hover .photo-card {
     left: var(--left) !important; top: 50%;
     transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot)) scale(1);
@@ -409,7 +405,7 @@ body {
         padding: 0 10px;
     }
 
-    /* 滚筒问候语 (🟢 修复：乱码问题) */
+    /* 滚筒问候语 (修复乱码) */
     .greeting-drum {
         width: 100%;
         height: 1.4em; 
@@ -424,18 +420,13 @@ body {
         text-align: center; 
     }
     .drum-item { 
-        /* 🔴 关键：保持绝对定位，确保它们叠在一起，而不是竖着排 */
         position: absolute; 
         left: 0; right: 0; margin: auto;
-        
         width: 100%; 
         font-size: 14vw; 
         text-align: center;
-        
-        /* 🔴 关键：移除 opacity: 1 !important，让 JS 动画生效 */
+        /* 🔴 移除 opacity: 1 !important，恢复JS动画 */
         opacity: 0; 
-        
-        /* 保持动画 */
         transform: translateY(100%) rotateX(-90deg);
         transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
@@ -465,13 +456,13 @@ body {
     .edu-item { width: 100%; }
     .edu-icon-wrapper { height: auto; margin-bottom: 10px; }
 
-    /* --- Social (🟢 修复：显示不全) --- */
+    /* --- Social (修复显示不全) --- */
     .social-section-wrapper { padding-bottom: 60px; }
     .social-flex-container { flex-direction: column; gap: 15px; }
     /* 🔴 核心修复: 宽度 100% 且去掉 min-width */
     .social-card { width: 100%; min-width: 0; padding: 20px; }
 
-    /* --- Gallery (🟢 修复：改为横向滑动) --- */
+    /* --- Gallery (修复交互：改为横向滑动) --- */
     .gallery-wrapper { 
         height: auto; /* 高度自适应 */
         min-height: 350px;
@@ -491,8 +482,7 @@ body {
         height: auto;
     }
     .photo-card { 
-        /* 🔴 强制重置：取消所有绝对定位和旋转 */
-        position: relative !important; 
+        position: relative; /* 不再绝对定位 */
         left: auto !important; 
         top: auto !important; 
         margin-top: 0;
@@ -500,7 +490,7 @@ body {
         /* 卡片大小调整 */
         width: 280px; 
         height: 180px; 
-        flex-shrink: 0; /* 防止被挤压 */
+        flex-shrink: 0; /* 防止挤压 */
         
         /* 移除旋转 */
         transform: none !important; 
@@ -508,15 +498,15 @@ body {
     }
     /* 禁用 hover 效果防止错位 */
     .photo-pile-container:hover .photo-card { left: auto !important; transform: none !important; }
-    /* 标题始终显示，不需要 hover */
-    .card-caption { opacity: 1; transform: translateY(0); margin-top: 10px; position: static; }
+    /* 标题始终显示 */
+    .card-caption { opacity: 1; transform: translateY(0); margin-top: 10px; }
 
     /* --- Projects --- */
     .project-item { grid-template-columns: 1fr; gap: 30px; margin-bottom: 60px; }
     .project-item:nth-child(even) { direction: ltr; }
     .project-name { font-size: 2.2rem; }
     
-    /* --- Blog & FAB (🟢 修复：留白过多) --- */
+    /* --- Blog & FAB (修复留白) --- */
     .blog-item { flex-direction: column; align-items: flex-start; gap: 10px; padding: 20px 0; }
     .blog-meta { width: 100%; margin-bottom: 0; }
     .blog-thumb { display: none; }
