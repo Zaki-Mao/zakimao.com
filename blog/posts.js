@@ -2,6 +2,14 @@
 
 const blogPosts = [
     {
+        url: "blog/holmes.html",  // 
+        date: "Jan 31, 2026",       // 你可以改成当天的日期
+        title_en: "When Prediction Markets Meet AI: Why I Built BeHolmes?",
+        title_zh: "当预测市场遇上AI新闻分析：我为什么要做BeHolmes？",
+        tag_en: "Product & AI",
+        tag_zh: "产品与AI"
+    },
+    {
         url: "blog/ohenry.html",
         date: "06.12.2022",
         title_en: "O. Henry's Tragicomic World: Reflections on Reading",
