@@ -102,19 +102,19 @@ body {
 
 
 /* =========================================
-   4. 黄色背景区域 (渐变拉长 + 底部紧凑)
+   4. 黄色背景区域 (🔥 渐变缩短 + 80%留白)
    ========================================= */
 .dark-section {
     position: relative; background-color: var(--dark-bg); color: var(--light-text);
     width: 100%; 
-    padding: 140px 10% 60px; /* 底部 padding 减小 */
+    padding: 140px 10% 60px; 
     z-index: 1;
 }
 
-/* 渐变拉长到 600px */
+/* 渐变仅在交界处出现 (150px) */
 .dark-section.first-section::before {
     content: ''; position: absolute; 
-    top: -600px; left: 0; width: 100%; height: 601px;
+    top: -150px; left: 0; width: 100%; height: 151px;
     background: linear-gradient(to bottom, transparent, var(--dark-bg));
     pointer-events: none; z-index: 2;
 }
@@ -165,7 +165,7 @@ body {
 
 
 /* =========================================
-   6. Education / Experience (完美对齐)
+   6. Education / Experience (支持链接跳转)
    ========================================= */
 .edu-section {
     margin-top: 60px; padding-top: 80px; 
@@ -179,17 +179,23 @@ body {
     display: flex; flex-wrap: wrap; justify-content: center; gap: 80px; 
     align-items: flex-start;
 }
+
+/* 🔥 .edu-item 也是链接，需要重置默认样式 */
 .edu-item {
     display: flex; flex-direction: column; align-items: center; gap: 20px; 
     opacity: 0.8; transition: all 0.3s; text-align: center;
+    
+    text-decoration: none; /* 去掉链接下划线 */
+    color: inherit; /* 继承文字颜色 */
+    cursor: pointer;
 }
 .edu-item:hover { opacity: 1; transform: translateY(-5px); }
 
-/* Logo 容器：固定高度 + 垂直居中 (解决对齐问题的关键) */
+/* Logo 容器：垂直居中对齐 */
 .edu-icon-wrapper {
     height: 110px; 
     display: flex;
-    align-items: center; /* 垂直居中 */
+    align-items: center; 
     justify-content: center;
 }
 
@@ -217,7 +223,7 @@ body {
 
 
 /* =========================================
-   7. Gallery (堆叠 -> 散开 16:9 版)
+   7. Gallery (16:9 堆叠流 + 底部故事)
    ========================================= */
 .gallery-wrapper {
     position: relative; width: 100%; height: 600px; 
@@ -345,7 +351,9 @@ body {
 .blog-content { flex: 1; }
 .blog-title { font-family: 'JuanaCustom', serif; font-size: 2.2rem; font-weight: 200; margin-bottom: 10px; }
 .blog-tag { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 0.8rem; background-color: rgba(44,36,27,0.05); padding: 4px 10px; border-radius: 4px; opacity: 0.8; }
-
+.blog-thumb { width: 180px; height: 110px; border-radius: 4px; overflow: hidden; margin-left: 40px; opacity: 0; transform: translateX(20px); transition: all 0.4s ease; }
+.blog-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.blog-item:hover .blog-thumb { opacity: 1; transform: translateX(0); }
 
 /* 手机适配 */
 @media (max-width: 768px) {

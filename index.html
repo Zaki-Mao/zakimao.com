@@ -79,7 +79,7 @@
                 </div>
                 
                 <div class="edu-grid">
-                    <div class="edu-item">
+                    <a href="https://fie.must.edu.mo/" target="_blank" class="edu-item">
                         <div class="edu-icon-wrapper">
                             <img src="images/must.svg" alt="MUST Logo" class="edu-logo-img">
                         </div>
@@ -93,9 +93,9 @@
                                 <span class="lang-zh" style="display: none;">计算机科学 (学士)</span>
                             </div>
                         </div>
-                    </div>
+                    </a>
                     
-                    <div class="edu-item">
+                    <a href="https://www.ntu.edu.sg/wkwsci" target="_blank" class="edu-item">
                         <div class="edu-icon-wrapper">
                             <img src="images/ntu.svg" alt="NTU Logo" class="edu-logo-img ntu-special">
                         </div>
@@ -109,11 +109,11 @@
                                 <span class="lang-zh" style="display: none;">信息系统 (硕士)</span>
                             </div>
                         </div>
-                    </div>
+                    </a>
 
-                    <div class="edu-item">
+                    <a href="https://www.heroesports.com/" target="_blank" class="edu-item">
                         <div class="edu-icon-wrapper">
-                            <div class="edu-icon">🎮</div>
+                            <img src="images/hero.png" alt="Hero Esports Logo" class="edu-logo-img">
                         </div>
                         <div class="edu-info-text">
                             <div class="edu-school">
@@ -125,9 +125,9 @@
                                 <span class="lang-zh" style="display: none;">项目管理</span>
                             </div>
                         </div>
-                    </div>
+                    </a>
 
-                    <div class="edu-item">
+                    <a href="https://www.zhinan.tech/" target="_blank" class="edu-item">
                         <div class="edu-icon-wrapper">
                             <div class="edu-icon">💻</div>
                         </div>
@@ -141,7 +141,7 @@
                                 <span class="lang-zh" style="display: none;">产品与创新</span>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -314,7 +314,7 @@
             }
         }
 
-        // 2. 生成博客列表 (🔥 已移除图片生成)
+        // 2. 生成博客列表
         const container = document.getElementById('blog-list-container');
         
         if (typeof blogPosts !== 'undefined' && container) {
@@ -331,7 +331,7 @@
                             <span class="lang-zh" style="display: none;">${post.tag_zh}</span>
                         </span>
                     </div>
-                    </a>
+                </a>
             `).join('');
 
             container.innerHTML = postsHTML;
