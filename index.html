@@ -14,11 +14,7 @@
 
     <main class="hero-wrapper" id="hero">
         
-        <div class="hero-blobs">
-            <div class="blob blob-1"></div>
-            <div class="blob blob-2"></div>
-            <div class="blob blob-3"></div>
-        </div>
+        <div id="webgl-container"></div>
 
         <div class="title-container">
             <div class="greeting-drum">
@@ -355,8 +351,9 @@
 
     <script src="blog/posts.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // --- 1. 语言切换 (保留) ---
+        // --- 1. 语言切换 ---
         const toggleBtn = document.getElementById('langToggle');
         let currentLang = 'en';
 
@@ -390,7 +387,7 @@
             }
         }
 
-        // --- 2. 博客列表渲染 (保留) ---
+        // --- 2. 博客列表渲染 ---
         const container = document.getElementById('blog-list-container');
         if (typeof blogPosts !== 'undefined' && container) {
             const postsHTML = blogPosts.map(post => `
@@ -411,7 +408,7 @@
             container.innerHTML = postsHTML;
         }
 
-        // --- 3. FAB 悬浮菜单逻辑 (保留) ---
+        // --- 3. FAB 悬浮菜单逻辑 ---
         const fabBtn = document.getElementById('fabBtn');
         const fabOptions = document.getElementById('fabOptions');
         const fabLinks = document.querySelectorAll('.fab-link');
@@ -433,58 +430,183 @@
             });
         }
 
-        // --- 4. Hero 区域新逻辑 (鼠标互动 + 滚筒动画) ---
-        const heroWrapper = document.getElementById('hero');
-        const blob1 = document.querySelector('.blob-1');
-        const blob2 = document.querySelector('.blob-2');
-        const blob3 = document.querySelector('.blob-3');
+        // --- 4. WebGL Fluid Simulation (流体烟雾背景) ---
+        const containerWebGL = document.getElementById('webgl-container');
 
-        if(heroWrapper) {
-            heroWrapper.addEventListener('mousemove', (e) => {
-                const x = e.clientX;
-                const y = e.clientY;
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2;
+        if (containerWebGL) {
+            const scene = new THREE.Scene();
+            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); 
+            
+            // 性能优化: 手机端限制像素比
+            const pixelRatio = Math.min(window.devicePixelRatio, 2);
+            renderer.setPixelRatio(pixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            containerWebGL.appendChild(renderer.domElement);
 
-                // 鼠标视差移动效果
-                blob1.style.transform = `translate(${(x - centerX) * 0.05}px, ${(y - centerY) * 0.05}px)`;
-                blob2.style.transform = `translate(${-(x - centerX) * 0.04}px, ${-(y - centerY) * 0.04}px)`;
-                blob3.style.transform = `translate(${(x - centerX) * 0.02}px, ${(y - centerY) * 0.02}px)`;
+            const mouse = new THREE.Vector2(0.5, 0.5);
+            const targetMouse = new THREE.Vector2(0.5, 0.5);
+
+            document.addEventListener('mousemove', (e) => {
+                targetMouse.x = e.clientX / window.innerWidth;
+                targetMouse.y = 1.0 - (e.clientY / window.innerHeight);
+            });
+
+            // 触摸支持
+            document.addEventListener('touchmove', (e) => {
+                if(e.touches.length > 0) {
+                    targetMouse.x = e.touches[0].clientX / window.innerWidth;
+                    targetMouse.y = 1.0 - (e.touches[0].clientY / window.innerHeight);
+                }
+            }, { passive: true });
+
+            const vertexShader = `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = vec4(position, 1.0);
+                }
+            `;
+
+            const fragmentShader = `
+                uniform float u_time;
+                uniform vec2 u_resolution;
+                uniform vec2 u_mouse;
+                varying vec2 vUv;
+
+                // 随机函数
+                float random (in vec2 _st) {
+                    return fract(sin(dot(_st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+                }
+
+                // 噪声函数
+                float noise (in vec2 _st) {
+                    vec2 i = floor(_st);
+                    vec2 f = fract(_st);
+                    float a = random(i);
+                    float b = random(i + vec2(1.0, 0.0));
+                    float c = random(i + vec2(0.0, 1.0));
+                    float d = random(i + vec2(1.0, 1.0));
+                    vec2 u = f * f * (3.0 - 2.0 * f);
+                    return mix(a, b, u.x) + (c - a)* u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+                }
+
+                #define NUM_OCTAVES 5
+                // FBM (分形布朗运动)
+                float fbm ( in vec2 _st) {
+                    float v = 0.0;
+                    float a = 0.5;
+                    vec2 shift = vec2(100.0);
+                    mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
+                    for (int i = 0; i < NUM_OCTAVES; ++i) {
+                        v += a * noise(_st);
+                        _st = rot * _st * 2.0 + shift;
+                        a *= 0.5;
+                    }
+                    return v;
+                }
+
+                void main() {
+                    vec2 st = gl_FragCoord.xy/u_resolution.xy;
+                    float aspect = u_resolution.x/u_resolution.y;
+                    st.x *= aspect; 
+                    
+                    vec2 mouse = u_mouse;
+                    mouse.x *= aspect;
+
+                    // 鼠标互动范围
+                    float dist = distance(st, mouse);
+                    float interaction = smoothstep(0.5, 0.0, dist);
+
+                    // 坐标扭曲 (烟雾流动感)
+                    vec2 q = vec2(0.);
+                    q.x = fbm( st + 0.05*u_time);
+                    q.y = fbm( st + vec2(1.0));
+
+                    vec2 r = vec2(0.);
+                    r.x = fbm( st + 1.0*q + vec2(1.7,9.2)+ 0.15*u_time + interaction * 0.5);
+                    r.y = fbm( st + 1.0*q + vec2(8.3,2.8)+ 0.126*u_time + interaction * 0.5);
+
+                    float f = fbm(st+r);
+
+                    // 配色混合
+                    vec3 colorBg = vec3(0.98, 0.96, 0.94); // #FAF5EF
+                    vec3 color1 = vec3(0.65, 0.95, 0.99);  // #A5F3FC
+                    vec3 color2 = vec3(0.88, 0.95, 1.0);   // #E0F2FE
+                    vec3 color3 = vec3(0.80, 0.98, 0.95);  // #CCFBF1
+
+                    vec3 color = mix(colorBg, color1, clamp(f*f*4.0, 0.0, 1.0));
+                    color = mix(color, color2, clamp(length(q), 0.0, 1.0));
+                    color = mix(color, color3, clamp(length(r.x), 0.0, 1.0));
+
+                    // 高亮
+                    color += vec3(0.05) * interaction;
+
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `;
+
+            const material = new THREE.ShaderMaterial({
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShader,
+                uniforms: {
+                    u_time: { value: 0.0 },
+                    u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+                    u_mouse: { value: new THREE.Vector2(0.5, 0.5) },
+                }
+            });
+
+            const plane = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+            scene.add(plane);
+
+            const clock = new THREE.Clock();
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // 鼠标平滑跟随
+                mouse.x += (targetMouse.x - mouse.x) * 0.05;
+                mouse.y += (targetMouse.y - mouse.y) * 0.05;
+
+                material.uniforms.u_time.value = clock.getElapsedTime();
+                material.uniforms.u_mouse.value = mouse;
+                
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // 窗口调整
+            window.addEventListener('resize', () => {
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                material.uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
             });
         }
 
-        // 滚筒文字动画 (Drum Effect)
+        // --- 5. Drum Text Animation (文字轮播) ---
         const drumItems = document.querySelectorAll('.drum-item');
         let drumIndex = 0;
 
         if (drumItems.length > 0) {
             setInterval(() => {
-                // 当前项退出 (往上滚)
                 drumItems[drumIndex].classList.remove('active');
                 drumItems[drumIndex].classList.add('exit');
 
-                // 计算下一项
                 drumIndex = (drumIndex + 1) % drumItems.length;
 
-                // 清理其他项的 class，防止混乱
                 drumItems.forEach((item, idx) => {
                     if (idx !== drumIndex) {
                         item.classList.remove('active');
-                        // 稍微延时清理exit，这里简化处理，只要不是当前项也不是上一项，就清理
                         if(idx !== (drumIndex - 1 + drumItems.length) % drumItems.length) {
                             item.classList.remove('exit');
                         }
                     }
                 });
 
-                // 下一项进入
                 drumItems[drumIndex].classList.remove('exit');
                 drumItems[drumIndex].classList.add('active');
 
             }, 2000); 
         }
 
-        // 初始化语言
         updateLanguage();
     </script>
 </body>
