@@ -159,37 +159,27 @@
                     
                     <div class="photo-card" style="--left: 10%; --rot: -8deg; --y: 40px;">
                         <div class="photo-card-img" style="background-image: url('images/photo/img1.jpg');"></div>
-                        <div class="card-caption">
-                            <span class="caption-text">ECL 2024, Shanghai</span>
-                        </div>
+                        <div class="card-caption"><span class="caption-text">ECL 2024, Shanghai</span></div>
                     </div>
                     
                     <div class="photo-card" style="--left: 30%; --rot: -2deg; --y: -20px;">
                         <div class="photo-card-img" style="background-image: url('images/photo/img2.jpg');"></div>
-                        <div class="card-caption">
-                            <span class="caption-text">Arena Breakout 2024, Shanghai</span>
-                        </div>
+                        <div class="card-caption"><span class="caption-text">Arena Breakout 2024, Shanghai</span></div>
                     </div>
                     
                     <div class="photo-card" style="--left: 50%; --rot: 5deg; --y: 30px;">
                         <div class="photo-card-img" style="background-image: url('images/photo/img3.jpg');"></div>
-                        <div class="card-caption">
-                            <span class="caption-text">IEM China</span>
-                        </div>
+                        <div class="card-caption"><span class="caption-text">IEM China</span></div>
                     </div>
                     
                     <div class="photo-card" style="--left: 70%; --rot: 8deg; --y: -10px;">
                         <div class="photo-card-img" style="background-image: url('images/photo/img4.jpg');"></div>
-                        <div class="card-caption">
-                            <span class="caption-text">PCL Spring 2024</span>
-                        </div>
+                        <div class="card-caption"><span class="caption-text">PCL Spring 2024</span></div>
                     </div>
 
                     <div class="photo-card" style="--left: 90%; --rot: -5deg; --y: 20px;">
                         <div class="photo-card-img" style="background-image: url('images/photo/img5.jpg');"></div>
-                        <div class="card-caption">
-                            <span class="caption-text">PGC 2023, Bangkok</span>
-                        </div>
+                        <div class="card-caption"><span class="caption-text">PGC 2023, Bangkok</span></div>
                     </div>
                     
                 </div>
@@ -265,18 +255,25 @@
                 <span class="lang-en">Selected Writings</span>
                 <span class="lang-zh" style="display: none;">近期文章</span>
             </div>
-            
             <div class="blog-list" id="blog-list-container"></div>
-            
         </div>
     </section>
 
-    <div class="fab-menu">⋮</div>
+    <div class="fab-menu-container">
+        <div class="fab-options" id="fabOptions">
+            <a href="#about" class="fab-link">About Me</a>
+            <a href="#projects" class="fab-link">Projects</a>
+            <a href="#blog" class="fab-link">Blog</a>
+        </div>
+        <div class="fab-btn" id="fabBtn">
+            <span>⋮</span>
+        </div>
+    </div>
 
     <script src="blog/posts.js"></script>
 
     <script>
-        // 1. 定义语言切换功能
+        // --- 1. 语言切换 ---
         const toggleBtn = document.getElementById('langToggle');
         let currentLang = 'en';
 
@@ -295,9 +292,7 @@
                 enElements.forEach(el => el.style.display = 'none');
                 zhElements.forEach(el => {
                     el.style.display = 'inline';
-                    if (['P', 'DIV', 'H3'].includes(el.tagName)) {
-                        el.style.display = 'block';
-                    }
+                    if (['P', 'DIV', 'H3'].includes(el.tagName)) el.style.display = 'block';
                 });
                 if(toggleBtn) toggleBtn.innerHTML = `<span>EN</span> / <span class="active">中文</span>`;
                 document.body.style.fontFamily = "'Noto Serif SC', 'Inter', sans-serif";
@@ -305,18 +300,15 @@
                 zhElements.forEach(el => el.style.display = 'none');
                 enElements.forEach(el => {
                     el.style.display = 'inline';
-                    if (['P', 'DIV', 'H3'].includes(el.tagName)) {
-                        el.style.display = 'block';
-                    }
+                    if (['P', 'DIV', 'H3'].includes(el.tagName)) el.style.display = 'block';
                 });
                 if(toggleBtn) toggleBtn.innerHTML = `<span class="active">EN</span> / <span>中文</span>`;
                 document.body.style.fontFamily = "'Inter', sans-serif";
             }
         }
 
-        // 2. 生成博客列表
+        // --- 2. 博客列表 ---
         const container = document.getElementById('blog-list-container');
-        
         if (typeof blogPosts !== 'undefined' && container) {
             const postsHTML = blogPosts.map(post => `
                 <a href="${post.url}" class="blog-item">
@@ -333,11 +325,37 @@
                     </div>
                 </a>
             `).join('');
-
             container.innerHTML = postsHTML;
         }
 
-        // 3. 初始化语言状态
+        // --- 3. FAB 导航逻辑 (新增) ---
+        const fabBtn = document.getElementById('fabBtn');
+        const fabOptions = document.getElementById('fabOptions');
+        const fabLinks = document.querySelectorAll('.fab-link');
+
+        if (fabBtn && fabOptions) {
+            // 点击主按钮切换显示
+            fabBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // 防止冒泡触发 document 点击
+                fabOptions.classList.toggle('active');
+            });
+
+            // 点击菜单链接后自动关闭
+            fabLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    fabOptions.classList.remove('active');
+                });
+            });
+
+            // 点击页面其他地方关闭菜单
+            document.addEventListener('click', (e) => {
+                if (!fabBtn.contains(e.target) && !fabOptions.contains(e.target)) {
+                    fabOptions.classList.remove('active');
+                }
+            });
+        }
+
+        // 初始化
         updateLanguage();
     </script>
 
