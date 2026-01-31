@@ -29,11 +29,11 @@ body {
     color: var(--light-text);
     overflow-x: hidden; 
     overflow-y: auto;
-    -webkit-font-smoothing: antialiased; /* 让字体更清晰 */
+    -webkit-font-smoothing: antialiased;
 }
 
 /* =========================================
-   3. Hero 区域 (优化版：防止文字溢出)
+   3. Hero 区域 (修复版：智能字体 + 防溢出)
    ========================================= */
 .hero-wrapper {
     position: relative; width: 100%; height: 100vh;
@@ -62,33 +62,35 @@ body {
     display: flex;
     align-items: baseline; /* 底部对齐 */
     justify-content: center;
-    gap: 30px; /* 增加间距 */
-    width: 90%; /* 限制最大宽度，防止贴边 */
-    max-width: 1400px;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px; /* 限制最大宽度 */
     margin-top: -5vh;
+    padding: 0 20px; /* 防止贴边 */
 }
 
 /* 1. 滚筒问候语区域 */
 .greeting-drum {
-    height: 9vw; /* 略微减小 */
+    height: 1.1em; /* 高度跟随字体 */
     overflow: hidden;
     display: flex;
     align-items: flex-end;
+    line-height: 1;
 }
 
 .greeting-track {
     position: relative;
-    width: 28vw; /* 宽度适中 */
-    height: 100%;
+    width: auto;
+    min-width: 260px; /* 给足够宽度容纳 Bonjour */
     text-align: right;
 }
 
 .drum-item {
     position: absolute; bottom: 0; right: 0;
     font-family: 'JuanaCustom', 'Playfair Display', serif;
-    font-size: 6vw; /* 缩小字体，防止 Bonjour 换行 */
-    color: var(--primary-color);
-    line-height: 1.1;
+    /* 智能字体：最小40px，最大90px，中间自适应 */
+    font-size: clamp(40px, 7vw, 90px);
+    color: var(--primary-color); /* 强制红色 */
     opacity: 0;
     transform: translateY(100%) rotateX(-90deg);
     transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -102,9 +104,10 @@ body {
 /* 2. Zaki 名字 */
 .static-name {
     font-family: 'JuanaCustom', 'Playfair Display', serif;
-    font-size: 11vw; /* 从 15vw 减小到 11vw，更安全 */
+    /* 智能字体：最小80px，最大180px，彻底解决过大问题 */
+    font-size: clamp(80px, 13vw, 180px);
     font-weight: 200;
-    color: var(--primary-color);
+    color: var(--primary-color); /* 强制红色 */
     line-height: 0.9;
     margin: 0;
     letter-spacing: -0.02em;
@@ -143,7 +146,7 @@ body {
 }
 
 /* =========================================
-   4. 通用容器设置
+   4. 通用容器
    ========================================= */
 .dark-section {
     position: relative; background-color: var(--dark-bg); color: var(--light-text);
@@ -200,7 +203,7 @@ body {
 .edu-major { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 0.85rem; opacity: 0.7; }
 
 /* =========================================
-   7. Social Section
+   7. Social Section (修复版：强制横排)
    ========================================= */
 .social-section-wrapper {
     background-color: var(--dark-bg);
@@ -215,13 +218,15 @@ body {
 
 .social-flex-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row; /* 强制横排 */
+    flex-wrap: wrap;     /* 允许换行 */
+    justify-content: space-between;
     gap: 20px;
 }
 
 .social-card {
     flex: 1;
-    min-width: 220px; /* 电脑端最小宽度 */
+    min-width: 220px;
     background: rgba(255,255,255, 0.4);
     border: 1px solid rgba(255,255,255,0.6);
     border-radius: 12px;
@@ -366,45 +371,46 @@ body {
    ========================================= */
 @media (max-width: 768px) {
     /* --- Hero 区域适配 --- */
-    .hero-wrapper { height: 90vh; } /* 避免手机浏览器底栏遮挡 */
+    .hero-wrapper { height: 90vh; }
     
     .title-container { 
-        flex-direction: column; /* 垂直排列：问候语在上，名字在下 */
+        flex-direction: column; /* 手机上改垂直 */
         align-items: center; 
         gap: 0; 
         margin-top: 0;
         width: 100%;
+        padding: 0 10px;
     }
 
-    /* 滚筒问候语 - 手机端设置 */
+    /* 滚筒问候语 */
     .greeting-drum {
         width: 100%;
-        height: 8vh; /* 相对高度 */
-        justify-content: center; /* 居中 */
-        align-items: center;
-        margin-bottom: 0px;
+        height: 8vh;
+        justify-content: center;
+        align-items: flex-end;
     }
     .greeting-track { 
         width: 100%; 
         text-align: center; 
+        min-width: 0;
     }
     .drum-item { 
         width: 100%; 
-        font-size: 8vw; /* 手机上适当放大 */
+        font-size: 10vw; /* 手机上适当大小 */
         text-align: center;
         transform-origin: center center;
     }
 
-    /* Zaki 名字 - 手机端设置 */
+    /* Zaki 名字 */
     .static-name { 
-        font-size: 28vw; /* 巨大化居中 */
+        font-size: 30vw; /* 手机上大一点 */
         line-height: 1.1;
     }
 
     .subtitle-text { font-size: 0.9rem; padding: 0 10px; margin-top: 20px; }
     
-    /* --- About 区域适配 --- */
-    .dark-section { padding: 80px 20px 60px; } /* 减小内边距 */
+    /* --- About 适配 --- */
+    .dark-section { padding: 80px 20px 60px; }
     .story-grid { grid-template-columns: 1fr; gap: 40px; }
     .about-image-wrapper { aspect-ratio: 16/9; margin-top: 40px; }
     .lang-switch-wrapper { position: static; margin-bottom: 30px; text-align: right; }
@@ -415,45 +421,35 @@ body {
     .edu-item { width: 100%; }
     .edu-icon-wrapper { height: auto; margin-bottom: 10px; }
 
-    /* --- Social 区域适配 (强制单列) --- */
+    /* --- Social 适配 (强制竖排) --- */
     .social-section-wrapper { padding-bottom: 80px; }
-    .social-flex-container { 
-        flex-direction: column; 
-        gap: 15px; 
-    }
-    .social-card { 
-        width: 100%; 
-        min-width: 0; /* 防止溢出 */
-        padding: 20px;
-    }
+    .social-flex-container { flex-direction: column; gap: 15px; }
+    .social-card { width: 100%; min-width: 0; padding: 20px; }
 
     /* --- Gallery 适配 --- */
     .gallery-wrapper { height: 400px; margin: 40px 0; }
     .photo-card { 
-        width: 280px; height: 168px; /* 缩小卡片 */
+        width: 280px; height: 168px;
         margin-top: -84px; 
-        left: 50% !important; /* 强制居中堆叠，手机上交互复杂，建议堆叠 */
+        left: 50% !important; /* 强制居中 */
     }
-    /* 手机上稍微散开一点点，或者就保持居中堆叠 */
+    /* 手机端微微散开 */
     .photo-card:nth-child(1) { transform: translateX(-50%) rotate(-6deg); }
     .photo-card:nth-child(2) { transform: translateX(-50%) rotate(-3deg); }
     .photo-card:nth-child(3) { transform: translateX(-50%) rotate(0deg); }
     .photo-card:nth-child(4) { transform: translateX(-50%) rotate(3deg); }
     .photo-card:nth-child(5) { transform: translateX(-50%) rotate(6deg); }
-    
-    /* 禁用手机上的 Hover 散开效果，因为没有鼠标 */
     .photo-pile-container:hover .photo-card { left: 50% !important; }
 
     /* --- Projects 适配 --- */
     .project-item { grid-template-columns: 1fr; gap: 30px; margin-bottom: 80px; }
-    .project-item:nth-child(even) { direction: ltr; } /* 手机上全部左对齐 */
+    .project-item:nth-child(even) { direction: ltr; }
     .project-name { font-size: 2.2rem; }
     
     /* --- Blog & FAB 适配 --- */
     .blog-item { flex-direction: column; align-items: flex-start; gap: 10px; }
     .blog-meta { width: 100%; margin-bottom: 5px; }
-    .blog-thumb { display: none; /* 手机上隐藏缩略图保持整洁，或改为上方显示 */ }
-    
+    .blog-thumb { display: none; }
     .fab-menu-container { left: auto; right: 20px; bottom: 30px; }
     .fab-options { left: auto; right: 0; align-items: flex-end; }
 }
