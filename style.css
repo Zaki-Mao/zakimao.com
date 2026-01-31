@@ -12,13 +12,13 @@
    2. 全局变量 & 配色
    ========================================= */
 :root {
-    --bg-color: #FAF5EF;      /* Hero 顶部杏仁白 */
-    --dark-bg: #FFDAB9;       /* 统一底部背景：肉粉色 (Peach Puff) */
+    --bg-color: #FAF5EF;      
+    --dark-bg: #FFDAB9;       /* 统一底部背景 */
     
-    --primary-color: #E34234; /* 朱砂红 */
-    --text-color: #5A4D4D;    /* 深暖灰 */
-    --light-text: #2C241B;    /* 深咖色 */
-    --fab-color: #6B2E7F;     /* 导航紫色 */
+    --primary-color: #E34234; 
+    --text-color: #5A4D4D;    
+    --light-text: #2C241B;    
+    --fab-color: #6B2E7F;     
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -43,11 +43,10 @@ body {
     overflow: hidden; z-index: 10;
 }
 
-/* 底部过渡: 透明 -> #FFDAB9 */
+/* 底部过渡 */
 .hero-wrapper::after {
     content: ''; position: absolute; bottom: 0; left: 0;
-    width: 100%; 
-    height: 35vh; 
+    width: 100%; height: 35vh; 
     background: linear-gradient(to bottom, 
         rgba(255, 218, 185, 0) 0%, 
         rgba(255, 218, 185, 0.6) 60%, 
@@ -80,14 +79,14 @@ body {
 .greeting-drum {
     flex: 1; 
     display: flex;
-    justify-content: flex-end; /* 靠右对齐 */
+    justify-content: flex-end; 
     height: 1.5em; 
     overflow: visible; 
     position: relative;
     text-align: right;
     
-    /* 🔴🔴🔴 在这里调整左边文字的上下位置 🔴🔴🔴 */
-    transform: translateY(18px); 
+    /* 🔴 在这里调整左边文字的上下位置 🔴 */
+    transform: translateY(17px); 
 }
 
 .greeting-track {
@@ -99,7 +98,6 @@ body {
 .drum-item {
     position: absolute; bottom: 0; right: 0;
     font-family: 'JuanaCustom', 'Playfair Display', 'Noto Serif SC', serif;
-    /* 字体大小: 与 Zaki 一致 */
     font-size: clamp(40px, 9vw, 140px);
     color: var(--primary-color);
     line-height: 1;
@@ -162,7 +160,7 @@ body {
 }
 
 /* =========================================
-   4. 内容区域 (统一背景色)
+   4. 内容区域
    ========================================= */
 .dark-section {
     position: relative; 
@@ -173,7 +171,7 @@ body {
 .container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 3; }
 
 /* =========================================
-   5. About & Language
+   5. About
    ========================================= */
 .lang-switch-wrapper { position: absolute; top: 0; right: 0; z-index: 20; }
 .lang-btn {
@@ -271,7 +269,7 @@ body {
 .social-info .s-desc { font-size: 0.8rem; opacity: 0.7; font-family: 'Inter', sans-serif; }
 
 /* =========================================
-   8. Gallery
+   8. Gallery (电脑端: 堆叠 / 手机端: 横向滑动)
    ========================================= */
 .gallery-wrapper {
     position: relative; width: 100%; height: 600px;
@@ -294,14 +292,15 @@ body {
 }
 .photo-card-img { width: 100%; height: 100%; background-size: cover; background-position: center; }
 
-/* Desktop Pile Logic */
+/* 电脑端堆叠逻辑 */
 .photo-card:nth-child(1) { transform: translateX(-50%) rotate(-8deg) scale(0.9); z-index: 1; }
 .photo-card:nth-child(2) { transform: translateX(-50%) rotate(-4deg) scale(0.93); z-index: 2; }
 .photo-card:nth-child(3) { transform: translateX(-50%) rotate(0deg) scale(0.96); z-index: 3; }
 .photo-card:nth-child(4) { transform: translateX(-50%) rotate(4deg) scale(0.93); z-index: 2; }
 .photo-card:nth-child(5) { transform: translateX(-50%) rotate(8deg) scale(0.9); z-index: 1; }
-.photo-card:nth-child(6) { transform: translateX(-50%) rotate(-2deg) scale(0.95); z-index: 2; } /* 第6张图片样式 */
+.photo-card:nth-child(6) { transform: translateX(-50%) rotate(-2deg) scale(0.95); z-index: 2; }
 
+/* 电脑端悬停展开 */
 .photo-pile-container:hover .photo-card {
     left: var(--left) !important; top: 50%;
     transform: translateX(-50%) translateY(var(--y)) rotate(var(--rot)) scale(1);
@@ -388,7 +387,7 @@ body {
 .fab-options.active .fab-link:nth-child(3) { transition-delay: 0.05s; }
 
 /* =========================================
-   12. 手机端全站适配 (修复版)
+   12. 手机端全站适配 (核心修复版)
    ========================================= */
 @media (max-width: 768px) {
     /* --- Hero 区域 --- */
@@ -398,19 +397,19 @@ body {
         flex-direction: column; 
         align-items: center; 
         justify-content: center;
-        gap: 20px; /* 增加一点上下间距 */
+        gap: 0; 
         margin-top: -5vh;
         width: 100%;
         padding: 0 10px;
     }
 
-    /* 滚筒问候语 */
+    /* 滚筒问候语 (修复乱码) */
     .greeting-drum {
         width: 100%;
         height: 1.4em; 
         justify-content: center;
         align-items: flex-end;
-        /* 手机端重置 transform，不需要下沉 */
+        /* 手机端重置位置 */
         transform: translateY(0); 
     }
     .greeting-track { 
@@ -419,17 +418,13 @@ body {
         text-align: center; 
     }
     .drum-item { 
-        position: absolute; /* 恢复绝对定位，确保重叠 */
-        left: 0; right: 0; margin: auto; /* 强制水平居中 */
-        
+        position: absolute; 
+        left: 0; right: 0; margin: auto;
         width: 100%; 
         font-size: 14vw; 
         text-align: center;
-        
-        /* 🟢 修复手机乱码: 移除 opacity:1 !important，让JS控制显隐 */
+        /* 🔴 移除 opacity: 1 !important，恢复JS动画 */
         opacity: 0; 
-        
-        /* 恢复动画 */
         transform: translateY(100%) rotateX(-90deg);
         transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
@@ -440,7 +435,7 @@ body {
     .static-name { 
         font-size: 38vw; 
         line-height: 1;
-        margin-top: 0; 
+        margin-top: -10px; 
         text-align: center;
         transform: translateY(0);
     }
@@ -448,10 +443,10 @@ body {
     .subtitle-text { font-size: 0.9rem; padding: 0 10px; margin-top: 30px; }
     
     /* --- About --- */
-    .dark-section { padding: 80px 20px 60px; }
+    .dark-section { padding: 60px 20px; }
     .story-grid { grid-template-columns: 1fr; gap: 40px; }
-    .about-image-wrapper { aspect-ratio: 16/9; margin-top: 40px; }
-    .lang-switch-wrapper { position: static; margin-bottom: 30px; text-align: right; }
+    .about-image-wrapper { aspect-ratio: 16/9; margin-top: 20px; }
+    .lang-switch-wrapper { position: static; margin-bottom: 20px; text-align: right; }
     .story-paragraph { font-size: 1.6rem; }
 
     /* --- Education --- */
@@ -459,34 +454,59 @@ body {
     .edu-item { width: 100%; }
     .edu-icon-wrapper { height: auto; margin-bottom: 10px; }
 
-    /* --- Social --- */
-    .social-section-wrapper { padding-bottom: 80px; }
+    /* --- Social (修复显示不全) --- */
+    .social-section-wrapper { padding-bottom: 60px; }
     .social-flex-container { flex-direction: column; gap: 15px; }
+    /* 🔴 核心修复: 宽度 100% 且去掉 min-width */
     .social-card { width: 100%; min-width: 0; padding: 20px; }
 
-    /* --- Gallery --- */
-    .gallery-wrapper { height: 400px; margin: 40px 0; }
-    .photo-card { 
-        width: 280px; height: 168px;
-        margin-top: -84px; 
-        left: 50% !important; 
+    /* --- Gallery (修复交互：改为横向滑动) --- */
+    .gallery-wrapper { 
+        height: auto; /* 高度自适应 */
+        min-height: 350px;
+        margin: 20px 0; 
+        overflow: hidden; /* 防止撑破页面 */
     }
-    .photo-card:nth-child(1) { transform: translateX(-50%) rotate(-6deg); }
-    .photo-card:nth-child(2) { transform: translateX(-50%) rotate(-3deg); }
-    .photo-card:nth-child(3) { transform: translateX(-50%) rotate(0deg); }
-    .photo-card:nth-child(4) { transform: translateX(-50%) rotate(3deg); }
-    .photo-card:nth-child(5) { transform: translateX(-50%) rotate(6deg); }
-    .photo-card:nth-child(6) { transform: translateX(-50%) rotate(0deg); }
-    .photo-pile-container:hover .photo-card { left: 50% !important; }
+    .photo-pile-container {
+        display: flex;
+        flex-direction: row; /* 横向排列 */
+        overflow-x: auto;    /* 允许横向滑动 */
+        scroll-snap-type: x mandatory; /* 滑动吸附 */
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 15px;
+        padding-bottom: 20px; /* 给滚动条留位置 */
+        width: 100%;
+        height: auto;
+    }
+    .photo-card { 
+        position: relative; /* 不再绝对定位 */
+        left: auto !important; 
+        top: auto !important; 
+        margin-top: 0;
+        
+        /* 卡片大小调整 */
+        width: 280px; 
+        height: 180px; 
+        flex-shrink: 0; /* 防止挤压 */
+        
+        /* 移除旋转 */
+        transform: none !important; 
+        scroll-snap-align: center;
+    }
+    /* 禁用 hover 效果防止错位 */
+    .photo-pile-container:hover .photo-card { left: auto !important; transform: none !important; }
+    /* 标题始终显示 */
+    .card-caption { opacity: 1; transform: translateY(0); margin-top: 10px; }
 
     /* --- Projects --- */
-    .project-item { grid-template-columns: 1fr; gap: 30px; margin-bottom: 80px; }
+    .project-item { grid-template-columns: 1fr; gap: 30px; margin-bottom: 60px; }
     .project-item:nth-child(even) { direction: ltr; }
     .project-name { font-size: 2.2rem; }
     
-    /* --- Blog & FAB --- */
-    .blog-item { flex-direction: column; align-items: flex-start; gap: 10px; }
-    .blog-meta { width: 100%; margin-bottom: 5px; }
+    /* --- Blog & FAB (修复留白) --- */
+    .blog-item { flex-direction: column; align-items: flex-start; gap: 10px; padding: 20px 0; }
+    .blog-meta { width: 100%; margin-bottom: 0; }
     .blog-thumb { display: none; }
     .fab-menu-container { left: auto; right: 20px; bottom: 30px; }
     .fab-options { left: auto; right: 0; align-items: flex-end; }
