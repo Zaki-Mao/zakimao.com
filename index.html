@@ -20,9 +20,17 @@
         </div>
 
         <h1 class="huge-title">
-            <span class="letter word-box"><span id="changing-text">Hi</span></span>
-            <span class="letter">&nbsp;</span>
-            <span class="letter">Z</span><span class="letter">a</span><span class="letter">k</span><span class="letter">i</span>
+            <div class="greeting-drum-wrapper">
+                <span class="greeting-item active">Hi</span>
+                <span class="greeting-item">Hello</span>
+                <span class="greeting-item">Bonjour</span>
+                <span class="greeting-item">Hola</span>
+                <span class="greeting-item">你好</span>
+                <span class="greeting-item">こんにちは</span>
+            </div>
+            
+            <span class="letter-anim">&nbsp;</span>
+            <span class="letter-anim">Z</span><span class="letter-anim">a</span><span class="letter-anim">k</span><span class="letter-anim">i</span>
         </h1>
 
         <div class="content-area">
@@ -153,7 +161,57 @@
                     </a>
                 </div>
             </div>
-        </div>
+
+            <div class="social-section">
+                <div class="edu-title">
+                    <span class="lang-en">Connect With Me</span>
+                    <span class="lang-zh" style="display: none;">关注我</span>
+                </div>
+                <div class="social-grid">
+                    
+                    <a href="https://www.linkedin.com/in/zunjie-mao-b56838233/" target="_blank" class="social-card">
+                        <div class="social-icon-box linkedin">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                        </div>
+                        <div class="social-text">
+                            <h3>LinkedIn</h3>
+                            <p><span class="lang-en">Career Connect</span><span class="lang-zh" style="display:none">职场交流</span></p>
+                        </div>
+                    </a>
+
+                    <a href="https://www.xiaohongshu.com/user/profile/5feb294b0000000001006ffe" target="_blank" class="social-card">
+                        <div class="social-icon-box xhs">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        </div>
+                        <div class="social-text">
+                            <h3><span class="lang-en">Xiaohongshu</span><span class="lang-zh" style="display:none">小红书</span></h3>
+                            <p><span class="lang-en">Hotel Reviews</span><span class="lang-zh" style="display:none">酒店测评</span></p>
+                        </div>
+                    </a>
+
+                    <a href="https://www.douyin.com/user/MS4wLjABAAAAco5xNCr6FDGKRvTpyOJ2JeHVAbHBGfHjU4G4hjsmBBcYxDV0T2_VfSN9G6SP_48R?from_tab_name=main" target="_blank" class="social-card">
+                        <div class="social-icon-box douyin">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                        </div>
+                        <div class="social-text">
+                            <h3><span class="lang-en">Douyin</span><span class="lang-zh" style="display:none">抖音</span></h3>
+                            <p><span class="lang-en">Photography</span><span class="lang-zh" style="display:none">摄影作品</span></p>
+                        </div>
+                    </a>
+
+                    <a href="https://github.com/Zaki-Mao" target="_blank" class="social-card">
+                        <div class="social-icon-box github">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                        </div>
+                        <div class="social-text">
+                            <h3>GitHub</h3>
+                            <p><span class="lang-en">My Code</span><span class="lang-zh" style="display:none">代码仓库</span></p>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+            </div>
     </section>
 
     <section id="gallery" class="dark-section" style="padding-top: 0;">
@@ -357,43 +415,55 @@
             });
         }
 
-        // --- 4. Hero 交互逻辑 (光斑+文字切换) ---
+        // --- 4. Hero 交互逻辑 (光斑+文字滚筒) ---
         const heroSection = document.querySelector('.hero-wrapper');
         const blob1 = document.querySelector('.blob-1');
         const blob2 = document.querySelector('.blob-2');
         const blob3 = document.querySelector('.blob-3');
 
+        // 鼠标跟随
         if (heroSection) {
             heroSection.addEventListener('mousemove', (e) => {
                 const x = e.clientX;
                 const y = e.clientY;
                 const centerX = window.innerWidth / 2;
                 const centerY = window.innerHeight / 2;
+                
+                // 增加移动系数，让青色光斑移动更明显
                 blob1.style.transform = `translate(${(x - centerX) / 15}px, ${(y - centerY) / 15}px)`;
-                blob2.style.transform = `translate(${-(x - centerX) / 25}px, ${-(y - centerY) / 25}px)`;
+                blob2.style.transform = `translate(${-(x - centerX) / 20}px, ${-(y - centerY) / 20}px)`; // 反向移动
                 blob3.style.transform = `translate(${(x - centerX) / 10}px, ${(y - centerY) / 10}px)`;
             });
         }
 
-        const greetings = ["Hi", "你好", "Hola", "Bonjour", "Ciao", "Olá"];
-        const changingText = document.getElementById('changing-text');
-        let greetingIndex = 0;
+        // 滚筒文字切换逻辑
+        const greetings = document.querySelectorAll('.greeting-item');
+        let currentIdx = 0;
 
-        if (changingText) {
-            setInterval(() => {
-                changingText.classList.add('text-fade-out');
-                setTimeout(() => {
-                    greetingIndex = (greetingIndex + 1) % greetings.length;
-                    changingText.textContent = greetings[greetingIndex];
-                    changingText.classList.remove('text-fade-out');
-                    void changingText.offsetWidth; 
-                    changingText.classList.add('text-fade-in');
-                    setTimeout(() => {
-                        changingText.classList.remove('text-fade-in');
-                    }, 500);
-                }, 500);
-            }, 3000);
-        }
+        setInterval(() => {
+            // 当前的退出 (往上滚)
+            greetings[currentIdx].classList.remove('active');
+            greetings[currentIdx].classList.add('exit');
+
+            // 计算下一个
+            currentIdx = (currentIdx + 1) % greetings.length;
+
+            // 清理其他所有状态，防止堆积
+            greetings.forEach((el, idx) => {
+                if (idx !== currentIdx) {
+                    el.classList.remove('active'); // 确保非当前项没有active
+                    // 稍微延时移除 exit，保证动画播完（或者在下次循环前保持exit状态）
+                    if (idx !== (currentIdx - 1 + greetings.length) % greetings.length) {
+                         el.classList.remove('exit');
+                    }
+                }
+            });
+
+            // 下一个进入 (从下方滚入)
+            greetings[currentIdx].classList.remove('exit');
+            greetings[currentIdx].classList.add('active');
+
+        }, 2500);
 
         // 初始化
         updateLanguage();
