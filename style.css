@@ -437,7 +437,7 @@ body {
     .static-name { 
         font-size: 38vw; 
         line-height: 1;
-        margin-top: -10px; 
+        margin-top: -1px; 
         text-align: center;
         transform: translateY(0);
     }
