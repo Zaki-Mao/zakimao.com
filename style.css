@@ -85,8 +85,8 @@ body {
     position: relative;
     text-align: right;
     
-    /* 🔴 在这里调整左边文字的上下位置 🔴 */
-    transform: translateY(15px); 
+    /* 左侧文字位置微调 */
+    transform: translateY(18px); 
 }
 
 .greeting-track {
@@ -269,7 +269,7 @@ body {
 .social-info .s-desc { font-size: 0.8rem; opacity: 0.7; font-family: 'Inter', sans-serif; }
 
 /* =========================================
-   8. Gallery (电脑端: 堆叠 / 手机端: 横向滑动)
+   8. Gallery (更新：加入第7张图的逻辑)
    ========================================= */
 .gallery-wrapper {
     position: relative; width: 100%; height: 600px;
@@ -292,13 +292,15 @@ body {
 }
 .photo-card-img { width: 100%; height: 100%; background-size: cover; background-position: center; }
 
-/* 电脑端堆叠逻辑 */
+/* Desktop Pile Logic (堆叠逻辑) */
 .photo-card:nth-child(1) { transform: translateX(-50%) rotate(-8deg) scale(0.9); z-index: 1; }
 .photo-card:nth-child(2) { transform: translateX(-50%) rotate(-4deg) scale(0.93); z-index: 2; }
 .photo-card:nth-child(3) { transform: translateX(-50%) rotate(0deg) scale(0.96); z-index: 3; }
 .photo-card:nth-child(4) { transform: translateX(-50%) rotate(4deg) scale(0.93); z-index: 2; }
 .photo-card:nth-child(5) { transform: translateX(-50%) rotate(8deg) scale(0.9); z-index: 1; }
 .photo-card:nth-child(6) { transform: translateX(-50%) rotate(-2deg) scale(0.95); z-index: 2; }
+/* 🟢 新增：第7张图片样式 */
+.photo-card:nth-child(7) { transform: translateX(-50%) rotate(3deg) scale(0.97); z-index: 3; }
 
 /* 电脑端悬停展开 */
 .photo-pile-container:hover .photo-card {
