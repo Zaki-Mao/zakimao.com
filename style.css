@@ -3,7 +3,7 @@
    ========================================= */
 @font-face {
     font-family: 'JuanaCustom';
-    src: url('J-Extralight.woff2') format('woff2'); /* 请确保路径正确 */
+    src: url('J-Extralight.woff2') format('woff2'); /* 确保路径正确 */
     font-weight: 200; font-style: normal; font-display: swap;
 }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&family=Noto+Serif+SC:wght@300;400;600&display=swap');
@@ -33,7 +33,7 @@ body {
 }
 
 /* =========================================
-   3. Hero 区域 (修复版：智能字体 + 防溢出)
+   3. Hero 区域 (视觉平衡微调版)
    ========================================= */
 .hero-wrapper {
     position: relative; width: 100%; height: 100vh;
@@ -60,37 +60,45 @@ body {
 .title-container {
     z-index: 10;
     display: flex;
-    align-items: baseline; /* 底部对齐 */
+    /* 关键：使用 baseline 对齐，让文字坐在同一条线上 */
+    align-items: baseline; 
     justify-content: center;
-    gap: 20px;
+    /* 增加间距，让两个大号字体呼吸感更强 */
+    gap: 30px; 
     width: 100%;
-    max-width: 1200px; /* 限制最大宽度 */
+    max-width: 1400px; 
     margin-top: -5vh;
-    padding: 0 20px; /* 防止贴边 */
+    padding: 0 20px;
 }
 
 /* 1. 滚筒问候语区域 */
 .greeting-drum {
-    height: 1.1em; /* 高度跟随字体 */
+    /* 高度稍微给大一点，防止某些字体下半部分被切 */
+    height: 1.3em; 
     overflow: hidden;
     display: flex;
     align-items: flex-end;
-    line-height: 1;
+    /* 调整行高，确保基线对齐 */
+    line-height: 1.1; 
 }
 
 .greeting-track {
     position: relative;
     width: auto;
-    min-width: 260px; /* 给足够宽度容纳 Bonjour */
+    /* 增加最小宽度，容纳放大的 Bonjour */
+    min-width: 320px; 
     text-align: right;
 }
 
 .drum-item {
     position: absolute; bottom: 0; right: 0;
     font-family: 'JuanaCustom', 'Playfair Display', serif;
-    /* 智能字体：最小40px，最大90px，中间自适应 */
-    font-size: clamp(40px, 7vw, 90px);
-    color: var(--primary-color); /* 强制红色 */
+    
+    /* 🔴 改动：增大字体 (最小60, 理想10vw, 最大130) */
+    /* 这会让它看起来比 Zaki 小一圈，但依然很有份量 */
+    font-size: clamp(60px, 10vw, 130px);
+    
+    color: var(--primary-color);
     opacity: 0;
     transform: translateY(100%) rotateX(-90deg);
     transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -104,10 +112,13 @@ body {
 /* 2. Zaki 名字 */
 .static-name {
     font-family: 'JuanaCustom', 'Playfair Display', serif;
-    /* 智能字体：最小80px，最大180px，彻底解决过大问题 */
-    font-size: clamp(80px, 13vw, 180px);
+    
+    /* 🔴 改动：显著增大 Zaki (最小100, 理想18vw, 最大260) */
+    /* 之前的最大值 180px 可能在大屏上不够霸气，现在放宽到 260px */
+    font-size: clamp(100px, 18vw, 260px);
+    
     font-weight: 200;
-    color: var(--primary-color); /* 强制红色 */
+    color: var(--primary-color);
     line-height: 0.9;
     margin: 0;
     letter-spacing: -0.02em;
@@ -115,7 +126,7 @@ body {
 
 /* 内容区域 */
 .content-area {
-    z-index: 10; text-align: center; margin-top: 30px;
+    z-index: 10; text-align: center; margin-top: 40px;
     opacity: 0; animation: fadeIn 1.5s ease 1s forwards;
     padding: 0 20px;
 }
@@ -123,7 +134,7 @@ body {
 
 .subtitle-text {
     font-family: 'Playfair Display', serif; font-style: italic;
-    font-size: 1.2rem; color: var(--text-color); line-height: 1.6; letter-spacing: 0.05em;
+    font-size: 1.3rem; color: var(--text-color); line-height: 1.6; letter-spacing: 0.05em;
 }
 
 /* 滚动提示 */
@@ -203,7 +214,7 @@ body {
 .edu-major { font-family: 'Inter', 'Noto Serif SC', sans-serif; font-size: 0.85rem; opacity: 0.7; }
 
 /* =========================================
-   7. Social Section (修复版：强制横排)
+   7. Social Section
    ========================================= */
 .social-section-wrapper {
     background-color: var(--dark-bg);
@@ -367,17 +378,18 @@ body {
 .fab-options.active .fab-link:nth-child(3) { transition-delay: 0.05s; }
 
 /* =========================================
-   12. 手机端全站适配 (重构版)
+   12. 手机端全站适配 (最终版)
    ========================================= */
 @media (max-width: 768px) {
-    /* --- Hero 区域适配 --- */
+    /* --- Hero 区域 --- */
     .hero-wrapper { height: 90vh; }
     
     .title-container { 
-        flex-direction: column; /* 手机上改垂直 */
+        flex-direction: column; /* 手机上垂直 */
         align-items: center; 
+        justify-content: center;
         gap: 0; 
-        margin-top: 0;
+        margin-top: -5vh;
         width: 100%;
         padding: 0 10px;
     }
@@ -385,53 +397,55 @@ body {
     /* 滚筒问候语 */
     .greeting-drum {
         width: 100%;
-        height: 8vh;
+        height: 1.2em; /* 适当增加高度 */
         justify-content: center;
         align-items: flex-end;
     }
     .greeting-track { 
         width: 100%; 
-        text-align: center; 
         min-width: 0;
+        text-align: center; 
     }
     .drum-item { 
         width: 100%; 
-        font-size: 10vw; /* 手机上适当大小 */
+        font-size: 14vw; /* 手机上问候语适中 */
         text-align: center;
         transform-origin: center center;
+        right: auto; left: 0; /* 强制居中 */
     }
 
     /* Zaki 名字 */
     .static-name { 
-        font-size: 30vw; /* 手机上大一点 */
-        line-height: 1.1;
+        font-size: 38vw; /* 手机上巨大化 */
+        line-height: 1;
+        margin-top: -10px; /* 拉近一点 */
     }
 
-    .subtitle-text { font-size: 0.9rem; padding: 0 10px; margin-top: 20px; }
+    .subtitle-text { font-size: 0.9rem; padding: 0 10px; margin-top: 30px; }
     
-    /* --- About 适配 --- */
+    /* --- About --- */
     .dark-section { padding: 80px 20px 60px; }
     .story-grid { grid-template-columns: 1fr; gap: 40px; }
     .about-image-wrapper { aspect-ratio: 16/9; margin-top: 40px; }
     .lang-switch-wrapper { position: static; margin-bottom: 30px; text-align: right; }
     .story-paragraph { font-size: 1.6rem; }
 
-    /* --- Education 适配 --- */
+    /* --- Education --- */
     .edu-grid { flex-direction: column; gap: 40px; }
     .edu-item { width: 100%; }
     .edu-icon-wrapper { height: auto; margin-bottom: 10px; }
 
-    /* --- Social 适配 (强制竖排) --- */
+    /* --- Social --- */
     .social-section-wrapper { padding-bottom: 80px; }
     .social-flex-container { flex-direction: column; gap: 15px; }
     .social-card { width: 100%; min-width: 0; padding: 20px; }
 
-    /* --- Gallery 适配 --- */
+    /* --- Gallery --- */
     .gallery-wrapper { height: 400px; margin: 40px 0; }
     .photo-card { 
         width: 280px; height: 168px;
         margin-top: -84px; 
-        left: 50% !important; /* 强制居中 */
+        left: 50% !important; 
     }
     /* 手机端微微散开 */
     .photo-card:nth-child(1) { transform: translateX(-50%) rotate(-6deg); }
@@ -441,12 +455,12 @@ body {
     .photo-card:nth-child(5) { transform: translateX(-50%) rotate(6deg); }
     .photo-pile-container:hover .photo-card { left: 50% !important; }
 
-    /* --- Projects 适配 --- */
+    /* --- Projects --- */
     .project-item { grid-template-columns: 1fr; gap: 30px; margin-bottom: 80px; }
     .project-item:nth-child(even) { direction: ltr; }
     .project-name { font-size: 2.2rem; }
     
-    /* --- Blog & FAB 适配 --- */
+    /* --- Blog & FAB --- */
     .blog-item { flex-direction: column; align-items: flex-start; gap: 10px; }
     .blog-meta { width: 100%; margin-bottom: 5px; }
     .blog-thumb { display: none; }
