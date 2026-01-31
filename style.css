@@ -9,13 +9,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&family=Noto+Serif+SC:wght@300;400;600&display=swap');
 
 /* =========================================
-   2. 全局变量 & 配色 (统一背景色)
+   2. 全局变量 & 配色
    ========================================= */
 :root {
-    --bg-color: #FAF5EF;      /* Hero 顶部的杏仁白底色 */
-    
-    /* 🟢 核心修改: 下方内容背景统一为 #FFDAB9 */
-    --dark-bg: #FFDAB9;       
+    --bg-color: #FAF5EF;      /* Hero 顶部杏仁白 */
+    --dark-bg: #FFDAB9;       /* 统一底部背景：肉粉色 (Peach Puff) */
     
     --primary-color: #E34234; /* 朱砂红 */
     --text-color: #5A4D4D;    /* 深暖灰 */
@@ -36,7 +34,7 @@ body {
 }
 
 /* =========================================
-   3. Hero 区域 (光斑 + 完美过渡)
+   3. Hero 区域
    ========================================= */
 .hero-wrapper {
     position: relative; width: 100%; height: 100vh;
@@ -45,32 +43,31 @@ body {
     overflow: hidden; z-index: 10;
 }
 
-/* 🟢 底部过渡层: 负责把 Hero 的颜色平滑过渡到下面的 #FFDAB9 */
+/* 底部过渡: 透明 -> #FFDAB9 */
 .hero-wrapper::after {
     content: ''; position: absolute; bottom: 0; left: 0;
     width: 100%; 
-    height: 35vh; /* 拉长过渡区域，越长越自然 */
-    
-    /* 逻辑: 从完全透明 -> 过渡到 #FFDAB9 */
+    height: 35vh; 
     background: linear-gradient(to bottom, 
         rgba(255, 218, 185, 0) 0%, 
+        rgba(255, 218, 185, 0.6) 60%, 
         #FFDAB9 100% 
     );
     pointer-events: none; z-index: 5;
 }
 
-/* 背景光斑 (保持不变) */
+/* 背景光斑 */
 .hero-blobs { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; transition: transform 0.1s ease-out; will-change: transform; }
 .blob-1 { width: 600px; height: 600px; background: #A5F3FC; top: -10%; left: 10%; } 
 .blob-2 { width: 500px; height: 500px; background: #CCFBF1; bottom: 10%; right: 10%; } 
 .blob-3 { width: 400px; height: 400px; background: #E0F2FE; top: 40%; left: 40%; } 
 
-/* --- 标题容器 (稳定版布局) --- */
+/* --- 标题容器 --- */
 .title-container {
     z-index: 10;
     display: flex;
-    align-items: baseline; /* 基线对齐，让文字坐在同一水平线上 */
+    align-items: flex-end; /* 底部对齐 */
     justify-content: center;
     width: 100%;
     max-width: 1400px;
@@ -81,16 +78,16 @@ body {
 
 /* 1. 左侧：滚筒问候语 */
 .greeting-drum {
-    flex: 1; /* 占左边一半 */
+    flex: 1; 
     display: flex;
-    justify-content: flex-end; /* 内容靠右，贴近中轴线 */
+    justify-content: flex-end; /* 靠右对齐 */
     height: 1.5em; 
     overflow: visible; 
     position: relative;
     text-align: right;
     
-    /* 针对汉字/韩语视觉重心的微调 */
-    transform: translateY(5px); 
+    /* 🟢 关键修复: 下沉 18px，解决“左高右低”问题 */
+    transform: translateY(18px); 
 }
 
 .greeting-track {
@@ -101,12 +98,9 @@ body {
 
 .drum-item {
     position: absolute; bottom: 0; right: 0;
-    /* 确保包含韩语字体支持 */
-    font-family: 'JuanaCustom', 'Playfair Display', 'Noto Serif SC', sans-serif;
-    
-    /* 字体大小: 这里的 9vw 必须和下面 Zaki 的 9vw 一致 */
+    font-family: 'JuanaCustom', 'Playfair Display', 'Noto Serif SC', serif;
+    /* 字体大小: 与 Zaki 一致 */
     font-size: clamp(40px, 9vw, 140px);
-    
     color: var(--primary-color);
     line-height: 1;
     opacity: 0;
@@ -114,6 +108,7 @@ body {
     transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     white-space: nowrap;
     transform-origin: center bottom;
+    padding-bottom: 0;
 }
 
 .drum-item.active { opacity: 1; transform: translateY(0) rotateX(0deg); }
@@ -121,16 +116,16 @@ body {
 
 /* 2. 右侧：Zaki 名字 */
 .static-name {
-    flex: 1; /* 占右边一半 */
-    text-align: left; /* 靠左，贴近中轴线 */
-    
+    flex: 1; 
+    text-align: left; 
     font-family: 'JuanaCustom', 'Playfair Display', serif;
     font-size: clamp(40px, 9vw, 140px);
     font-weight: 200;
     color: var(--primary-color);
-    line-height: 0.9; 
+    line-height: 0.85; 
     margin: 0;
     letter-spacing: -0.02em;
+    transform: translateY(0);
 }
 
 /* 内容区域 */
@@ -167,11 +162,10 @@ body {
 }
 
 /* =========================================
-   4. 内容区域 (统一使用 #FFDAB9)
+   4. 内容区域 (统一背景色)
    ========================================= */
 .dark-section {
     position: relative; 
-    /* 🟢 改动: 纯色背景，消除拼接线 */
     background-color: var(--dark-bg);
     color: var(--light-text);
     width: 100%; padding: 100px 5% 80px; z-index: 1;
@@ -230,7 +224,6 @@ body {
    7. Social Section
    ========================================= */
 .social-section-wrapper {
-    /* 🟢 改动: 背景色统一 */
     background-color: var(--dark-bg);
     padding-bottom: 100px;
     margin-top: -40px;
