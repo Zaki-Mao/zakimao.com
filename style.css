@@ -3,19 +3,19 @@
    ========================================= */
 @font-face {
     font-family: 'JuanaCustom';
-    src: url('J-Extralight.woff2') format('woff2'); /* 确保路径正确 */
+    src: url('J-Extralight.woff2') format('woff2'); 
     font-weight: 200; font-style: normal; font-display: swap;
 }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&family=Noto+Serif+SC:wght@300;400;600&display=swap');
 
 /* =========================================
-   2. 全局变量 & 配色 (调色盘更新)
+   2. 全局变量 & 配色 (背景更暖)
    ========================================= */
 :root {
-    --bg-color: #FAF5EF;      /* 杏仁白 (Hero背景) */
+    --bg-color: #FAF5EF;      /* 杏仁白 */
     
-    /* 🟢 改动点 1: 将原本较深的 #F6D38D 改为更浅的香槟奶油色 */
-    --dark-bg: #FDF3D8;       /* 香槟奶油色 */
+    /* 🟢 调整: 颜色更暖一点，衔接更好 */
+    --dark-bg: #FCEEB5;       /* 暖杏色 / 蛋挞黄 */
     
     --primary-color: #E34234; /* 朱砂红 */
     --text-color: #5A4D4D;    /* 深暖灰 */
@@ -36,7 +36,7 @@ body {
 }
 
 /* =========================================
-   3. Hero 区域
+   3. Hero 区域 (Grid 对称布局)
    ========================================= */
 .hero-wrapper {
     position: relative; width: 100%; height: 100vh;
@@ -45,10 +45,10 @@ body {
     overflow: hidden; z-index: 10;
 }
 
-/* 🟢 改动点 2: 增加渐变高度 (15vh -> 25vh)，让融合更丝滑 */
+/* 渐变过渡 */
 .hero-wrapper::after {
     content: ''; position: absolute; bottom: 0; left: 0;
-    width: 100%; height: 25vh; 
+    width: 100%; height: 25vh;
     background: linear-gradient(to bottom, transparent, var(--dark-bg));
     pointer-events: none; z-index: 5;
 }
@@ -60,54 +60,64 @@ body {
 .blob-2 { width: 500px; height: 500px; background: #CCFBF1; bottom: 10%; right: 10%; } 
 .blob-3 { width: 400px; height: 400px; background: #E0F2FE; top: 40%; left: 40%; } 
 
-/* --- 标题布局容器 --- */
+/* --- 核心修改：标题布局容器 (Grid) --- */
 .title-container {
     z-index: 10;
-    display: flex;
-    align-items: baseline; 
-    justify-content: center;
-    gap: 30px; 
+    display: grid; /* 使用网格布局 */
+    grid-template-columns: 1fr 1fr; /* 左右各占 50%，中间就是中轴线 */
+    align-items: baseline; /* 基线对齐 */
     width: 100%;
-    max-width: 1400px; 
+    max-width: 1600px; /* 允许更宽，防止换行 */
     margin-top: -5vh;
     padding: 0 20px;
+    gap: 20px; /* 中间缝隙 */
 }
 
-/* 1. 滚筒问候语区域 */
+/* 1. 左侧：滚筒问候语 */
 .greeting-drum {
-    height: 1.3em; 
+    /* 🟢 修复 Bug: 增加高度，防止中文“你好”被切掉 */
+    height: 1.4em; 
     overflow: hidden;
     display: flex;
+    justify-content: flex-end; /* 靠右对齐 (贴近中轴线) */
     align-items: flex-end;
-    line-height: 1.1; 
+    line-height: 1.2; /* 🟢 增加行高，容纳汉字 */
 }
 
 .greeting-track {
     position: relative;
     width: auto;
-    min-width: 320px; 
-    text-align: right;
+    text-align: right; /* 文字右对齐 */
 }
 
 .drum-item {
     position: absolute; bottom: 0; right: 0;
-    font-family: 'JuanaCustom', 'Playfair Display', serif;
-    font-size: clamp(60px, 10vw, 130px);
+    /* 字体设置：确保包含中文字体 */
+    font-family: 'JuanaCustom', 'Playfair Display', 'Noto Serif SC', serif;
+    
+    /* 🟢 调整: 字体大小与 Zaki 保持一致 */
+    font-size: clamp(60px, 16vw, 240px);
+    
     color: var(--primary-color);
     opacity: 0;
     transform: translateY(100%) rotateX(-90deg);
     transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     white-space: nowrap;
     transform-origin: center bottom;
+    padding-bottom: 5px; /* 微调位置防止切底 */
 }
 
 .drum-item.active { opacity: 1; transform: translateY(0) rotateX(0deg); }
 .drum-item.exit { opacity: 0; transform: translateY(-100%) rotateX(90deg); }
 
-/* 2. Zaki 名字 */
+/* 2. 右侧：Zaki 名字 */
 .static-name {
     font-family: 'JuanaCustom', 'Playfair Display', serif;
-    font-size: clamp(100px, 18vw, 260px);
+    text-align: left; /* 左对齐 (贴近中轴线) */
+    
+    /* 🟢 调整: 字体大小与左边一致 */
+    font-size: clamp(60px, 16vw, 240px);
+    
     font-weight: 200;
     color: var(--primary-color);
     line-height: 0.9;
@@ -376,6 +386,7 @@ body {
     .hero-wrapper { height: 90vh; }
     
     .title-container { 
+        display: flex; /* 手机上改回 Flex 上下排列 */
         flex-direction: column; 
         align-items: center; 
         justify-content: center;
@@ -389,27 +400,35 @@ body {
     .greeting-drum {
         width: 100%;
         height: 1.2em; 
-        justify-content: center;
+        justify-content: center; /* 手机上文字居中 */
         align-items: flex-end;
     }
     .greeting-track { 
         width: 100%; 
         min-width: 0;
-        text-align: center; 
+        text-align: center; /* 手机上文字居中 */
     }
     .drum-item { 
+        position: relative; right: auto; bottom: auto;
         width: 100%; 
         font-size: 14vw; 
         text-align: center;
-        transform-origin: center center;
-        right: auto; left: 0; 
+        transform: none !important; opacity: 1 !important; /* 手机上显示静态或动画可调整，这里设为可见 */
+        
+        /* 如果保留动画，使用下面的代码覆盖上面的 transform */
+        position: absolute; right: 0; left: 0; margin: auto;
+        transform: translateY(100%) rotateX(-90deg);
+        transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+    .drum-item.active { opacity: 1; transform: translateY(0) rotateX(0deg); }
+    .drum-item.exit { opacity: 0; transform: translateY(-100%) rotateX(90deg); }
 
     /* Zaki 名字 */
     .static-name { 
         font-size: 38vw; 
         line-height: 1;
         margin-top: -10px; 
+        text-align: center;
     }
 
     .subtitle-text { font-size: 0.9rem; padding: 0 10px; margin-top: 30px; }
@@ -438,7 +457,6 @@ body {
         margin-top: -84px; 
         left: 50% !important; 
     }
-    /* 手机端微微散开 */
     .photo-card:nth-child(1) { transform: translateX(-50%) rotate(-6deg); }
     .photo-card:nth-child(2) { transform: translateX(-50%) rotate(-3deg); }
     .photo-card:nth-child(3) { transform: translateX(-50%) rotate(0deg); }
