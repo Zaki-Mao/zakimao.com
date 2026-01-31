@@ -9,13 +9,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&family=Noto+Serif+SC:wght@300;400;600&display=swap');
 
 /* =========================================
-   2. 全局变量 & 配色 (更新背景色)
+   2. 全局变量 & 配色 (新配色方案)
    ========================================= */
 :root {
-    --bg-color: #FAF5EF;      /* 杏仁白 */
+    --bg-color: #FAF5EF;      /* 顶部杏仁白 */
     
-    /* 🟢 改动: 更新为您指定的暖色 */
-    --dark-bg: #F7E5CE;       
+    /* 🟢 新增: 底部渐变色系 */
+    --peach-main: #FFD1C1;    /* 浅桃橙 (主色) */
+    --peach-warm: #FFDAC1;    /* 更暖桃 */
+    --peach-base: #FFE4D6;    /* 米桃底 */
+    --bridge-blue: #E0F0FF;   /* 极浅蓝 (桥接色) */
     
     --primary-color: #E34234; /* 朱砂红 */
     --text-color: #5A4D4D;    /* 深暖灰 */
@@ -36,7 +39,7 @@ body {
 }
 
 /* =========================================
-   3. Hero 区域 (修复左侧显示 & 布局)
+   3. Hero 区域
    ========================================= */
 .hero-wrapper {
     position: relative; width: 100%; height: 100vh;
@@ -45,10 +48,16 @@ body {
     overflow: hidden; z-index: 10;
 }
 
+/* 🟢 核心修改: 底部过渡遮罩 (桥接色 -> 桃色) */
 .hero-wrapper::after {
     content: ''; position: absolute; bottom: 0; left: 0;
-    width: 100%; height: 25vh;
-    background: linear-gradient(to bottom, transparent, var(--dark-bg));
+    width: 100%; height: 30vh; /* 拉长过渡区 */
+    /* 逻辑: 透明 -> 极浅蓝(桥接) -> 浅桃橙(底部主色) */
+    background: linear-gradient(to bottom, 
+        rgba(250, 245, 239, 0) 0%, 
+        var(--bridge-blue) 60%, 
+        var(--peach-main) 100%
+    );
     pointer-events: none; z-index: 5;
 }
 
@@ -59,56 +68,56 @@ body {
 .blob-2 { width: 500px; height: 500px; background: #CCFBF1; bottom: 10%; right: 10%; } 
 .blob-3 { width: 400px; height: 400px; background: #E0F2FE; top: 40%; left: 40%; } 
 
-/* --- 标题容器 (改用 Flex 50/50 布局，更稳健) --- */
+/* --- 标题容器 --- */
 .title-container {
     z-index: 10;
-    display: flex; /* 确保左右分栏 */
-    align-items: baseline; /* 底部对齐 */
+    display: flex; /* 保持左右布局 */
+    align-items: baseline; 
     justify-content: center;
     width: 100%;
-    max-width: 1600px;
+    max-width: 1400px;
     margin-top: -5vh;
-    padding: 0 40px;
-    gap: 30px; /* 中间间距 */
+    padding: 0 20px;
+    gap: 20px; /* 适中的间距 */
 }
 
 /* 1. 左侧：滚筒问候语 */
 .greeting-drum {
-    flex: 1; /* 占据左边 50% */
+    flex: 1; /* 占左半边 */
     display: flex;
-    justify-content: flex-end; /* 内容靠右贴近中轴线 */
-    
-    /* 🟢 修复: 增加高度并移除 hidden 限制，防止文字被切 */
-    height: 1.5em; 
-    overflow: visible; 
+    justify-content: flex-end; /* 靠右对齐中轴线 */
+    height: 1.6em; /* 稍微加大高度防止文字被切 */
+    overflow: visible; /* 🟢 关键: 允许稍微溢出，防止“你好”被裁 */
     position: relative;
-    text-align: right;
+    /* 调试用: 如果还看不到字，可以把 mask 关掉 */
+    /* mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent); */
 }
 
 .greeting-track {
     position: relative;
-    width: 100%; /* 占满左侧区域 */
+    width: 100%; 
     text-align: right;
 }
 
 .drum-item {
     position: absolute; 
     bottom: 0; 
-    right: 0; /* 强制靠右 */
+    right: 0;
     
     font-family: 'JuanaCustom', 'Playfair Display', 'Noto Serif SC', serif;
-    /* 字体大小：与 Zaki 保持一致 */
-    font-size: clamp(60px, 16vw, 240px);
+    
+    /* 🟢 核心修改: 大幅缩小字体，防止溢出 */
+    /* 最小 40px, 理想 9vw (之前是16vw), 最大 140px (之前是240px) */
+    font-size: clamp(40px, 9vw, 140px);
     
     color: var(--primary-color);
-    line-height: 1;
+    line-height: 1.1;
     opacity: 0;
-    
-    /* 动画 */
     transform: translateY(100%) rotateX(-90deg);
     transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     white-space: nowrap;
     transform-origin: center bottom;
+    padding-bottom: 2px;
 }
 
 .drum-item.active { opacity: 1; transform: translateY(0) rotateX(0deg); }
@@ -116,11 +125,13 @@ body {
 
 /* 2. 右侧：Zaki 名字 */
 .static-name {
-    flex: 1; /* 占据右边 50% */
-    text-align: left; /* 靠左贴近中轴线 */
+    flex: 1; /* 占右半边 */
+    text-align: left; /* 靠左对齐中轴线 */
     
     font-family: 'JuanaCustom', 'Playfair Display', serif;
-    font-size: clamp(60px, 16vw, 240px);
+    /* 保持与左侧完全一致的大小 */
+    font-size: clamp(40px, 9vw, 140px);
+    
     font-weight: 200;
     color: var(--primary-color);
     line-height: 0.9;
@@ -141,11 +152,11 @@ body {
     font-size: 1.3rem; color: var(--text-color); line-height: 1.6; letter-spacing: 0.05em;
 }
 
-/* 🟢 修复: Scroll 箭头间距 */
+/* Scroll 箭头 (修复间距) */
 .scroll-indicator {
     position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);
     display: flex; flex-direction: column; align-items: center; 
-    gap: 15px; /* 增加间距，让箭头和文字分开 */
+    gap: 15px; /* 分开一点 */
     text-decoration: none; z-index: 20; opacity: 0; animation: fadeIn 1s ease 2s forwards;
 }
 .scroll-text {
@@ -155,7 +166,6 @@ body {
 .arrow-icon {
     width: 20px; height: 20px; border: solid var(--primary-color); border-width: 0 2px 2px 0;
     transform: rotate(45deg); animation: retroScroll 1.5s infinite ease-in-out;
-    margin-top: -5px; /* 微调位置 */
 }
 @keyframes retroScroll {
     0%, 100% { transform: rotate(45deg) translate(0, 0); }
@@ -163,10 +173,13 @@ body {
 }
 
 /* =========================================
-   4. 通用容器
+   4. 内容区域背景 (新桃色渐变)
    ========================================= */
 .dark-section {
-    position: relative; background-color: var(--dark-bg); color: var(--light-text);
+    position: relative; 
+    /* 🟢 改动: 使用柔和的线性渐变 */
+    background: linear-gradient(180deg, var(--peach-main) 0%, var(--peach-base) 50%, var(--peach-warm) 100%);
+    color: var(--light-text);
     width: 100%; padding: 100px 5% 80px; z-index: 1;
 }
 .container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 3; }
@@ -223,7 +236,8 @@ body {
    7. Social Section
    ========================================= */
 .social-section-wrapper {
-    background-color: var(--dark-bg);
+    /* 背景跟随 dark-section 的渐变，不需要单独设色，或者设为透明 */
+    background: transparent;
     padding-bottom: 100px;
     margin-top: -40px;
 }
@@ -391,7 +405,7 @@ body {
     .hero-wrapper { height: 90vh; }
     
     .title-container { 
-        flex-direction: column; /* 手机上垂直 */
+        flex-direction: column; 
         align-items: center; 
         justify-content: center;
         gap: 0; 
@@ -403,7 +417,7 @@ body {
     /* 滚筒问候语 */
     .greeting-drum {
         width: 100%;
-        height: 1.2em; 
+        height: 1.4em; 
         justify-content: center;
         align-items: flex-end;
     }
@@ -413,19 +427,12 @@ body {
         text-align: center; 
     }
     .drum-item { 
+        position: relative; right: auto; bottom: auto;
         width: 100%; 
         font-size: 14vw; 
         text-align: center;
-        transform-origin: center center;
-        right: auto; left: 0; 
-        transform: none !important; opacity: 1 !important; /* 手机端禁用复杂动画 */
-        
-        /* 如果要保留动画，取消上面的 transform:none，保留下面的代码:
-        position: absolute; right: 0; left: 0; margin: auto;
-        transform: translateY(100%) rotateX(-90deg);
-        */
+        transform: none !important; opacity: 1 !important; 
     }
-    /* 为了保证手机端问候语可见，直接覆盖动画属性 */
     .drum-item.active { opacity: 1; transform: none !important; }
     .drum-item.exit { opacity: 0; transform: none !important; }
 
@@ -434,6 +441,7 @@ body {
         font-size: 38vw; 
         line-height: 1;
         margin-top: -10px; 
+        text-align: center;
     }
 
     .subtitle-text { font-size: 0.9rem; padding: 0 10px; margin-top: 30px; }
@@ -483,7 +491,7 @@ body {
 }
 
 /* =========================================
-   13. 文章页样式
+   13. Article Page Styles
    ========================================= */
 .article-container { max-width: 800px; margin: 0 auto; padding: 120px 20px; }
 .article-header { text-align: center; margin-bottom: 80px; }
