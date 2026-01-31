@@ -30,7 +30,7 @@ body {
 }
 
 /* =========================================
-   3. Hero 区域 (纯白 + 极短底部渐变)
+   3. Hero 区域 (交互光斑 + 纯白 + 极短渐变)
    ========================================= */
 .hero-wrapper {
     position: relative; width: 100%; height: 100vh;
@@ -39,30 +39,72 @@ body {
     background-color: var(--bg-color);
 }
 
-/* 🔥 修改：将 height 改为 15vh，让渐变只在最底部出现 */
+/* 🔥 底部 15vh 渐变过渡 */
 .hero-wrapper::after {
     content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 15vh; /* 之前是 35vh，改小后渐变起始点会大幅下降 */
+    position: absolute; bottom: 0; left: 0;
+    width: 100%; height: 15vh;
     background: linear-gradient(to bottom, transparent, var(--dark-bg));
-    pointer-events: none;
-    z-index: 1; 
+    pointer-events: none; z-index: 5; /* 在光斑之上，文字之下 */
 }
 
+/* 🔥 背景交互光斑 */
+.hero-blobs {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1; pointer-events: none;
+}
+
+.blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: 0.6;
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+}
+
+/* 光斑 1：主色调（朱砂红变体） */
+.blob-1 {
+    width: 600px; height: 600px;
+    background: #FF8F85; 
+    top: -10%; left: 20%; opacity: 0.5;
+}
+
+/* 光斑 2：辅助色（深黄/橙色） */
+.blob-2 {
+    width: 500px; height: 500px;
+    background: #FFD580; 
+    bottom: 10%; right: 10%; opacity: 0.6;
+}
+
+/* 光斑 3：点缀色（淡紫色） */
+.blob-3 {
+    width: 400px; height: 400px;
+    background: #D8BFD8; 
+    top: 40%; left: 40%; opacity: 0.4;
+}
+
+/* 标题样式 */
 .huge-title {
     font-family: 'JuanaCustom', serif !important;
     font-size: 22vw; font-weight: 200; color: var(--primary-color);
     line-height: 0.8; white-space: nowrap; margin-top: -5vh;
     display: flex; justify-content: center; align-items: baseline;
-    letter-spacing: -1vw;
-    position: relative; z-index: 20; 
+    letter-spacing: -1vw; position: relative; z-index: 10;
 }
 .huge-title .letter { font-family: inherit !important; }
 
-/* 字母动效 */
+/* 文字切换动画 */
+#changing-text {
+    display: inline-block; min-width: 1.5em; text-align: right;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.text-fade-out { opacity: 0; transform: translateY(-20px); }
+.text-fade-in { animation: textEnter 0.5s forwards; }
+@keyframes textEnter {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 字母入场动画 */
 .letter {
     display: inline-block; opacity: 0;
     animation: smoothDrop 1.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
@@ -80,7 +122,7 @@ body {
 }
 
 .content-area {
-    margin-top: 5vh; text-align: center; z-index: 20;
+    margin-top: 5vh; text-align: center; z-index: 10;
     opacity: 0; animation: fadeIn 1.5s ease 1.2s forwards;
 }
 @keyframes fadeIn { to { opacity: 1; } }
@@ -94,12 +136,11 @@ body {
    🔥 动态向下箭头 (复古风格)
    ========================================= */
 .scroll-indicator {
-    position: absolute; bottom: 60px; /* 稍微调整位置以适应新的渐变高度 */
+    position: absolute; bottom: 60px;
     left: 50%; transform: translateX(-50%);
     display: flex; flex-direction: column; align-items: center; gap: 20px;
     opacity: 0; animation: fadeIn 1s ease 2s forwards; cursor: pointer;
-    text-decoration: none;
-    z-index: 20; 
+    text-decoration: none; z-index: 20;
 }
 
 .scroll-text {
@@ -108,18 +149,13 @@ body {
 }
 
 .arrow-icon {
-    width: 24px;
-    height: 24px;
-    border: solid var(--primary-color);
-    border-width: 0 3px 3px 0; 
-    display: inline-block;
-    padding: 3px;
+    width: 24px; height: 24px;
+    border: solid var(--primary-color); border-width: 0 3px 3px 0; 
+    display: inline-block; padding: 3px;
     transform: rotate(45deg); 
     animation: retroScroll 1.5s infinite ease-in-out;
     border-radius: 2px; 
 }
-.arrow-icon::after { display: none; }
-
 @keyframes retroScroll {
     0%, 100% { transform: rotate(45deg) translate(0, 0); }
     50% { transform: rotate(45deg) translate(8px, 8px); }
@@ -135,11 +171,8 @@ body {
     padding: 140px 10% 60px;
     z-index: 1;
 }
-
-/* 移除旧的 section 顶部渐变，完全由 Hero 控制过渡 */
-.dark-section.first-section::before {
-    display: none;
-}
+/* 移除旧的 section 顶部渐变 */
+.dark-section.first-section::before { display: none; }
 
 .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 3; }
 
@@ -333,7 +366,7 @@ body {
 .blog-item:hover .blog-thumb { opacity: 1; transform: translateX(0); }
 
 /* =========================================
-   9. FAB Menu
+   9. FAB Menu (左下角紫色导航)
    ========================================= */
 .fab-menu-container {
     position: fixed; bottom: 40px; left: 40px; z-index: 99;

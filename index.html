@@ -12,8 +12,17 @@
 <body>
 
     <main class="hero-wrapper">
+        
+        <div class="hero-blobs">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
+        </div>
+
         <h1 class="huge-title">
-            <span class="letter">H</span><span class="letter">i</span><span class="letter">&nbsp;</span><span class="letter">Z</span><span class="letter">a</span><span class="letter">k</span><span class="letter">i</span>
+            <span class="letter word-box"><span id="changing-text">Hi</span></span>
+            <span class="letter">&nbsp;</span>
+            <span class="letter">Z</span><span class="letter">a</span><span class="letter">k</span><span class="letter">i</span>
         </h1>
 
         <div class="content-area">
@@ -265,9 +274,7 @@
             <a href="#projects" class="fab-link">Projects</a>
             <a href="#blog" class="fab-link">Blog</a>
         </div>
-        <div class="fab-btn" id="fabBtn">
-            <span>⋮</span>
-        </div>
+        <div class="fab-btn" id="fabBtn"><span>⋮</span></div>
     </div>
 
     <script src="blog/posts.js"></script>
@@ -328,31 +335,64 @@
             container.innerHTML = postsHTML;
         }
 
-        // --- 3. FAB 导航逻辑 (新增) ---
+        // --- 3. FAB 导航逻辑 ---
         const fabBtn = document.getElementById('fabBtn');
         const fabOptions = document.getElementById('fabOptions');
         const fabLinks = document.querySelectorAll('.fab-link');
 
         if (fabBtn && fabOptions) {
-            // 点击主按钮切换显示
             fabBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); // 防止冒泡触发 document 点击
+                e.stopPropagation();
                 fabOptions.classList.toggle('active');
             });
-
-            // 点击菜单链接后自动关闭
             fabLinks.forEach(link => {
                 link.addEventListener('click', () => {
                     fabOptions.classList.remove('active');
                 });
             });
-
-            // 点击页面其他地方关闭菜单
             document.addEventListener('click', (e) => {
                 if (!fabBtn.contains(e.target) && !fabOptions.contains(e.target)) {
                     fabOptions.classList.remove('active');
                 }
             });
+        }
+
+        // --- 4. Hero 交互逻辑 (光斑+文字切换) ---
+        const heroSection = document.querySelector('.hero-wrapper');
+        const blob1 = document.querySelector('.blob-1');
+        const blob2 = document.querySelector('.blob-2');
+        const blob3 = document.querySelector('.blob-3');
+
+        if (heroSection) {
+            heroSection.addEventListener('mousemove', (e) => {
+                const x = e.clientX;
+                const y = e.clientY;
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                blob1.style.transform = `translate(${(x - centerX) / 15}px, ${(y - centerY) / 15}px)`;
+                blob2.style.transform = `translate(${-(x - centerX) / 25}px, ${-(y - centerY) / 25}px)`;
+                blob3.style.transform = `translate(${(x - centerX) / 10}px, ${(y - centerY) / 10}px)`;
+            });
+        }
+
+        const greetings = ["Hi", "你好", "Hola", "Bonjour", "Ciao", "Olá"];
+        const changingText = document.getElementById('changing-text');
+        let greetingIndex = 0;
+
+        if (changingText) {
+            setInterval(() => {
+                changingText.classList.add('text-fade-out');
+                setTimeout(() => {
+                    greetingIndex = (greetingIndex + 1) % greetings.length;
+                    changingText.textContent = greetings[greetingIndex];
+                    changingText.classList.remove('text-fade-out');
+                    void changingText.offsetWidth; 
+                    changingText.classList.add('text-fade-in');
+                    setTimeout(() => {
+                        changingText.classList.remove('text-fade-in');
+                    }, 500);
+                }, 500);
+            }, 3000);
         }
 
         // 初始化
