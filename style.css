@@ -86,7 +86,7 @@ body {
     text-align: right;
     
     /* 🔴 在这里调整左边文字的上下位置 🔴 */
-    transform: translateY(17px); 
+    transform: translateY(15px); 
 }
 
 .greeting-track {
